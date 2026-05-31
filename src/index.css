@@ -75,7 +75,6 @@ body {
 .high-contrast-active .bg-white,
 .high-contrast-active .bg-slate-50,
 .high-contrast-active .bg-slate-100,
-.high-contrast-active .bg-slate-150,
 .high-contrast-active .bg-\[\#f4f6f8\],
 .high-contrast-active .bg-\[\#e6e8eb\],
 .high-contrast-active .bg-slate-200,
@@ -172,5 +171,30 @@ body {
   height: auto !important;
   padding-top: 1.5rem !important;
   padding-bottom: 1.5rem !important;
+}
+
+/* Scrollbar styling for touch screens and totems */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Elegant scrollbar details for standard scrolling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
 }
 

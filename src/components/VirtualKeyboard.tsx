@@ -32,7 +32,7 @@ export default function VirtualKeyboard({ onKeyPress, layout = 'text' }: Virtual
                 key={char}
                 type="button"
                 onClick={() => handlePress(char)}
-                className="key-tap w-9 sm:w-12 md:w-14 h-12 md:h-14 bg-white active:bg-slate-100 text-[#121212] hover:text-[#e30613] hover:border-[#e30613] text-sm sm:text-base md:text-lg font-bold rounded-xl shadow-sm border border-slate-200 flex items-center justify-center cursor-pointer transition-all duration-100"
+                className="key-tap w-9 sm:w-12 md:w-14 h-12 md:h-14 bg-white active:bg-brand-red active:text-white active:border-brand-red text-[#121212] hover:text-brand-red hover:border-brand-red text-sm sm:text-base md:text-lg font-bold rounded-xl shadow-sm border border-slate-200 flex items-center justify-center cursor-pointer transition-all duration-100"
               >
                 {char}
               </button>
@@ -48,7 +48,7 @@ export default function VirtualKeyboard({ onKeyPress, layout = 'text' }: Virtual
               key={helper}
               type="button"
               onClick={() => handlePress(helper)}
-              className="key-tap px-3 h-10 bg-slate-50 active:bg-slate-100 text-xs font-bold rounded-lg border border-slate-250 text-slate-700 flex items-center justify-center cursor-pointer transition-all"
+              className="key-tap px-3 h-10 bg-slate-50 active:bg-brand-red active:text-white active:border-brand-red text-xs font-bold rounded-lg border border-slate-200 text-slate-700 flex items-center justify-center cursor-pointer transition-all"
             >
               {helper}
             </button>
@@ -61,7 +61,7 @@ export default function VirtualKeyboard({ onKeyPress, layout = 'text' }: Virtual
         <button
           type="button"
           onClick={() => handlePress('CLEAR')}
-          className="key-tap w-24 h-12 md:h-14 bg-red-50 active:bg-red-100 border border-red-200 text-[#e30613] text-xs font-bold rounded-xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
+          className="key-tap w-24 h-12 md:h-14 bg-red-50 active:bg-red-100 border border-red-200 text-red-600 text-xs font-bold rounded-xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
         >
           LIMPAR
         </button>
@@ -69,7 +69,7 @@ export default function VirtualKeyboard({ onKeyPress, layout = 'text' }: Virtual
         <button
           type="button"
           onClick={() => handlePress('SPACE')}
-          className="key-tap w-56 sm:w-80 md:w-[450px] h-12 md:h-14 bg-white active:bg-slate-50 border border-slate-200 rounded-xl shadow-sm flex items-center justify-center cursor-pointer font-bold text-xs tracking-widest text-[#121212] transition-all duration-100"
+          className="key-tap w-56 sm:w-80 md:w-[450px] h-12 md:h-14 bg-white active:bg-brand-red active:text-white active:border-brand-red border border-slate-200 rounded-xl shadow-sm flex items-center justify-center cursor-pointer font-bold text-xs tracking-widest text-[#121212] transition-all duration-100"
         >
           ESPAÇO
         </button>
@@ -77,7 +77,7 @@ export default function VirtualKeyboard({ onKeyPress, layout = 'text' }: Virtual
         <button
           type="button"
           onClick={() => handlePress('BACKSPACE')}
-          className="key-tap w-24 h-12 md:h-14 bg-slate-200 active:bg-slate-300 border border-slate-250 text-slate-800 rounded-xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
+          className="key-tap w-24 h-12 md:h-14 bg-slate-200 active:bg-slate-300 border border-slate-200 text-slate-800 rounded-xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
         >
           <span className="material-symbols-outlined !text-xl">backspace</span>
         </button>

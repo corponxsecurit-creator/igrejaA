@@ -97,7 +97,7 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
+          className="flex items-center gap-2 text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
         >
           <span className="material-symbols-outlined !text-xl">arrow_back</span>
           <span>Voltar</span>
@@ -108,7 +108,7 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
       <main className="flex-grow pt-28 pb-32 px-6 md:px-20 max-w-7xl mx-auto w-full flex flex-col justify-center">
         
         {/* Neighborhood selectors line */}
-        <div className="flex bg-slate-100 p-1.5 rounded-2xl gap-2 mb-8 overflow-x-auto border border-slate-200">
+        <div className="flex bg-slate-100 p-1.5 rounded-2xl gap-2 mb-6 overflow-x-auto border border-slate-200 scrollbar-none">
           {neighborhoods.map((n) => {
             const isSelected = selectedNeighborhood === n;
             return (
@@ -126,6 +126,10 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
               </button>
             );
           })}
+        </div>
+        <div className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest text-center mt-[-1rem] mb-6 flex items-center justify-center gap-1 select-none">
+          <span className="material-symbols-outlined !text-sm">swipe_left</span>
+          <span>Deslize para ver todas as regiões</span>
         </div>
 
         {/* Banner Card de Pequenos Grupos */}
@@ -256,7 +260,7 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
                     <label className="block text-xs uppercase tracking-widest font-black text-brand-red ml-1">
                       Seu WhatsApp / Celular
                     </label>
-                    <div className="w-full h-12 px-4 rounded-xl border border-slate-350 bg-slate-50 font-bold text-slate-800 flex items-center text-lg shadow-inner">
+                    <div className="w-full h-12 px-4 rounded-xl border border-slate-300 bg-slate-50 font-bold text-slate-800 flex items-center text-lg shadow-inner">
                       {formatPhone(phoneNumber) || <span className="text-slate-400 font-normal">Digite seu celular</span>}
                     </div>
                   </div>

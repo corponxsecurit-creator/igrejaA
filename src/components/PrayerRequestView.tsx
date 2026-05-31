@@ -163,7 +163,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
                   className={`py-3 rounded-lg font-bold text-xs uppercase tracking-wider text-center cursor-pointer transition-all ${
                     request.isAnonymous
                       ? 'bg-brand-dark text-white shadow-sm'
-                      : 'text-slate-650 hover:bg-slate-200/50'
+                      : 'text-slate-600 hover:bg-slate-200/50'
                   }`}
                 >
                   Anônimo
@@ -174,7 +174,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
                   className={`py-3 rounded-lg font-bold text-xs uppercase tracking-wider text-center cursor-pointer transition-all ${
                     !request.isAnonymous
                       ? 'bg-brand-dark text-white shadow-sm'
-                      : 'text-slate-650 hover:bg-slate-200/50'
+                      : 'text-slate-600 hover:bg-slate-200/50'
                   }`}
                 >
                   Com Nome

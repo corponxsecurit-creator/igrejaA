@@ -241,7 +241,7 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
                       <div className="absolute left-0 w-full h-1 bg-brand-red scan-line rounded-full opacity-80" />
                       
                       {/* Target lines around */}
-                      <div className="absolute inset-8 border border-dashed border-slate-350 rounded-2xl flex items-center justify-center flex-col opacity-60">
+                      <div className="absolute inset-8 border border-dashed border-slate-300 rounded-2xl flex items-center justify-center flex-col opacity-60">
                         <span className="material-symbols-outlined !text-6xl text-slate-400 group-hover:scale-110 transition-transform">
                           qr_code_scanner
                         </span>
@@ -251,7 +251,7 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
                       </div>
                     </div>
 
-                    <p className="text-xs text-slate-455 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
+                    <p className="text-xs text-slate-500 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
                       Simule o escaneamento tocando no leitor acima
                     </p>
                   </div>
@@ -285,13 +285,13 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
                           readOnly
                           value={nameSearch}
                           placeholder="Busque por letras abaixo..."
-                          className="w-full h-12 px-4 bg-slate-150 rounded-xl border border-slate-300 font-bold text-slate-800 pointer-events-none"
+                          className="w-full h-12 px-4 bg-slate-100 rounded-xl border border-slate-300 font-bold text-slate-800 pointer-events-none"
                         />
                         {nameSearch && (
                           <button
                             type="button"
                             onClick={() => { playTapSound(); setNameSearch(''); setSelectedMember(null); }}
-                            className="absolute right-3 top-2.5 hover:bg-slate-200 rounded-full w-7 h-7 flex items-center justify-center font-bold text-slate-550 cursor-pointer text-xs"
+                            className="absolute right-3 top-2.5 hover:bg-slate-200 rounded-full w-7 h-7 flex items-center justify-center font-bold text-slate-500 cursor-pointer text-xs"
                           >
                             X
                           </button>
@@ -300,7 +300,7 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
                     </div>
 
                     {/* Filter result members */}
-                    <div className="bg-slate-50 p-2.5 rounded-2xl border border-slate-250 min-h-[120px] max-h-[140px] overflow-y-auto space-y-1 shrink-0">
+                    <div className="bg-slate-50 p-2.5 rounded-2xl border border-slate-200 min-h-[120px] max-h-[140px] overflow-y-auto space-y-1 shrink-0">
                       {filteredMembers.length > 0 ? (
                         filteredMembers.map((m) => {
                           const isSelected = selectedMember === m;
@@ -312,7 +312,7 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
                               className={`w-full text-left font-semibold text-sm px-4 py-2 rounded-xl cursor-pointer ${
                                 isSelected 
                                   ? 'bg-brand-red text-white font-black shadow-sm' 
-                                  : 'hover:bg-slate-150 text-slate-700'
+                                  : 'hover:bg-slate-100 text-slate-700'
                               }`}
                             >
                               {m}

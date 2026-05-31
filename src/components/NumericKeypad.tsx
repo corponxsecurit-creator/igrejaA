@@ -28,7 +28,7 @@ export default function NumericKeypad({ onKeyPress, onConfirm, confirmLabel = 'O
             key={num}
             type="button"
             onClick={() => handlePress(num)}
-            className="key-tap h-16 bg-white active:bg-slate-100 text-[#121212] hover:text-[#e30613] hover:border-[#e30613] text-xl font-bold border-2 border-slate-200 rounded-2xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
+            className="key-tap h-16 bg-white active:bg-brand-red active:text-white active:border-brand-red text-[#121212] hover:text-brand-red hover:border-brand-red text-xl font-bold border-2 border-slate-200 rounded-2xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
           >
             {num}
           </button>
@@ -38,7 +38,7 @@ export default function NumericKeypad({ onKeyPress, onConfirm, confirmLabel = 'O
         <button
           type="button"
           onClick={() => handlePress('CLEAR')}
-          className="key-tap h-16 bg-red-50 active:bg-red-100 text-[#e30613] text-sm font-bold border-2 border-red-200 rounded-2xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
+          className="key-tap h-16 bg-red-50 active:bg-red-100 text-red-600 text-sm font-bold border-2 border-red-200 rounded-2xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
         >
           LIMPAR
         </button>
@@ -46,7 +46,7 @@ export default function NumericKeypad({ onKeyPress, onConfirm, confirmLabel = 'O
         <button
           type="button"
           onClick={() => handlePress('0')}
-          className="key-tap h-16 bg-white active:bg-slate-100 text-[#121212] hover:text-[#e30613] hover:border-[#e30613] text-xl font-bold border-2 border-slate-200 rounded-2xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
+          className="key-tap h-16 bg-white active:bg-brand-red active:text-white active:border-brand-red text-[#121212] hover:text-brand-red hover:border-brand-red text-xl font-bold border-2 border-slate-200 rounded-2xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
         >
           0
         </button>
@@ -54,7 +54,7 @@ export default function NumericKeypad({ onKeyPress, onConfirm, confirmLabel = 'O
         <button
           type="button"
           onClick={() => handlePress('BACKSPACE')}
-          className="key-tap h-16 bg-slate-100 active:bg-slate-200 text-slate-800 border-2 border-slate-250 rounded-2xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
+          className="key-tap h-16 bg-slate-100 active:bg-slate-200 text-slate-800 border-2 border-slate-200 rounded-2xl shadow-sm flex items-center justify-center cursor-pointer transition-all duration-100"
         >
           <span className="material-symbols-outlined !text-2xl">backspace</span>
         </button>
@@ -64,7 +64,7 @@ export default function NumericKeypad({ onKeyPress, onConfirm, confirmLabel = 'O
         <button
           type="button"
           onClick={handleConfirm}
-          className="w-full h-14 mt-2 bg-[#e30613] hover:bg-[#c61118] text-white text-base font-extrabold uppercase tracking-widest rounded-2xl shadow-md cursor-pointer transition-colors flex items-center justify-center gap-2 active:scale-98 duration-100"
+          className="w-full h-14 mt-2 bg-brand-red hover:bg-brand-red-hover text-white text-base font-extrabold uppercase tracking-widest rounded-2xl shadow-md cursor-pointer transition-colors flex items-center justify-center gap-2 active:scale-98 duration-100"
         >
           <span>{confirmLabel}</span>
           <span className="material-symbols-outlined !text-xl">check_circle</span>

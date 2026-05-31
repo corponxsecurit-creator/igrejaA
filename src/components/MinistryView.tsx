@@ -45,7 +45,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
           name: 'Recepção (Hachnassat Orchim)',
           tag: 'Acolhimento',
           icon: 'front_hand',
-          color: 'bg-[#d4af37] border-yellow-650',
+          color: 'bg-[#d4af37] border-yellow-600',
           desc: 'Acolha calorosamente e diga Shalom Aleichem a todos os membros e visitantes que entram.',
         },
         {
@@ -108,7 +108,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
           name: 'Grupo Caleb',
           tag: 'Melhor Idade',
           icon: 'elderly',
-          color: 'bg-[#cf2e2e] border-red-850',
+          color: 'bg-[#cf2e2e] border-red-800',
           desc: 'Preste acolhimento, carinho e assistência à melhor idade em nossas reuniões de fé.',
         },
         {
@@ -452,7 +452,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                       <button
                         type="button"
                         onClick={handleClose}
-                        className="flex-1 h-12 border border-slate-350 text-slate-600 rounded-xl font-bold hover:bg-slate-50 cursor-pointer text-sm"
+                        className="flex-1 h-12 border border-slate-300 text-slate-600 rounded-xl font-bold hover:bg-slate-50 cursor-pointer text-sm"
                       >
                         Cancelar
                       </button>

@@ -190,7 +190,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
                 <div
                   onClick={() => handleFieldFocus('name')}
                   className={`w-full h-16 px-6 rounded-2xl border-2 bg-white text-lg font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
-                    activeField === 'name' ? 'border-brand-red bg-slate-50/50' : 'border-slate-250'
+                    activeField === 'name' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
                   }`}
                 >
                   {form.name || <span className="text-slate-400 font-normal">Digite seu nome</span>}
@@ -204,7 +204,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
                 <div
                   onClick={() => handleFieldFocus('phone')}
                   className={`w-full h-16 px-6 rounded-2xl border-2 bg-white text-lg font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
-                    activeField === 'phone' ? 'border-brand-red bg-slate-50/50' : 'border-slate-250'
+                    activeField === 'phone' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
                   }`}
                 >
                   {formatPhone(form.phone) || <span className="text-slate-400 font-normal">Digite seu celular</span>}
@@ -223,7 +223,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
                 <div
                   onClick={() => handleFieldFocus('email')}
                   className={`w-full h-16 px-6 rounded-2xl border-2 bg-white text-lg font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
-                    activeField === 'email' ? 'border-brand-red bg-slate-50/50' : 'border-slate-250'
+                    activeField === 'email' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
                   }`}
                 >
                   {form.email || <span className="text-slate-400 font-normal">Digite seu email</span>}
@@ -237,7 +237,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
                 <div
                   onClick={() => handleFieldFocus('city')}
                   className={`w-full h-16 px-6 rounded-2xl border-2 bg-white text-lg font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
-                    activeField === 'city' ? 'border-brand-red bg-slate-50/50' : 'border-slate-250'
+                    activeField === 'city' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
                   }`}
                 >
                   {form.city || <span className="text-slate-400 font-normal">Ex: Barueri</span>}
@@ -269,7 +269,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
                       className={`h-20 rounded-2xl border-2 text-lg font-black text-left px-8 cursor-pointer transition-all ${
                         isSelected 
                           ? 'bg-brand-red border-brand-red-hover text-white shadow-md'
-                          : 'bg-white border-slate-250 text-slate-800 hover:bg-slate-50'
+                          : 'bg-white border-slate-200 text-slate-800 hover:bg-slate-50'
                       }`}
                     >
                       {range}

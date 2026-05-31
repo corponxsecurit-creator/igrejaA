@@ -131,7 +131,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               calendar_month
             </span>
             <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-slate-455 block mb-1">
+              <span className="text-xs tracking-widest uppercase font-bold text-slate-500 block mb-1">
                 {brand.type === 'synagogue' ? 'Shabat & Festividades' : 'Agenda & Encontros'}
               </span>
               <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block">{brand.termCults}</span>
@@ -148,7 +148,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               payments
             </span>
             <div className="text-left mt-4 z-10">
-              <span className="text-xs tracking-widest uppercase font-bold text-slate-350 block mb-1">{brand.termDonations}</span>
+              <span className="text-xs tracking-widest uppercase font-bold text-slate-400 block mb-1">{brand.termDonations}</span>
               <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block">{brand.termDonation}</span>
             </div>
             <div className="absolute right-6 bottom-6 opacity-15 text-white">
@@ -166,7 +166,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               groups
             </span>
             <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-slate-350 block mb-1">
+              <span className="text-xs tracking-widest uppercase font-bold text-slate-400 block mb-1">
                 {brand.type === 'synagogue' ? 'Engajamento & Mitzvot' : 'Voluntariado'}
               </span>
               <span className="text-xl md:text-2xl font-black uppercase tracking-wider block">Quero Participar</span>

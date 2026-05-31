@@ -135,7 +135,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
+          className="flex items-center gap-2 text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
         >
           <span className="material-symbols-outlined !text-xl">arrow_back</span>
           <span>Voltar</span>
@@ -170,7 +170,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                   <h3 className="text-lg font-black text-brand-dark tracking-tight">
                     Meta de Gratidão Diária 🎯
                   </h3>
-                  <p className="text-xs md:text-sm text-slate-650 font-medium leading-relaxed">
+                  <p className="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
                     {brand.type === 'synagogue'
                       ? `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 em tsedakás! Nossa meta hoje é alcançar esse valor para apoiar a manutenção da sinagoga e auxílio social.`
                       : `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 em dízimos e ofertas voluntárias! Nossa meta hoje é igualar ou ultrapassar essa bênção para apoiar as ações sociais.`}
@@ -233,7 +233,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
               
               {/* Presets col */}
               <div className="space-y-3 flex flex-col justify-center">
-                <span className="text-xs uppercase tracking-widest font-black text-slate-650 block text-center mb-1">
+                <span className="text-xs uppercase tracking-widest font-black text-slate-600 block text-center mb-1">
                   Valores Prontos
                 </span>
 
@@ -258,7 +258,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                     Valor Personalizado
                   </span>
                   
-                  <div className="bg-white rounded-xl py-2 px-4 text-xl md:text-2xl font-black border border-slate-350 text-slate-800 tracking-tight flex items-center justify-center min-h-[52px]">
+                  <div className="bg-white rounded-xl py-2 px-4 text-xl md:text-2xl font-black border border-slate-300 text-slate-800 tracking-tight flex items-center justify-center min-h-[52px]">
                     R$ {state.customValue || '0'}
                   </div>
                 </div>
@@ -285,7 +285,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
         {state.step === 'pix' && (
           <div className="space-y-6 animate-fade-in text-center max-w-xl mx-auto">
             <header className="space-y-2">
-              <span className="text-xs uppercase tracking-widest font-black text-slate-550 block">PIX Facilitado</span>
+              <span className="text-xs uppercase tracking-widest font-black text-slate-500 block">PIX Facilitado</span>
               <h2 className="text-2xl font-black text-brand-dark">Aproxime o Celular</h2>
               <div className="text-xl font-extrabold text-brand-red bg-brand-red/10 rounded-full px-6 py-2.5 inline-block border border-brand-red/30 shadow-sm">
                 Valor: R$ {state.value.toFixed(2)} ({state.category})
@@ -324,7 +324,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                 </button>
               </div>
 
-              <p className="text-xs text-slate-505 font-semibold mt-4 leading-relaxed">
+              <p className="text-xs text-slate-500 font-semibold mt-4 leading-relaxed">
                 Abra o aplicativo do seu banco, selecione a opção "Pagar com PIX/QR Code" e aponte para o código acima para concluir.
               </p>
             </div>
@@ -332,7 +332,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
             <button
               type="button"
               onClick={handleCompletePix}
-              className="w-full h-14 bg-emerald-650 hover:bg-emerald-700 text-white font-black rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-md active:scale-98 transition-transform"
+              className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-md active:scale-98 transition-transform"
             >
               <span className="material-symbols-outlined !text-2xl">check_circle</span>
               <span>Simular Pagamento Confirmado</span>
