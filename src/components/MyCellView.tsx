@@ -127,6 +127,25 @@ export default function MyCellView({ onBack, onGoHome }: MyCellViewProps) {
           })}
         </div>
 
+        {/* Banner Card de Pequenos Grupos */}
+        <div 
+          className="w-full h-48 rounded-3xl overflow-hidden mb-8 shadow-sm border border-slate-200 bg-cover bg-center flex flex-col justify-end p-6 md:p-8 relative"
+          style={{ backgroundImage: "url('https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/get_small_group.png')" }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent z-0" />
+          <div className="relative z-10 text-left">
+            <span className="bg-brand-red text-white text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md block w-fit mb-1 border border-brand-red-hover">
+              Vida em Comunidade
+            </span>
+            <h2 className="text-xl md:text-2xl font-black text-white leading-tight uppercase">
+              Pequenos Grupos Atitude
+            </h2>
+            <p className="text-xs text-white/80 font-semibold mt-1">
+              Encontre uma célula perto de você e viva uma verdadeira comunhão cristã em Alphaville.
+            </p>
+          </div>
+        </div>
+
         {/* Cells Layout list */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCells.length > 0 ? (

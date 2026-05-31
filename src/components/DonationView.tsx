@@ -48,7 +48,7 @@ export default function DonationView({ onBack, onGoHome }: DonationViewProps) {
 
   const handleCopyKey = () => {
     playSuccessSound();
-    navigator.clipboard.writeText('00020101021226870014br.gov.bcb.pix2565pix.atitudealphaville.com/donations/totem');
+    navigator.clipboard.writeText('pixsaopaulo@ibatitude.com.br');
     setCopied(true);
     speakText('Chave Copiada');
     setTimeout(() => setCopied(false), 3000);

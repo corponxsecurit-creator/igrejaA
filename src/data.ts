@@ -51,29 +51,29 @@ export const cellGroups: CellGroup[] = [
 export const pastors: Pastor[] = [
   {
     id: '1',
-    name: 'Pr. Cláudio Duarte',
-    role: 'Pastor Sênior',
+    name: 'Pr. Josué Valandro Jr.',
+    role: 'Pastor Sênior & Fundador',
     available: true,
     photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&fit=crop&q=80',
   },
   {
     id: '2',
+    name: 'Pr. Wallace Cardozo',
+    role: 'Pastor Responsável Alphaville',
+    available: true,
+    photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&fit=crop&q=80',
+  },
+  {
+    id: '3',
     name: 'Pra. Viviane Santos',
     role: 'Ministério de Casais',
     available: true,
     photoUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&fit=crop&q=80',
   },
   {
-    id: '3',
-    name: 'Pr. Lucas Gabriel',
-    role: 'Líder de Jovens',
-    available: false,
-    photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&fit=crop&q=80',
-  },
-  {
     id: '4',
     name: 'Pra. Daniele Souza',
-    role: 'Atendimento e Cuidado',
+    role: 'Cuidado & Integração',
     available: true,
     photoUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&fit=crop&q=80',
   }

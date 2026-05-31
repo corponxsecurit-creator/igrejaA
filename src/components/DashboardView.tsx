@@ -36,12 +36,16 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
     <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden animate-fade-in font-sans">
       
       {/* Top App Bar inside main panel */}
-      <nav className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-8 md:px-20 py-6 bg-white/80 backdrop-blur-md shadow-sm border-b border-[#eceef1]">
-        <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-brand-dark !text-4xl">church</span>
-          <h1 className="font-sans text-2xl md:text-3xl font-extrabold text-brand-dark tracking-tight">
-            Atitude <span className="text-brand-red">Alphaville</span>
-          </h1>
+      <nav className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-8 md:px-20 py-4 bg-white/90 backdrop-blur-md shadow-sm border-b border-[#eceef1]">
+        <div className="flex items-center gap-2">
+          <img 
+            src="https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png" 
+            className="h-12 object-contain" 
+            alt="Igreja Batista Atitude" 
+          />
+          <span className="text-xs uppercase tracking-[0.25em] font-black text-brand-red mt-1">
+            Alphaville
+          </span>
         </div>
 
         {/* Relógio Digital de Totem em Tempo Real */}

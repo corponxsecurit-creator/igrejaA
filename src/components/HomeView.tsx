@@ -44,21 +44,25 @@ export default function HomeView({ onStart, onOpenAccessibility }: HomeViewProps
       {/* Background Image with Kiosk ambiance - Overlay style */}
       <div className="absolute inset-0 z-0">
         <img
-          className="h-full w-full object-cover opacity-50 mix-blend-overlay transition-transform duration-10000 ease-out"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkmaqDQPQDhgday7oT76Rrhv9Fom7TtN-Ao_dXxXT-D3y-Tu9QuTFZkkexWTx5s6RGpZwB9AV_R0hGZk4z4EPFdbP2XTrO4DJey1baZsg5Su5fwMX95PTp1Y_KUchmjaM1rMZhJ5HbYjSQDDUAXMk4s8aLDJn4E5nZqBHG8dy6cuq5XZX4qB8q_8Q6Suvgr7i9VuMY8uFlTlhLq17PrQ5IBOv-EJiYlSjIMSigwbXugzdyRpO8fjcFX_JCyOOi73X6G05UaL_wVDPp"
+          className="h-full w-full object-cover opacity-40 mix-blend-overlay transition-transform duration-10000 ease-out"
+          src="https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png"
           alt="Ambiente Kiosk Atitude Alphaville"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/40 via-transparent to-brand-dark/95" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1c1b1d]/50 via-transparent to-[#1c1b1d]/95" />
       </div>
 
       {/* Top Header */}
-      <nav className="absolute top-0 left-0 z-50 flex w-full justify-between items-center px-12 md:px-20 py-10">
+      <nav className="absolute top-0 left-0 z-50 flex w-full justify-between items-center px-12 md:px-20 py-8">
         <div className="flex flex-col items-center mx-auto text-center">
-          <h1 className="font-sans text-4xl md:text-6xl font-black tracking-tighter drop-shadow-2xl text-white">
-            Atitude <span className="text-brand-red">Alphaville</span>
-          </h1>
-          <div className="h-1.5 w-32 bg-brand-red mt-3 rounded-full opacity-90 shadow-md animate-pulse" />
+          <img 
+            src="https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png" 
+            className="h-24 object-contain invert brightness-0 filter drop-shadow-xl" 
+            alt="Igreja Batista Atitude" 
+          />
+          <span className="text-[10px] uppercase tracking-[0.4em] font-black text-brand-red mt-2 drop-shadow-md">
+            Alphaville
+          </span>
         </div>
 
         {/* Accessibility Buttons (Absolute Right overlay style) */}
@@ -125,33 +129,33 @@ export default function HomeView({ onStart, onOpenAccessibility }: HomeViewProps
           <div className="flex gap-4 overflow-hidden w-full md:w-auto">
             {/* Card 1: Culto */}
             <div 
-              className={`bg-[#121212]/95 backdrop-blur-2xl border-2 border-brand-red/45 p-6 rounded-2xl flex flex-col gap-3 w-full md:w-80 transition-all duration-500 ease-in-out shadow-2xl ${
+              className={`bg-[#1c1b1d]/95 backdrop-blur-2xl border-2 border-brand-red/45 p-6 rounded-2xl flex flex-col gap-3 w-full md:w-80 transition-all duration-500 ease-in-out shadow-2xl ${
                 activeCard === 0 ? 'opacity-100 scale-100 ring-4 ring-brand-red/30' : 'opacity-40 scale-95 hidden md:flex'
               }`}
             >
               <div className="flex items-center text-brand-red">
                 <span className="material-symbols-outlined mr-2">event</span>
-                <span className="text-xs uppercase tracking-widest font-black">Próximo Culto</span>
+                <span className="text-xs uppercase tracking-widest font-black">Cultos de Celebração</span>
               </div>
               <div>
-                <p className="text-2xl font-black text-brand-red tracking-tight drop-shadow-md">Hoje, 20:00h</p>
-                <p className="text-sm text-white/90 font-bold tracking-wide mt-1 drop-shadow-sm">Celebração &amp; Adoração</p>
+                <p className="text-2xl font-black text-brand-red tracking-tight drop-shadow-md">Domingo, 10h e 19h</p>
+                <p className="text-sm text-white/90 font-bold tracking-wide mt-1 drop-shadow-sm">Celebração da Família</p>
               </div>
             </div>
 
             {/* Card 2: Connect Groups */}
             <div 
-              className={`bg-[#121212]/95 backdrop-blur-2xl border-2 border-brand-red/45 p-6 rounded-2xl flex flex-col gap-3 w-full md:w-80 transition-all duration-500 ease-in-out shadow-2xl ${
+              className={`bg-[#1c1b1d]/95 backdrop-blur-2xl border-2 border-brand-red/45 p-6 rounded-2xl flex flex-col gap-3 w-full md:w-80 transition-all duration-500 ease-in-out shadow-2xl ${
                 activeCard === 1 ? 'opacity-100 scale-100 ring-4 ring-brand-red/30' : 'opacity-40 scale-95 hidden md:flex'
               }`}
             >
               <div className="flex items-center text-brand-red">
                 <span className="material-symbols-outlined mr-2">group</span>
-                <span className="text-xs uppercase tracking-widest font-black">Connect groups</span>
+                <span className="text-xs uppercase tracking-widest font-black">Culto de Jovens</span>
               </div>
               <div>
-                <p className="text-2xl font-black text-brand-red tracking-tight drop-shadow-md">Vida em Comunidade</p>
-                <p className="text-sm text-white/90 font-bold tracking-wide mt-1 drop-shadow-sm">Encontre o seu grupo hoje</p>
+                <p className="text-2xl font-black text-brand-red tracking-tight drop-shadow-md">Sábado, 19:00h</p>
+                <p className="text-sm text-white/90 font-bold tracking-wide mt-1 drop-shadow-sm">Be One Alphaville</p>
               </div>
             </div>
           </div>

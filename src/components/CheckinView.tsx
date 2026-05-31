@@ -166,7 +166,7 @@ export default function CheckinView({ onBack, onSuccess }: CheckinViewProps) {
                     <span className="material-symbols-outlined text-brand-red !text-2xl">pin_drop</span>
                     <div>
                       <p className="font-bold text-sm text-brand-dark">Localização</p>
-                      <p className="text-xs text-slate-500">Al. Rio Negro, 1200 - Alphaville</p>
+                      <p className="text-xs text-slate-500">Av. Juruá, 159 - Alphaville, Barueri - SP</p>
                     </div>
                   </div>
                 </div>

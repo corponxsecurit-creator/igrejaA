@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
-  --font-body: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
   
   --color-brand-red: #e30613;
   --color-brand-red-hover: #c61118;
   --color-brand-dark: #0a0a0a;
-  --color-brand-charcoal: #121212;
+  --color-brand-charcoal: #1c1b1d;
   --color-brand-light: #f4f6f8;
 }
 
 body {
-  font-family: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 
 
