@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { playTapSound } from '../utils/audio';
+import { speakText } from '../utils/tts';
 
 interface HomeViewProps {
   onStart: () => void;
+  onOpenAccessibility: () => void;
 }
 
-export default function HomeView({ onStart }: HomeViewProps) {
+export default function HomeView({ onStart, onOpenAccessibility }: HomeViewProps) {
   const [activeCard, setActiveCard] = useState(0);
+
+  // Welcome voice message on mount
+  useEffect(() => {
+    speakText('Bem-vindo à Igreja Atitude Alphaville. Toque na tela para iniciar o atendimento.');
+  }, []);
 
   // Rotate carousel cards every 5 seconds
   useEffect(() => {
@@ -24,11 +31,13 @@ export default function HomeView({ onStart }: HomeViewProps) {
   const handleAccessibilityClick = (type: string) => {
     playTapSound();
     if (type === 'lang') {
+      speakText('Idioma selecionado: Português do Brasil.');
       alert('Idioma: Português (Brasil) selecionado.');
     } else {
-      alert('Modo de Acessibilidade: Contraste de cores ativado por padrão. Teclado virtual ampliado disponível em todos os campos de texto.');
+      onOpenAccessibility();
     }
   };
+
 
   return (
     <div className="relative h-screen w-full select-none overflow-hidden bg-brand-dark text-white">

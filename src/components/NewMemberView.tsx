@@ -3,6 +3,7 @@ import { ViewState, NewMemberState } from '../types';
 import { playSuccessSound, playTapSound } from '../utils/audio';
 import VirtualKeyboard from './VirtualKeyboard';
 import NumericKeypad from './NumericKeypad';
+import LiveClock from './LiveClock';
 
 interface NewMemberViewProps {
   onBack: () => void;
@@ -156,6 +157,11 @@ export default function NewMemberView({ onBack, onGoHome }: NewMemberViewProps) 
             <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">Boas-vindas</span>
             <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Sou Novo Aqui</h1>
           </div>
+
+          <div className="hidden md:block">
+            <LiveClock />
+          </div>
+
           <span className="text-sm font-bold text-slate-500 font-sans" id="step-counter">
             Passo {form.step} de 3
           </span>

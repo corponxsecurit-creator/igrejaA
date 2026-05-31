@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DonationState } from '../types';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
+import LiveClock from './LiveClock';
+import { speakText } from '../utils/tts';
 
 interface DonationViewProps {
   onBack: () => void;
@@ -15,6 +17,42 @@ export default function DonationView({ onBack, onGoHome }: DonationViewProps) {
     customValue: '',
     step: 'category'
   });
+
+  const [pixTimer, setPixTimer] = useState(300);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (state.step !== 'pix') return;
+
+    setPixTimer(300);
+    speakText(`Código PIX gerado no valor de R$ ${state.value.toFixed(2)}. Aponte o celular ou copie a chave para pagar.`);
+
+    const timer = setInterval(() => {
+      setPixTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [state.step, state.value]);
+
+  const formatTimer = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleCopyKey = () => {
+    playSuccessSound();
+    navigator.clipboard.writeText('00020101021226870014br.gov.bcb.pix2565pix.atitudealphaville.com/donations/totem');
+    setCopied(true);
+    speakText('Chave Copiada');
+    setTimeout(() => setCopied(false), 3000);
+  };
 
   const categories = [
     { title: 'Dízimo Geral', icon: 'payments', desc: 'Devolução regular de comunhão financeira de dízimo.' },
@@ -77,15 +115,20 @@ export default function DonationView({ onBack, onGoHome }: DonationViewProps) {
     <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
       
       {/* Header bar */}
-      <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-6 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
+      <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
         <div>
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">Altar &amp; Generosidade</span>
           <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Contribuições Atitude</h1>
         </div>
+
+        <div className="hidden md:block">
+          <LiveClock />
+        </div>
+
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-2 text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
+          className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
         >
           <span className="material-symbols-outlined !text-xl">arrow_back</span>
           <span>Voltar</span>
@@ -233,21 +276,45 @@ export default function DonationView({ onBack, onGoHome }: DonationViewProps) {
           <div className="space-y-6 animate-fade-in text-center max-w-xl mx-auto">
             <header className="space-y-2">
               <span className="text-xs uppercase tracking-widest font-black text-slate-550 block">PIX Facilitado</span>
-              <h2 className="text-2xl font-black text-brand-dark">Posicione sua câmera</h2>
+              <h2 className="text-2xl font-black text-brand-dark">Aproxime o Celular</h2>
               <div className="text-xl font-extrabold text-brand-red bg-brand-red/10 rounded-full px-6 py-2.5 inline-block border border-brand-red/30 shadow-sm">
                 Valor: R$ {state.value.toFixed(2)} ({state.category})
               </div>
             </header>
 
             {/* Simulated PIX QR display */}
-            <div className="bg-white rounded-3xl p-6 border-2 border-slate-200 shadow-lg flex flex-col items-center">
-              <img
-                className="w-56 h-56 object-contain rounded-2xl pointer-events-none"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_ptHuYhlDFyDexHL0MXiDWIWBLQywj4JYFKg9lNzTjM1PVcSDD5P9AkpH48mcS9VAxPD0SCLRkTk86Jc0fItS7fLrskbB0D-CE20Mpp83ZXA6R_Hh5hMcdgSSw5OQV6gkjjzmuI2XP6r3pjC5vurY4SgT1g__rD4uRh6b6NVv4x6_TJtVdDwrgfH6FuHvLgiEJFbqa5zc-GQ4YvskFfGOalToE-66bFI3wVUaNPmvV_C8jyNy9FjlE4QSUlPLEoc58jSKl4bAhegS"
-                alt="PIX QR Code"
-                referrerPolicy="no-referrer"
-              />
-              <p className="text-xs text-slate-500 font-semibold mt-4">
+            <div className="bg-white rounded-3xl p-6 border-2 border-slate-200 shadow-lg flex flex-col items-center relative overflow-hidden">
+              <div className="relative w-56 h-56 group border-2 border-brand-red/20 rounded-2xl overflow-hidden p-1 shadow-inner bg-slate-50">
+                <img
+                  className="w-full h-full object-contain rounded-xl pointer-events-none opacity-90"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_ptHuYhlDFyDexHL0MXiDWIWBLQywj4JYFKg9lNzTjM1PVcSDD5P9AkpH48mcS9VAxPD0SCLRkTk86Jc0fItS7fLrskbB0D-CE20Mpp83ZXA6R_Hh5hMcdgSSw5OQV6gkjjzmuI2XP6r3pjC5vurY4SgT1g__rD4uRh6b6NVv4x6_TJtVdDwrgfH6FuHvLgiEJFbqa5zc-GQ4YvskFfGOalToE-66bFI3wVUaNPmvV_C8jyNy9FjlE4QSUlPLEoc58jSKl4bAhegS"
+                  alt="PIX QR Code"
+                  referrerPolicy="no-referrer"
+                />
+                {/* Scan line overlay */}
+                <div className="absolute left-0 w-full h-1 bg-brand-red scan-line rounded-full opacity-80" />
+              </div>
+
+              {/* Countdown timer display */}
+              <div className="mt-4 flex items-center justify-center gap-2 text-slate-700 bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl">
+                <span className="material-symbols-outlined text-brand-red !text-lg animate-spin">autorenew</span>
+                <span className="text-xs font-black uppercase tracking-wider">O código expira em:</span>
+                <span className="text-sm font-extrabold text-brand-red font-mono">{formatTimer(pixTimer)}</span>
+              </div>
+
+              {/* Copy paste button */}
+              <div className="mt-4 w-full">
+                <button
+                  type="button"
+                  onClick={handleCopyKey}
+                  className="w-full h-12 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors active:scale-95 text-xs uppercase tracking-wider"
+                >
+                  <span className="material-symbols-outlined !text-base">content_copy</span>
+                  <span>{copied ? 'Chave Copiada!' : 'Copiar Chave PIX Copia e Cola'}</span>
+                </button>
+              </div>
+
+              <p className="text-xs text-slate-505 font-semibold mt-4 leading-relaxed">
                 Abra o aplicativo do seu banco, selecione a opção "Pagar com PIX/QR Code" e aponte para o código acima para concluir.
               </p>
             </div>

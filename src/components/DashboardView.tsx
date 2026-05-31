@@ -1,13 +1,16 @@
 import React from 'react';
 import { ViewState } from '../types';
 import { playTapSound } from '../utils/audio';
+import LiveClock from './LiveClock';
+import { speakText } from '../utils/tts';
 
 interface DashboardViewProps {
   onSelectView: (view: ViewState) => void;
   onGoHome: () => void;
+  onOpenAccessibility: () => void;
 }
 
-export default function DashboardView({ onSelectView, onGoHome }: DashboardViewProps) {
+export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibility }: DashboardViewProps) {
   const handleSelect = (view: ViewState) => {
     playTapSound();
     onSelectView(view);
@@ -20,12 +23,13 @@ export default function DashboardView({ onSelectView, onGoHome }: DashboardViewP
 
   const handleHelpClick = () => {
     playTapSound();
+    speakText('Ajuda física solicitada. Se precisar de auxílio com o totem, chame um voluntário no saguão.');
     alert('Este é um totem de atendimento inteligente. Se precisar de ajuda física, chame um voluntário no saguão principal.');
   };
 
   const handleAccessibilityClick = () => {
     playTapSound();
-    alert('Modo de Acessibilidade: Contraste de cores ativado por padrão. Teclado virtual ampliado disponível em todos os campos de texto.');
+    onOpenAccessibility();
   };
 
   return (
@@ -39,6 +43,11 @@ export default function DashboardView({ onSelectView, onGoHome }: DashboardViewP
             Atitude <span className="text-brand-red">Alphaville</span>
           </h1>
         </div>
+
+        {/* Relógio Digital de Totem em Tempo Real */}
+        <div className="hidden md:block">
+          <LiveClock />
+        </div>
         
         <div className="flex gap-4">
           <button 
@@ -51,6 +60,7 @@ export default function DashboardView({ onSelectView, onGoHome }: DashboardViewP
           </button>
         </div>
       </nav>
+
 
       {/* Main Grid Area */}
       <main className="flex-grow pt-28 pb-36 px-6 md:px-20 max-w-7xl mx-auto w-full flex flex-col justify-center">

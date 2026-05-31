@@ -4,6 +4,7 @@ import { churchMembers } from '../data';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
 import VirtualKeyboard from './VirtualKeyboard';
+import LiveClock from './LiveClock';
 
 interface CheckinViewProps {
   onBack: () => void;
@@ -97,11 +98,16 @@ export default function CheckinView({ onBack, onSuccess }: CheckinViewProps) {
     <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
       
       {/* Top Header */}
-      <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-6 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
+      <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
         <div>
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">Totem de Acesso</span>
           <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Check-in do Culto</h1>
         </div>
+
+        <div className="hidden md:block">
+          <LiveClock />
+        </div>
+
         <button
           type="button"
           onClick={handleGoBack}

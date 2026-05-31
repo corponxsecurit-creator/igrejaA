@@ -65,3 +65,112 @@ body {
 .scan-line {
   animation: scan 3s linear infinite;
 }
+
+/* Accessibility Theme: High Contrast */
+.high-contrast-active {
+  background: #000000 !important;
+  color: #ffff00 !important;
+}
+
+.high-contrast-active .bg-white,
+.high-contrast-active .bg-slate-50,
+.high-contrast-active .bg-slate-100,
+.high-contrast-active .bg-slate-150,
+.high-contrast-active .bg-\[\#f4f6f8\],
+.high-contrast-active .bg-\[\#e6e8eb\],
+.high-contrast-active .bg-slate-200,
+.high-contrast-active .bg-brand-light {
+  background-color: #000000 !important;
+  background-image: none !important;
+  color: #ffff00 !important;
+  border-color: #ffff00 !important;
+}
+
+.high-contrast-active header,
+.high-contrast-active nav,
+.high-contrast-active footer {
+  background-color: #000000 !important;
+  border-color: #ffff00 !important;
+}
+
+.high-contrast-active button,
+.high-contrast-active input,
+.high-contrast-active select,
+.high-contrast-active textarea {
+  background-color: #000000 !important;
+  color: #ffff00 !important;
+  border: 2px solid #ffff00 !important;
+}
+
+.high-contrast-active button:hover,
+.high-contrast-active button:active,
+.high-contrast-active .bg-brand-red {
+  background-color: #ffff00 !important;
+  color: #000000 !important;
+  border-color: #ffff00 !important;
+}
+
+.high-contrast-active .bg-brand-dark,
+.high-contrast-active .bg-\[\#0a0a0a\],
+.high-contrast-active .bg-\[\#121212\] {
+  background-color: #000000 !important;
+  color: #ffff00 !important;
+  border-color: #ffff00 !important;
+}
+
+.high-contrast-active .text-slate-500,
+.high-contrast-active .text-slate-600,
+.high-contrast-active .text-slate-700,
+.high-contrast-active .text-brand-dark,
+.high-contrast-active .text-\[\#191c1e\],
+.high-contrast-active .text-\[\#43474d\],
+.high-contrast-active .text-slate-400,
+.high-contrast-active .text-slate-450 {
+  color: #ffff00 !important;
+}
+
+.high-contrast-active .text-brand-red {
+  color: #ffff00 !important;
+  text-decoration: underline;
+}
+
+.high-contrast-active .material-symbols-outlined,
+.high-contrast-active .material-symbols-fill {
+  color: #ffff00 !important;
+}
+
+/* Accessibility Theme: Text Zoom */
+.text-zoom-active {
+  font-size: 1.25rem !important;
+}
+
+.text-zoom-active h1 {
+  font-size: 2.5rem !important;
+}
+
+.text-zoom-active h2 {
+  font-size: 2rem !important;
+}
+
+.text-zoom-active p,
+.text-zoom-active span,
+.text-zoom-active button,
+.text-zoom-active label,
+.text-zoom-active input {
+  font-size: 1.35rem !important;
+}
+
+.text-zoom-active button {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+  min-height: 4.5rem !important;
+}
+
+.text-zoom-active footer,
+.text-zoom-active header,
+.text-zoom-active nav {
+  height: auto !important;
+  padding-top: 1.5rem !important;
+  padding-bottom: 1.5rem !important;
+}
+
