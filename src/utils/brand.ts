@@ -149,7 +149,7 @@ export const brands: Record<string, BrandConfig> = {
     termConnect: 'GC (Grupo de Crescimento)',
     termConnects: 'Grupos de Crescimento',
     termMember: 'Novo Membro',
-    location: 'Al. Araguaia, 319 - Alphaville, Barueri - SP',
+    location: 'Avenida Tamboré, 74 – Alphaville Industrial, Barueri - SP',
     wifi: 'Lagoinha_Alphaville',
     pixKey: 'pix@lagoinhaalphaville.com.br',
     pastors: [
@@ -301,7 +301,7 @@ export const brands: Record<string, BrandConfig> = {
     termConnect: 'Shiur (Estudo)',
     termConnects: 'Estudos e Classes',
     termMember: 'Registro de Membro',
-    location: 'Rua Bela Cintra, 2431 - Consolação, São Paulo - SP',
+    location: 'Rua Dr. Veiga Filho, 547 – Higienópolis, São Paulo - SP',
     wifi: 'BeitYaacov_Guest',
     pixKey: 'tsedaka@beityaacov.org.br',
     pastors: [
@@ -314,15 +314,15 @@ export const brands: Record<string, BrandConfig> = {
       },
       {
         id: '2',
-        name: 'Rabino David Weitman',
+        name: 'Rabino Y. David Weitman',
         role: 'Orientação Espiritual',
         available: true,
         photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&fit=crop&q=80',
       },
       {
         id: '3',
-        name: 'Rabino Shamai Ende',
-        role: 'Estudos da Torá e Cabalá',
+        name: 'Rabino Efraim Laniado',
+        role: 'Estudos da Torá e Halachá',
         available: true,
         photoUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&fit=crop&q=80',
       }
@@ -334,7 +334,7 @@ export const brands: Record<string, BrandConfig> = {
         neighborhood: 'Biblioteca Beit Yaacov',
         day: 'Terça-feira',
         hour: '19:30',
-        leader: 'Rabino Shamai',
+        leader: 'Rabino Efraim',
         phone: '(11) 99777-6655',
       },
       {
@@ -343,7 +343,7 @@ export const brands: Record<string, BrandConfig> = {
         neighborhood: 'Auditório Anexo',
         day: 'Segunda-feira',
         hour: '20:00',
-        leader: 'Rabino David',
+        leader: 'Rabino Y. David',
         phone: '(11) 98888-7766',
       },
       {

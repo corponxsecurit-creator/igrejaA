@@ -198,3 +198,18 @@ body {
   background: rgba(0, 0, 0, 0.3);
 }
 
+/* Totem/Kiosk touch, zoom and select restrictions */
+body, button, a, img {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation; /* Disables double-tap to zoom natively */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Allow text selection inside forms */
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
