@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { playTapSound } from '../utils/audio';
 import { speakText } from '../utils/tts';
-
-interface HomeViewProps {
-  onStart: () => void;
-  onOpenAccessibility: () => void;
-}
-
-import React, { useState, useEffect } from 'react';
-import { playTapSound } from '../utils/audio';
-import { speakText } from '../utils/tts';
 import { BrandConfig } from '../utils/brand';
 
 interface HomeViewProps {
