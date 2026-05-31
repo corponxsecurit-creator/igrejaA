@@ -3,13 +3,15 @@ import { ViewState, PrayerRequest } from '../types';
 import { playSuccessSound, playTapSound } from '../utils/audio';
 import VirtualKeyboard from './VirtualKeyboard';
 import LiveClock from './LiveClock';
+import { BrandConfig } from '../utils/brand';
 
 interface PrayerRequestViewProps {
   onBack: () => void;
   onGoHome: () => void;
+  brand: BrandConfig;
 }
 
-export default function PrayerRequestView({ onBack, onGoHome }: PrayerRequestViewProps) {
+export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerRequestViewProps) {
   const [request, setRequest] = useState<PrayerRequest>({
     isAnonymous: true,
     name: '',
@@ -49,7 +51,7 @@ export default function PrayerRequestView({ onBack, onGoHome }: PrayerRequestVie
       return;
     }
     if (!request.message.trim()) {
-      alert('Por favor, escreva o seu pedido de oração.');
+      alert(brand.type === 'synagogue' ? 'Por favor, escreva o seu pedido de reza.' : 'Por favor, escreva o seu pedido de oração.');
       return;
     }
     setIsSent(true);
@@ -89,12 +91,22 @@ export default function PrayerRequestView({ onBack, onGoHome }: PrayerRequestVie
               Pedido Enviado!
             </h2>
             <p className="text-lg text-slate-600 max-w-lg mx-auto">
-              Nossa equipe de intercessores estará em oração pelo seu pedido. Tenha certeza de que Deus estende as mãos sobre sua vida!
+              {brand.type === 'synagogue'
+                ? 'Nossa comunidade e rabinos estarão em oração pelo seu pedido. Tenha fé de que o Criador atende às preces sinceras!'
+                : 'Nossa equipe de intercessores estará em oração pelo seu pedido. Tenha certeza de que Deus estende as mãos sobre sua vida!'}
             </p>
           </div>
 
           <div className="bg-white/40 border border-slate-200 p-6 rounded-2xl italic text-slate-500 max-w-md mx-auto">
-            "Clama a mim, e responder-te-ei, e anunciar-te-ei coisas grandes e firmes..." Jeremias 33:3
+            {brand.type === 'synagogue' ? (
+              <>
+                "O Eterno está perto de todos os que O invocam, de todos os que O invocam em verdade." Salmos 145:18
+              </>
+            ) : (
+              <>
+                "Clama a mim, e responder-te-ei, e anunciar-te-ei coisas grandes e firmes..." Jeremias 33:3
+              </>
+            )}
           </div>
 
           <button
@@ -117,8 +129,12 @@ export default function PrayerRequestView({ onBack, onGoHome }: PrayerRequestVie
       <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
         <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
           <div>
-            <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">Intercessão</span>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Pedido de Oração</h1>
+            <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">
+              {brand.type === 'synagogue' ? 'Preces & Orações' : 'Intercessão'}
+            </span>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
+              {brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
+            </h1>
           </div>
 
           <div className="hidden md:block">
@@ -188,7 +204,9 @@ export default function PrayerRequestView({ onBack, onGoHome }: PrayerRequestVie
                 <span className="material-symbols-outlined !text-base">lock</span>
                 <span>Sigilo Absoluto</span>
               </div>
-              Todos os pedidos de oração recebidos em nosso Santuário são mantidos em absoluto sigilo e levados por nossos intercessores nas reuniões de oração diárias.
+              {brand.type === 'synagogue'
+                ? 'Todos os pedidos de rezas recebidos em nossa sinagoga são mantidos em absoluto sigilo e lembrados nas preces diárias por nossos rabinos e comunidade.'
+                : 'Todos os pedidos de oração recebidos em nosso Santuário são mantidos em absoluto sigilo e levados por nossos intercessores nas reuniões de oração diárias.'}
             </div>
           </div>
 

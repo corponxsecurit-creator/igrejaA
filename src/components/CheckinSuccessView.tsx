@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { playSuccessSound, playTapSound } from '../utils/audio';
+import { BrandConfig } from '../utils/brand';
 
 interface CheckinSuccessViewProps {
   onGoHome: () => void;
+  brand: BrandConfig;
 }
 
-export default function CheckinSuccessView({ onGoHome }: CheckinSuccessViewProps) {
+export default function CheckinSuccessView({ onGoHome, brand }: CheckinSuccessViewProps) {
   useEffect(() => {
     playSuccessSound();
   }, []);
@@ -22,8 +24,8 @@ export default function CheckinSuccessView({ onGoHome }: CheckinSuccessViewProps
       <div className="absolute inset-0 z-0">
         <img
           className="h-full w-full object-cover opacity-25 mix-blend-overlay transition-transform duration-10000"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcF63g5wINYh5KadlNZ9tDn5TZRGkNz2BEk-9Yd8WTr-pG_Ay6USjrsqfY7V5cTLemxuiDRJglHTib219JYGIO5dfFoc5BkXWS2kkc7ex0DZvkRqGzYTSPFB_45bwm4vxn_qqxtRKzycImwjlo7Vf0aPzN13ayAJMbAf32UcESpjhDmu9LsoC2n8bp3-uAUtavsYrKHhCCILvaGi5iWoU2sfcEOntjjmJv43G9tB__fuGAmUaDa9pQq-hGxJLgkxUwFZ_uS0ToccW"
-          alt="Santuário Atitude"
+          src={brand.bgUrl}
+          alt={brand.name}
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/60 via-transparent to-brand-dark/95" />
@@ -43,7 +45,7 @@ export default function CheckinSuccessView({ onGoHome }: CheckinSuccessViewProps
 
         <div className="space-y-4">
           <span className="bg-brand-red text-white text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full inline-block shadow-md border border-brand-red-hover">
-            Conferência Global Atitude
+            {brand.type === 'synagogue' ? 'Serviços do Shabat' : `Celebração Especial ${brand.name}`}
           </span>
           <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-xl">
             Check-in Realizado!
@@ -54,7 +56,9 @@ export default function CheckinSuccessView({ onGoHome }: CheckinSuccessViewProps
         <div className="glass-panel p-6 rounded-2xl border border-white/10 max-w-md mx-auto space-y-2">
           <p className="text-lg font-semibold text-white/95">Presença Confirmada</p>
           <p className="text-sm text-white/70 leading-relaxed">
-            Seja muito bem-vindo! Seu acesso ao templo principal foi liberado. Desejamos uma experiência transformadora com Deus nesta noite.
+            {brand.type === 'synagogue'
+              ? 'Seja muito bem-vindo! Seu acesso à sinagoga foi registrado. Desejamos um Shabat de paz, reflexão e bênçãos em nossa comunidade.'
+              : 'Seja muito bem-vindo! Seu acesso ao templo principal foi liberado. Desejamos uma experiência transformadora com Deus nesta noite.'}
           </p>
         </div>
 

@@ -5,13 +5,15 @@ import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
 import VirtualKeyboard from './VirtualKeyboard';
 import LiveClock from './LiveClock';
+import { BrandConfig } from '../utils/brand';
 
 interface CheckinViewProps {
   onBack: () => void;
   onSuccess: () => void;
+  brand: BrandConfig;
 }
 
-export default function CheckinView({ onBack, onSuccess }: CheckinViewProps) {
+export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewProps) {
   const [method, setMethod] = useState<'qr' | 'phone' | 'name'>('qr');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [nameSearch, setNameSearch] = useState('');
@@ -100,8 +102,10 @@ export default function CheckinView({ onBack, onSuccess }: CheckinViewProps) {
       {/* Top Header */}
       <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
         <div>
-          <span className="text-xs uppercase tracking-widest text-brand-red font-black block">Totem de Acesso</span>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Check-in do Culto</h1>
+          <span className="text-xs uppercase tracking-widest text-brand-red font-black block">
+            {brand.type === 'synagogue' ? 'Totem de Entrada' : 'Totem de Acesso'}
+          </span>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Check-in do {brand.termCult}</h1>
         </div>
 
         <div className="hidden md:block">
@@ -136,17 +140,17 @@ export default function CheckinView({ onBack, onSuccess }: CheckinViewProps) {
               <div className="relative h-48 w-full">
                 <img
                   className="h-full w-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvU--QNk4z3WPm2_QP2mx3Fg70KGHCOdM_ArPdrANHx6VPuQiWhf1HJ6CM_x-hDkveCxWYpO6f1_SMrVShNHhJ8i8c2_EQWfgAvmuh_PhQMr1CiOLCZ_E8TqQdPCkrT_34UPEZYGjzAeKmQWJfjg5-7HERai1Zb08k1WG0sHFKKjYvu-Ixuf8Bf6XbhzR0cQl4N7Ixu58rarnwCnZk3ZgYOJPSXQLOhMChfIofIoOglrmC5MimQEqDw4KkxcLfQsor5BQzbYnWKJoC"
-                  alt="Culto de Celebração"
+                  src={brand.bgUrl}
+                  alt={brand.termCult}
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
                 <div className="absolute bottom-4 left-6">
                   <span className="bg-brand-red text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md block w-fit mb-1 border border-brand-red-hover">
-                    Células &amp; Celebração
+                    {brand.type === 'synagogue' ? 'Comunidade & Shabat' : 'Células & Celebração'}
                   </span>
                   <h2 className="text-xl md:text-2xl font-black text-white leading-tight">
-                    Conferência Global Atitude
+                    {brand.type === 'synagogue' ? 'Serviços do Shabat' : `Celebração Especial ${brand.name}`}
                   </h2>
                 </div>
               </div>
@@ -158,7 +162,7 @@ export default function CheckinView({ onBack, onSuccess }: CheckinViewProps) {
                     <span className="material-symbols-outlined text-brand-red !text-2xl">schedule</span>
                     <div>
                       <p className="font-bold text-sm text-brand-dark">Horário de entrada</p>
-                      <p className="text-xs text-slate-500">19:30 - 22:00, Auditório Principal</p>
+                      <p className="text-xs text-slate-500">Acesso liberado 30 min antes do início</p>
                     </div>
                   </div>
 
@@ -166,14 +170,14 @@ export default function CheckinView({ onBack, onSuccess }: CheckinViewProps) {
                     <span className="material-symbols-outlined text-brand-red !text-2xl">pin_drop</span>
                     <div>
                       <p className="font-bold text-sm text-brand-dark">Localização</p>
-                      <p className="text-xs text-slate-500">Av. Juruá, 159 - Alphaville, Barueri - SP</p>
+                      <p className="text-xs text-slate-500">{brand.location}</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-red-50/50 rounded-2xl p-4 border border-dashed border-brand-red/20 text-xs text-slate-500 font-medium">
                   <p className="font-bold text-slate-700 mb-1">Problemas no check-in?</p>
-                  Por favor, chame um de nossos voluntários no saguão de entrada com crachá vermelho para validação manual.
+                  Por favor, solicite suporte a um de nossos voluntários e recepcionistas no saguão para auxílio imediato.
                 </div>
               </div>
             </div>

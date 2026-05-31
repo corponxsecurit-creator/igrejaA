@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
-import { cellGroups } from '../data';
 import { CellGroup } from '../types';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
 import LiveClock from './LiveClock';
+import { BrandConfig } from '../utils/brand';
 
 interface MyCellViewProps {
   onBack: () => void;
   onGoHome: () => void;
+  brand: BrandConfig;
 }
 
-export default function MyCellView({ onBack, onGoHome }: MyCellViewProps) {
+export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps) {
   const [selectedNeighborhood, setSelectedNeighborhood] = useState<string>('Todos');
   const [activeCellModal, setActiveCellModal] = useState<CellGroup | null>(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isJoined, setIsJoined] = useState(false);
 
-  // Neighbors select list
-  const neighborhoods = ['Todos', 'Alphaville', 'Tamboré', 'Barueri', 'Santana de Parnaíba'];
+  // Neighbors select list computed dynamically from brand's groups
+  const neighborhoods = ['Todos', ...Array.from(new Set(brand.cellGroups.map((c) => c.neighborhood)))];
 
   const filteredCells = selectedNeighborhood === 'Todos'
-    ? cellGroups
-    : cellGroups.filter((c) => c.neighborhood.toLowerCase().includes(selectedNeighborhood.toLowerCase()));
+    ? brand.cellGroups
+    : brand.cellGroups.filter((c) => c.neighborhood.toLowerCase().includes(selectedNeighborhood.toLowerCase()));
 
   const handleNeighborhoodSelect = (n: string) => {
     playTapSound();
@@ -85,8 +86,8 @@ export default function MyCellView({ onBack, onGoHome }: MyCellViewProps) {
       {/* Top Header */}
       <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
         <div>
-          <span className="text-xs uppercase tracking-widest text-brand-red font-black block">Pequenos Grupos</span>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Encontre sua Célula</h1>
+          <span className="text-xs uppercase tracking-widest text-brand-red font-black block">{brand.termConnects}</span>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Encontre seu {brand.termConnect}</h1>
         </div>
 
         <div className="hidden md:block">
@@ -130,18 +131,20 @@ export default function MyCellView({ onBack, onGoHome }: MyCellViewProps) {
         {/* Banner Card de Pequenos Grupos */}
         <div 
           className="w-full h-48 rounded-3xl overflow-hidden mb-8 shadow-sm border border-slate-200 bg-cover bg-center flex flex-col justify-end p-6 md:p-8 relative"
-          style={{ backgroundImage: "url('https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/get_small_group.png')" }}
+          style={{ backgroundImage: `url(${brand.type === 'synagogue' ? 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&fit=crop&q=80' : 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&fit=crop&q=80'})` }}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent z-0" />
           <div className="relative z-10 text-left">
             <span className="bg-brand-red text-white text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md block w-fit mb-1 border border-brand-red-hover">
-              Vida em Comunidade
+              {brand.type === 'synagogue' ? 'Estudos & Mitzvot' : 'Vida em Comunidade'}
             </span>
             <h2 className="text-xl md:text-2xl font-black text-white leading-tight uppercase">
-              Pequenos Grupos Atitude
+              {brand.termConnects} {brand.name}
             </h2>
             <p className="text-xs text-white/80 font-semibold mt-1">
-              Encontre uma célula perto de você e viva uma verdadeira comunhão cristã em Alphaville.
+              {brand.type === 'synagogue'
+                ? `Participe de um grupo de estudos perto de você e viva uma verdadeira comunhão em ${brand.campusName}.`
+                : `Encontre um(a) ${brand.termConnect.toLowerCase()} perto de você e viva uma verdadeira comunhão em ${brand.campusName}.`}
             </p>
           </div>
         </div>
@@ -170,7 +173,7 @@ export default function MyCellView({ onBack, onGoHome }: MyCellViewProps) {
                   <div className="mt-4 space-y-2.5">
                     <div className="flex items-center gap-2.5 text-slate-600 font-medium text-sm">
                       <span className="material-symbols-outlined !text-lg text-slate-400">person</span>
-                      <span>Líder: <strong className="text-brand-dark">{cell.leader}</strong></span>
+                      <span>Responsável: <strong className="text-brand-dark">{cell.leader}</strong></span>
                     </div>
 
                     <div className="flex items-center gap-2.5 text-slate-600 font-medium text-sm">
@@ -185,7 +188,7 @@ export default function MyCellView({ onBack, onGoHome }: MyCellViewProps) {
                   onClick={() => handleCellModalOpen(cell)}
                   className="w-full h-12 bg-slate-50 hover:bg-red-50 text-brand-dark hover:text-brand-red font-black text-xs uppercase tracking-wider rounded-xl mt-6 transition-colors cursor-pointer border border-slate-200 flex items-center justify-center gap-1"
                 >
-                  <span>Quero Visitar</span>
+                  <span>{brand.type === 'synagogue' ? 'Quero Participar' : 'Quero Visitar'}</span>
                   <span className="material-symbols-outlined !text-base">arrow_forward</span>
                 </button>
               </div>
@@ -193,7 +196,7 @@ export default function MyCellView({ onBack, onGoHome }: MyCellViewProps) {
           ) : (
             <div className="col-span-full py-16 text-center text-slate-400 font-medium space-y-2 bg-slate-50 border border-slate-200 rounded-3xl">
               <span className="material-symbols-outlined !text-5xl text-slate-300">block</span>
-              <p>Nenhuma célula cadastrada nesta região no momento.</p>
+              <p>Nenhum grupo cadastrado nesta região no momento.</p>
             </div>
           )}
         </div>
@@ -209,7 +212,7 @@ export default function MyCellView({ onBack, onGoHome }: MyCellViewProps) {
             <div className="p-6 bg-brand-dark text-white border-b flex justify-between items-center">
               <div>
                 <span className="text-[10px] uppercase font-black tracking-widest bg-brand-red px-2.5 py-1 rounded-md mb-1 block w-fit">
-                  Visitar Grupo
+                  {brand.type === 'synagogue' ? 'Participar do Grupo' : 'Visitar Grupo'}
                 </span>
                 <h3 className="text-xl font-bold uppercase tracking-tight">{activeCellModal.name}</h3>
               </div>
@@ -229,9 +232,9 @@ export default function MyCellView({ onBack, onGoHome }: MyCellViewProps) {
                   <div className="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-sm">
                     <span className="material-symbols-outlined !text-3xl font-black">done</span>
                   </div>
-                  <h4 className="text-xl font-black text-brand-dark">Endereço Enviado!</h4>
+                  <h4 className="text-xl font-black text-brand-dark">Local Enviado!</h4>
                   <p className="text-sm text-slate-600 leading-relaxed">
-                    O endereço completo e as coordenadas da Célula de <span className="font-bold text-brand-dark">{activeCellModal.leader}</span> foram enviados por WhatsApp para o número <span className="font-bold text-brand-dark">{formatPhone(phoneNumber)}</span>. Seja muito bem-vindo!
+                    O local completo e as orientações de <span className="font-bold text-brand-dark">{activeCellModal.leader}</span> foram enviados por WhatsApp para o número <span className="font-bold text-brand-dark">{formatPhone(phoneNumber)}</span>. Seja muito bem-vindo!
                   </p>
                   <button
                     type="button"
@@ -244,7 +247,9 @@ export default function MyCellView({ onBack, onGoHome }: MyCellViewProps) {
               ) : (
                 <div className="space-y-4">
                   <p className="text-xs text-slate-500 font-semibold mb-4 bg-red-50 rounded-xl p-3 border border-red-100">
-                    Por segurança de nossos pequenos grupos, enviamos o endereço completo exclusivamente por WhatsApp.
+                    {brand.type === 'synagogue'
+                      ? 'Por segurança de nossos membros, enviamos o local das preces e shiurim exclusivamente por WhatsApp.'
+                      : 'Por segurança de nossos pequenos grupos, enviamos o endereço completo exclusivamente por WhatsApp.'}
                   </p>
 
                   <div className="space-y-1.5 text-left">
@@ -260,7 +265,7 @@ export default function MyCellView({ onBack, onGoHome }: MyCellViewProps) {
                     <NumericKeypad 
                       onKeyPress={handleKeypadPress} 
                       onConfirm={handleSubmitAddress} 
-                      confirmLabel="Solicitar Endereço"
+                      confirmLabel={brand.type === 'synagogue' ? 'Solicitar Local' : 'Solicitar Endereço'}
                     />
                   </div>
                 </div>

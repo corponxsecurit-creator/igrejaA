@@ -3,14 +3,16 @@ import { ViewState } from '../types';
 import { playTapSound } from '../utils/audio';
 import LiveClock from './LiveClock';
 import { speakText } from '../utils/tts';
+import { BrandConfig } from '../utils/brand';
 
 interface DashboardViewProps {
   onSelectView: (view: ViewState) => void;
   onGoHome: () => void;
   onOpenAccessibility: () => void;
+  brand: BrandConfig;
 }
 
-export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibility }: DashboardViewProps) {
+export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibility, brand }: DashboardViewProps) {
   const handleSelect = (view: ViewState) => {
     playTapSound();
     onSelectView(view);
@@ -23,8 +25,8 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
 
   const handleHelpClick = () => {
     playTapSound();
-    speakText('Ajuda física solicitada. Se precisar de auxílio com o totem, chame um voluntário no saguão.');
-    alert('Este é um totem de atendimento inteligente. Se precisar de ajuda física, chame um voluntário no saguão principal.');
+    speakText(`Ajuda solicitada. Se precisar de auxílio com o totem da ${brand.name}, chame um de nossos voluntários no saguão.`);
+    alert(`Este é um totem de atendimento inteligente. Se precisar de ajuda física, chame um de nossos voluntários no saguão principal.`);
   };
 
   const handleAccessibilityClick = () => {
@@ -36,15 +38,15 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
     <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden animate-fade-in font-sans">
       
       {/* Top App Bar inside main panel */}
-      <nav className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-8 md:px-20 py-4 bg-white/90 backdrop-blur-md shadow-sm border-b border-[#eceef1]">
+      <nav className="fixed top-0 left-0 w-full z-45 flex justify-between items-center px-8 md:px-20 py-4 bg-white/90 backdrop-blur-md shadow-sm border-b border-[#eceef1]">
         <div className="flex items-center gap-2">
           <img 
-            src="https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png" 
+            src={brand.logoUrl} 
             className="h-12 object-contain" 
-            alt="Igreja Batista Atitude" 
+            alt={brand.name} 
           />
           <span className="text-xs uppercase tracking-[0.25em] font-black text-brand-red mt-1">
-            Alphaville
+            {brand.campusName}
           </span>
         </div>
 
@@ -60,7 +62,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             onClick={() => handleSelect('pastoral')}
           >
             <span className="material-symbols-outlined !text-xl text-brand-red">volunteer_activism</span>
-            <span>Mensagem Pastoral</span>
+            <span>{brand.termPastoral}</span>
           </button>
         </div>
       </nav>
@@ -71,7 +73,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         {/* Header Title */}
         <header className="mb-8 text-center">
           <h2 className="text-3xl md:text-4xl font-black text-brand-dark tracking-tight mb-2 animate-fade-in">
-            Bem-vindo à Atitude
+            Bem-vindo à {brand.name}
           </h2>
           <p className="text-base md:text-lg text-[#43474d] font-medium">
             Como podemos caminhar com você hoje?
@@ -81,7 +83,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         {/* Bento Grid Layout */}
         <div className="grid grid-cols-12 gap-5 md:gap-6 w-full">
           
-          {/* SOU NOVO AQUI (Big Action - 8 Cols on desktop) */}
+          {/* SOU NOVO AQUI / NOVO MEMBRO */}
           <button
             type="button"
             onClick={() => handleSelect('new_member')}
@@ -92,14 +94,14 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </span>
             <div className="text-left mt-4 z-10">
               <span className="text-xs tracking-widest uppercase font-bold text-slate-400 block mb-1">Membro ou Visitante</span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block">Sou Novo Aqui</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block">{brand.termMember}</span>
             </div>
             <div className="absolute right-6 bottom-6 opacity-15 text-white">
               <span className="material-symbols-outlined !text-[120px]">id_card</span>
             </div>
           </button>
 
-          {/* PEDIDO DE ORAÇÃO (Red - 4 Cols on desktop) */}
+          {/* PEDIDO DE ORAÇÃO */}
           <button
             type="button"
             onClick={() => handleSelect('prayer')}
@@ -110,14 +112,16 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </span>
             <div className="text-left mt-4">
               <span className="text-xs tracking-widest uppercase font-bold text-white/80 block mb-1">Intercessão</span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block leading-tight">Pedido de Oração</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block leading-tight">
+                {brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
+              </span>
             </div>
             <div className="absolute right-6 bottom-6 opacity-10 text-white animate-pulse">
               <span className="material-symbols-outlined !text-[100px]">chat</span>
             </div>
           </button>
 
-          {/* EVENTOS (Black / Charcoal - 4 Cols) */}
+          {/* EVENTOS / CULTOS */}
           <button
             type="button"
             onClick={() => handleSelect('checkin')}
@@ -127,12 +131,14 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               calendar_month
             </span>
             <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-slate-450 block mb-1">Agenda &amp; Encontros</span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block">Eventos</span>
+              <span className="text-xs tracking-widest uppercase font-bold text-slate-455 block mb-1">
+                {brand.type === 'synagogue' ? 'Shabat & Festividades' : 'Agenda & Encontros'}
+              </span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block">{brand.termCults}</span>
             </div>
           </button>
 
-          {/* FAÇA SUA CONTRIBUIÇÃO (Dark Slate - 8 Cols) */}
+          {/* DOACAO / CONTRIBUICAO */}
           <button
             type="button"
             onClick={() => handleSelect('donations')}
@@ -142,15 +148,15 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               payments
             </span>
             <div className="text-left mt-4 z-10">
-              <span className="text-xs tracking-widest uppercase font-bold text-slate-305 block mb-1">Dízimos e Ofertas</span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block">Faça sua Contribuição</span>
+              <span className="text-xs tracking-widest uppercase font-bold text-slate-350 block mb-1">{brand.termDonations}</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block">{brand.termDonation}</span>
             </div>
             <div className="absolute right-6 bottom-6 opacity-15 text-white">
               <span className="material-symbols-outlined !text-[120px]">qr_code</span>
             </div>
           </button>
 
-          {/* QUERO PARTICIPAR (Blue-ish / Dark - 6 Cols) */}
+          {/* QUERO PARTICIPAR */}
           <button
             type="button"
             onClick={() => handleSelect('ministries')}
@@ -160,12 +166,14 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               groups
             </span>
             <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-slate-350 block mb-1">Voluntariado</span>
+              <span className="text-xs tracking-widest uppercase font-bold text-slate-350 block mb-1">
+                {brand.type === 'synagogue' ? 'Engajamento & Mitzvot' : 'Voluntariado'}
+              </span>
               <span className="text-xl md:text-2xl font-black uppercase tracking-wider block">Quero Participar</span>
             </div>
           </button>
 
-          {/* CHECK-IN (Gray Outline - 3 Cols) */}
+          {/* CHECK-IN */}
           <button
             type="button"
             onClick={() => handleSelect('checkin')}
@@ -175,12 +183,14 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               how_to_reg
             </span>
             <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-[#43474d] block mb-1">Confirmar Presença</span>
+              <span className="text-xs tracking-widest uppercase font-bold text-[#43474d] block mb-1">
+                {brand.type === 'synagogue' ? 'Registrar Presença' : 'Confirmar Presença'}
+              </span>
               <span className="text-xl md:text-2xl font-black uppercase tracking-wider block">Check-in</span>
             </div>
           </button>
 
-          {/* MINHA CÉLULA (Slate/Gray - 3 Cols) */}
+          {/* MINHA CELULA */}
           <button
             type="button"
             onClick={() => handleSelect('my_cell')}
@@ -190,12 +200,14 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               hub
             </span>
             <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-[#43474d] block mb-1">Conexão Pequenos Grupos</span>
-              <span className="text-xl md:text-2xl font-black uppercase tracking-wider block">Minha Célula</span>
+              <span className="text-xs tracking-widest uppercase font-bold text-[#43474d] block mb-1">
+                {brand.type === 'synagogue' ? 'Grupos de Estudo' : 'Conexão Pequenos Grupos'}
+              </span>
+              <span className="text-xl md:text-2xl font-black uppercase tracking-wider block">{brand.termConnects}</span>
             </div>
           </button>
 
-          {/* ATENDIMENTO PASTORAL (Wide full-width action bar) */}
+          {/* ATENDIMENTO PASTORAL */}
           <button
             type="button"
             onClick={() => handleSelect('pastoral')}
@@ -206,8 +218,12 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
                 <span className="material-symbols-outlined !text-[36px]">chat_bubble</span>
               </div>
               <div className="text-left">
-                <span className="font-sans text-xs uppercase tracking-widest font-black text-brand-red block mb-1">Conselhamento</span>
-                <span className="font-sans text-xl md:text-2xl font-black uppercase tracking-wider text-brand-dark">Atendimento Pastoral</span>
+                <span className="font-sans text-xs uppercase tracking-widest font-black text-brand-red block mb-1">
+                  {brand.type === 'synagogue' ? 'Orientação Espiritual' : 'Conselhamento'}
+                </span>
+                <span className="font-sans text-xl md:text-2xl font-black uppercase tracking-wider text-brand-dark">
+                  {brand.termPastoral}
+                </span>
               </div>
             </div>
             
@@ -268,3 +284,4 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
     </div>
   );
 }
+

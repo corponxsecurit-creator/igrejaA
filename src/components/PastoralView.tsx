@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { pastors } from '../data';
 import { Pastor } from '../types';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
 import LiveClock from './LiveClock';
+import { BrandConfig } from '../utils/brand';
 
 interface PastoralViewProps {
   onBack: () => void;
   onGoHome: () => void;
+  brand: BrandConfig;
 }
 
-export default function PastoralView({ onBack, onGoHome }: PastoralViewProps) {
+export default function PastoralView({ onBack, onGoHome, brand }: PastoralViewProps) {
   const [selectedPastor, setSelectedPastor] = useState<Pastor | null>(null);
   const [userPhone, setUserPhone] = useState('');
   const [isScheduled, setIsScheduled] = useState(false);
@@ -18,7 +19,10 @@ export default function PastoralView({ onBack, onGoHome }: PastoralViewProps) {
   const handlePastorSelect = (p: Pastor) => {
     if (!p.available) {
       playTapSound();
-      alert('Este pastor está em atendimento individual no momento. Por favor escolha um de nossos conselheiros disponíveis ou aguarde alguns minutos.');
+      alert(brand.type === 'synagogue'
+        ? 'Este rabino está em atendimento no momento. Por favor, escolha outro disponível ou aguarde alguns minutos.'
+        : 'Este pastor está em atendimento individual no momento. Por favor escolha um de nossos conselheiros disponíveis ou aguarde alguns minutos.'
+      );
       return;
     }
     playTapSound();
@@ -77,8 +81,10 @@ export default function PastoralView({ onBack, onGoHome }: PastoralViewProps) {
       {/* Top Header */}
       <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
         <div>
-          <span className="text-xs uppercase tracking-widest text-brand-red font-black block">Cuidado e Aconselhamento</span>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Atendimento Pastoral</h1>
+          <span className="text-xs uppercase tracking-widest text-brand-red font-black block">
+            {brand.type === 'synagogue' ? 'Orientação Espiritual' : 'Cuidado e Aconselhamento'}
+          </span>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">{brand.termPastoral}</h1>
         </div>
 
         <div className="hidden md:block">
@@ -88,7 +94,7 @@ export default function PastoralView({ onBack, onGoHome }: PastoralViewProps) {
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-2 text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
+          className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
         >
           <span className="material-symbols-outlined !text-xl">arrow_back</span>
           <span>Voltar</span>
@@ -100,16 +106,21 @@ export default function PastoralView({ onBack, onGoHome }: PastoralViewProps) {
         
         <header className="mb-8 text-center max-w-2xl mx-auto">
           <h2 className="text-3xl font-extrabold text-brand-dark tracking-tight mb-2">
-            Precisa conversar ou receber uma oração presencial?
+            {brand.type === 'synagogue'
+              ? 'Precisa de orientação espiritual ou auxílio do Rabinato?'
+              : 'Precisa conversar ou receber uma oração presencial?'}
           </h2>
           <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">
-            Nossa equipe de pastores de plantão está pronta para ouvir você, oferecer conselhos bíblicos e orar pelas suas necessidades. Escolha um pastor abaixo para agendar um encontro reservado hoje mesmo.
+            {brand.type === 'synagogue'
+              ? `Nossa equipe de ${brand.termPastors.toLowerCase()} está pronta para ouvir você, oferecer conselhos baseados na Torá e prestar apoio espiritual. Escolha um ${brand.termPastor.toLowerCase()} abaixo para agendar um encontro hoje.`
+              : `Nossa equipe de ${brand.termPastors.toLowerCase()} de plantão está pronta para ouvir você, oferecer conselhos bíblicos e orar pelas suas necessidades. Escolha um ${brand.termPastor.toLowerCase()} abaixo para agendar um encontro reservado hoje mesmo.`}
           </p>
         </header>
 
         {/* Pastors Grid list */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {pastors.map((p) => (
+
+          {brand.pastors.map((p) => (
             <div
               key={p.id}
               className="bg-white rounded-3xl overflow-hidden border-2 border-slate-200 shadow-sm flex flex-col justify-between items-stretch hover:border-brand-red transition-colors duration-200"
@@ -155,7 +166,7 @@ export default function PastoralView({ onBack, onGoHome }: PastoralViewProps) {
                       : 'bg-slate-50 border-slate-150 text-slate-400 cursor-not-allowed'
                   }`}
                 >
-                  <span>Chamar Pastor</span>
+                  <span>Chamar {brand.termPastor}</span>
                   <span className="material-symbols-outlined !text-base">chat_bubble</span>
                 </button>
               </div>
@@ -174,7 +185,7 @@ export default function PastoralView({ onBack, onGoHome }: PastoralViewProps) {
             <div className="p-6 bg-brand-dark text-white border-b flex justify-between items-center">
               <div>
                 <span className="text-[10px] uppercase font-black tracking-widest bg-brand-red px-2.5 py-1 rounded-md mb-1 block w-fit">
-                  Conselho Reservado
+                  {brand.type === 'synagogue' ? 'Orientação Espiritual' : 'Conselho Reservado'}
                 </span>
                 <h3 className="text-xl font-bold uppercase tracking-tight">{selectedPastor.name}</h3>
               </div>
@@ -194,9 +205,11 @@ export default function PastoralView({ onBack, onGoHome }: PastoralViewProps) {
                   <div className="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-sm">
                     <span className="material-symbols-outlined !text-3xl font-black">done</span>
                   </div>
-                  <h4 className="text-xl font-black text-brand-dark">Encontro Confirmado!</h4>
+                  <h4 className="text-xl font-black text-brand-dark">Solicitação Confirmada!</h4>
                   <p className="text-sm text-slate-600 leading-relaxed">
-                    O <span className="font-bold text-brand-dark">{selectedPastor.name}</span> foi acionado imediatamente. Por favor, contorne o balcão esquerdo e aguarde confortavelmente nas poltronas de acolhimento localizadas no saguão principal do Lobby. Deus abençoe!
+                    {brand.type === 'synagogue'
+                      ? `O ${selectedPastor.name} foi acionado imediatamente. Por favor, aguarde confortavelmente nas poltronas localizadas no saguão principal de recepção.`
+                      : `O ${selectedPastor.name} foi acionado imediatamente. Por favor, contorne o balcão esquerdo e aguarde confortavelmente nas poltronas de acolhimento localizadas no saguão principal do Lobby. Deus abençoe!`}
                   </p>
                   <button
                     type="button"
@@ -209,7 +222,9 @@ export default function PastoralView({ onBack, onGoHome }: PastoralViewProps) {
               ) : (
                 <div className="space-y-4">
                   <p className="text-xs text-slate-500 font-semibold mb-4 bg-slate-50 rounded-xl p-3 border border-slate-200">
-                    Ao confirmar o atendimento, o pastor de plantão se organizará para recebê-lo de forma individual em nossa sala reservada de aconselhamento.
+                    {brand.type === 'synagogue'
+                      ? 'Ao confirmar a solicitação, o rabino de plantão se organizará para recebê-lo de forma individual em nossa sala reservada de estudos e orientação.'
+                      : 'Ao confirmar o atendimento, o pastor de plantão se organizará para recebê-lo de forma individual em nossa sala reservada de aconselhamento.'}
                   </p>
 
                   <div className="space-y-1.5 text-left">
@@ -225,7 +240,7 @@ export default function PastoralView({ onBack, onGoHome }: PastoralViewProps) {
                     <NumericKeypad 
                       onKeyPress={handleKeypadPress} 
                       onConfirm={handleScheduleSubmit} 
-                      confirmLabel="Solicitar Atendimento"
+                      confirmLabel={brand.type === 'synagogue' ? 'Chamar Rabino' : 'Solicitar Atendimento'}
                     />
                   </div>
                 </div>
@@ -242,3 +257,4 @@ export default function PastoralView({ onBack, onGoHome }: PastoralViewProps) {
     </div>
   );
 }
+

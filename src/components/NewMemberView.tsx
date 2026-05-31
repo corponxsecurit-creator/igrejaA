@@ -4,13 +4,15 @@ import { playSuccessSound, playTapSound } from '../utils/audio';
 import VirtualKeyboard from './VirtualKeyboard';
 import NumericKeypad from './NumericKeypad';
 import LiveClock from './LiveClock';
+import { BrandConfig } from '../utils/brand';
 
 interface NewMemberViewProps {
   onBack: () => void;
   onGoHome: () => void;
+  brand: BrandConfig;
 }
 
-export default function NewMemberView({ onBack, onGoHome }: NewMemberViewProps) {
+export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberViewProps) {
   const [form, setForm] = useState<NewMemberState>({
     step: 1,
     name: '',
@@ -123,10 +125,10 @@ export default function NewMemberView({ onBack, onGoHome }: NewMemberViewProps) 
 
           <div className="space-y-3">
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-dark tracking-tight">
-              Cadastro Concluído!
+              {brand.type === 'synagogue' ? 'Registro Concluído!' : 'Cadastro Concluído!'}
             </h2>
             <p className="text-lg text-slate-600 max-w-lg mx-auto leading-relaxed">
-              Ficamos muito felizes em ter você conosco na <span className="font-bold text-brand-dark">Atitude Alphaville</span>. Em breve nossa equipe de recepção entrará em contato!
+              Ficamos muito felizes em ter você conosco na <span className="font-bold text-brand-dark">{brand.name} {brand.campusName}</span>. Em breve nossa equipe entrará em contato!
             </p>
           </div>
 
@@ -155,7 +157,7 @@ export default function NewMemberView({ onBack, onGoHome }: NewMemberViewProps) 
         <div className="flex justify-between items-end">
           <div>
             <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">Boas-vindas</span>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Sou Novo Aqui</h1>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">{brand.termMember}</h1>
           </div>
 
           <div className="hidden md:block">

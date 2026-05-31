@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ViewState } from './types';
 import HomeView from './components/HomeView';
 import DashboardView from './components/DashboardView';
@@ -13,6 +13,7 @@ import PastoralView from './components/PastoralView';
 import InactivityTimer from './components/InactivityTimer';
 import { playTapSound, playSuccessSound } from './utils/audio';
 import { speakText, setVoiceAssistEnabled } from './utils/tts';
+import { getCurrentBrand } from './utils/brand';
 
 export default function App() {
   const [view, setView] = useState<ViewState>('home');
@@ -20,6 +21,13 @@ export default function App() {
   const [textZoom, setTextZoom] = useState(false);
   const [voiceAssist, setVoiceAssist] = useState(false);
   const [showAccessModal, setShowAccessModal] = useState(false);
+
+  const brand = getCurrentBrand();
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--color-brand-red', brand.primaryColor);
+    document.documentElement.style.setProperty('--color-brand-red-hover', brand.primaryColorHover);
+  }, [brand]);
 
   const handleStart = () => {
     setView('dashboard');
@@ -51,6 +59,7 @@ export default function App() {
           <HomeView 
             onStart={handleStart} 
             onOpenAccessibility={() => setShowAccessModal(true)}
+            brand={brand}
           />
         )}
 
@@ -59,16 +68,17 @@ export default function App() {
             onSelectView={(v) => {
               setView(v);
               // Provide vocal guidance on view change
-              if (v === 'new_member') speakText('Iniciando formulário de novos membros.');
-              else if (v === 'prayer') speakText('Abri a tela para enviar pedidos de oração.');
-              else if (v === 'checkin') speakText('Acessando check-in de cultos e eventos.');
-              else if (v === 'donations') speakText('Acessando altar de generosidade para dízimos e ofertas.');
-              else if (v === 'ministries') speakText('Abrindo painel de voluntariado e ministérios.');
-              else if (v === 'my_cell') speakText('Abri a busca de pequenos grupos e células.');
-              else if (v === 'pastoral') speakText('Exibindo pastores de plantão para aconselhamento.');
+              if (v === 'new_member') speakText(`Iniciando formulário de ${brand.termMember.toLowerCase()}.`);
+              else if (v === 'prayer') speakText(`Abri a tela para enviar pedidos de ${brand.type === 'synagogue' ? 'orações' : 'oração'}.`);
+              else if (v === 'checkin') speakText(`Acessando check-in de ${brand.termCults.toLowerCase()} e encontros.`);
+              else if (v === 'donations') speakText(`Acessando altar de generosidade para ${brand.termDonations.toLowerCase()}.`);
+              else if (v === 'ministries') speakText('Abrindo painel de voluntariado e atividades.');
+              else if (v === 'my_cell') speakText(`Abri a busca de ${brand.termConnects.toLowerCase()}.`);
+              else if (v === 'pastoral') speakText(`Exibindo ${brand.termPastors.toLowerCase()} de plantão.`);
             }} 
             onGoHome={handleGoHome} 
             onOpenAccessibility={() => setShowAccessModal(true)}
+            brand={brand}
           />
         )}
 
@@ -76,6 +86,7 @@ export default function App() {
           <NewMemberView 
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
+            brand={brand}
           />
         )}
 
@@ -83,6 +94,7 @@ export default function App() {
           <PrayerRequestView 
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
+            brand={brand}
           />
         )}
 
@@ -90,12 +102,14 @@ export default function App() {
           <CheckinView 
             onBack={handleBackToDashboard} 
             onSuccess={handleCheckinSuccess} 
+            brand={brand}
           />
         )}
 
         {view === 'checkin_success' && (
           <CheckinSuccessView 
             onGoHome={handleGoHome} 
+            brand={brand}
           />
         )}
 
@@ -103,6 +117,7 @@ export default function App() {
           <MinistryView 
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
+            brand={brand}
           />
         )}
 
@@ -110,6 +125,7 @@ export default function App() {
           <DonationView 
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
+            brand={brand}
           />
         )}
 
@@ -117,6 +133,7 @@ export default function App() {
           <MyCellView 
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
+            brand={brand}
           />
         )}
 
@@ -124,6 +141,7 @@ export default function App() {
           <PastoralView 
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
+            brand={brand}
           />
         )}
 

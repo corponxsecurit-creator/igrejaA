@@ -7,13 +7,24 @@ interface HomeViewProps {
   onOpenAccessibility: () => void;
 }
 
-export default function HomeView({ onStart, onOpenAccessibility }: HomeViewProps) {
+import React, { useState, useEffect } from 'react';
+import { playTapSound } from '../utils/audio';
+import { speakText } from '../utils/tts';
+import { BrandConfig } from '../utils/brand';
+
+interface HomeViewProps {
+  onStart: () => void;
+  onOpenAccessibility: () => void;
+  brand: BrandConfig;
+}
+
+export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeViewProps) {
   const [activeCard, setActiveCard] = useState(0);
 
   // Welcome voice message on mount
   useEffect(() => {
-    speakText('Bem-vindo à Igreja Atitude Alphaville. Toque na tela para iniciar o atendimento.');
-  }, []);
+    speakText(`Bem-vindo à ${brand.name} ${brand.campusName}. Toque na tela para iniciar o atendimento.`);
+  }, [brand]);
 
   // Rotate carousel cards every 5 seconds
   useEffect(() => {
@@ -38,6 +49,34 @@ export default function HomeView({ onStart, onOpenAccessibility }: HomeViewProps
     }
   };
 
+  // Get brand-specific carousel cards
+  const getCarouselData = () => {
+    switch (brand.id) {
+      case 'lagoinha':
+        return [
+          { title: brand.termCults, time: 'Domingo, 10h, 17h e 19:30h', subtitle: 'Celebração & Comunhão', icon: 'event' },
+          { title: brand.termConnects, time: 'Diversos dias e horários', subtitle: 'Grupos de Crescimento (GC)', icon: 'group' }
+        ];
+      case 'universal':
+        return [
+          { title: brand.termCults, time: 'Domingo, 9:30h e Quarta, 20:00h', subtitle: 'Reuniões de Fé e Poder', icon: 'event' },
+          { title: brand.termConnects, time: 'Atendimento todos os dias', subtitle: 'Ações Sociais e Grupos FJU', icon: 'group' }
+        ];
+      case 'beityaacov':
+        return [
+          { title: brand.termCults, time: 'Sexta às 19:00h e Sábado às 9:30h', subtitle: 'Preces e Cabalat Shabat', icon: 'event' },
+          { title: brand.termConnects, time: 'Segunda a Quinta', subtitle: 'Aulas de Cabalá e Torá', icon: 'group' }
+        ];
+      case 'atitude':
+      default:
+        return [
+          { title: brand.termCults, time: 'Domingo, 10h e 19h', subtitle: 'Celebração da Família', icon: 'event' },
+          { title: brand.termConnects, time: 'Sábado, 19:00h', subtitle: 'Culto de Jovens - Be One', icon: 'group' }
+        ];
+    }
+  };
+
+  const carouselCards = getCarouselData();
 
   return (
     <div className="relative h-screen w-full select-none overflow-hidden bg-brand-dark text-white">
@@ -45,8 +84,8 @@ export default function HomeView({ onStart, onOpenAccessibility }: HomeViewProps
       <div className="absolute inset-0 z-0">
         <img
           className="h-full w-full object-cover opacity-40 mix-blend-overlay transition-transform duration-10000 ease-out"
-          src="https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png"
-          alt="Ambiente Kiosk Atitude Alphaville"
+          src={brand.bgUrl}
+          alt={`Ambiente Kiosk ${brand.name}`}
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#1c1b1d]/50 via-transparent to-[#1c1b1d]/95" />
@@ -56,12 +95,12 @@ export default function HomeView({ onStart, onOpenAccessibility }: HomeViewProps
       <nav className="absolute top-0 left-0 z-50 flex w-full justify-between items-center px-12 md:px-20 py-8">
         <div className="flex flex-col items-center mx-auto text-center">
           <img 
-            src="https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png" 
-            className="h-24 object-contain invert brightness-0 filter drop-shadow-xl" 
-            alt="Igreja Batista Atitude" 
+            src={brand.logoUrl} 
+            className={`h-24 object-contain ${brand.id === 'atitude' ? 'invert brightness-0 filter drop-shadow-xl' : 'filter drop-shadow-xl'}`} 
+            alt={brand.name} 
           />
           <span className="text-[10px] uppercase tracking-[0.4em] font-black text-brand-red mt-2 drop-shadow-md">
-            Alphaville
+            {brand.campusName}
           </span>
         </div>
 
@@ -91,10 +130,12 @@ export default function HomeView({ onStart, onOpenAccessibility }: HomeViewProps
         {/* Welcome Section */}
         <div className="mb-10 animate-fade-in">
           <h2 className="font-sans text-3xl md:text-5xl lg:text-6xl text-white font-light tracking-wide drop-shadow-lg">
-            Bem-vindo à <span className="font-bold">Atitude Alphaville</span>
+            Bem-vindo à <span className="font-bold">{brand.name} {brand.campusName}</span>
           </h2>
           <p className="font-sans text-lg md:text-2xl text-white/80 mt-4 max-w-3xl mx-auto drop-shadow">
-            Um lugar de novos começos e experiências extraordinárias com Deus.
+            {brand.type === 'synagogue' 
+              ? 'Um espaço sagrado de oração, estudo da Torá e acolhimento comunitário.' 
+              : 'Um lugar de novos começos e experiências extraordinárias com Deus.'}
           </p>
         </div>
 
@@ -127,35 +168,35 @@ export default function HomeView({ onStart, onOpenAccessibility }: HomeViewProps
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6">
           {/* Information Cards (Rotating Carousel) */}
           <div className="flex gap-4 overflow-hidden w-full md:w-auto">
-            {/* Card 1: Culto */}
+            {/* Card 1 */}
             <div 
               className={`bg-[#1c1b1d]/95 backdrop-blur-2xl border-2 border-brand-red/45 p-6 rounded-2xl flex flex-col gap-3 w-full md:w-80 transition-all duration-500 ease-in-out shadow-2xl ${
                 activeCard === 0 ? 'opacity-100 scale-100 ring-4 ring-brand-red/30' : 'opacity-40 scale-95 hidden md:flex'
               }`}
             >
               <div className="flex items-center text-brand-red">
-                <span className="material-symbols-outlined mr-2">event</span>
-                <span className="text-xs uppercase tracking-widest font-black">Cultos de Celebração</span>
+                <span className="material-symbols-outlined mr-2">{carouselCards[0].icon}</span>
+                <span className="text-xs uppercase tracking-widest font-black">{carouselCards[0].title}</span>
               </div>
               <div>
-                <p className="text-2xl font-black text-brand-red tracking-tight drop-shadow-md">Domingo, 10h e 19h</p>
-                <p className="text-sm text-white/90 font-bold tracking-wide mt-1 drop-shadow-sm">Celebração da Família</p>
+                <p className="text-2xl font-black text-brand-red tracking-tight drop-shadow-md">{carouselCards[0].time}</p>
+                <p className="text-sm text-white/90 font-bold tracking-wide mt-1 drop-shadow-sm">{carouselCards[0].subtitle}</p>
               </div>
             </div>
 
-            {/* Card 2: Connect Groups */}
+            {/* Card 2 */}
             <div 
               className={`bg-[#1c1b1d]/95 backdrop-blur-2xl border-2 border-brand-red/45 p-6 rounded-2xl flex flex-col gap-3 w-full md:w-80 transition-all duration-500 ease-in-out shadow-2xl ${
                 activeCard === 1 ? 'opacity-100 scale-100 ring-4 ring-brand-red/30' : 'opacity-40 scale-95 hidden md:flex'
               }`}
             >
               <div className="flex items-center text-brand-red">
-                <span className="material-symbols-outlined mr-2">group</span>
-                <span className="text-xs uppercase tracking-widest font-black">Culto de Jovens</span>
+                <span className="material-symbols-outlined mr-2">{carouselCards[1].icon}</span>
+                <span className="text-xs uppercase tracking-widest font-black">{carouselCards[1].title}</span>
               </div>
               <div>
-                <p className="text-2xl font-black text-brand-red tracking-tight drop-shadow-md">Sábado, 19:00h</p>
-                <p className="text-sm text-white/90 font-bold tracking-wide mt-1 drop-shadow-sm">Be One Alphaville</p>
+                <p className="text-2xl font-black text-brand-red tracking-tight drop-shadow-md">{carouselCards[1].time}</p>
+                <p className="text-sm text-white/90 font-bold tracking-wide mt-1 drop-shadow-sm">{carouselCards[1].subtitle}</p>
               </div>
             </div>
           </div>
@@ -171,12 +212,12 @@ export default function HomeView({ onStart, onOpenAccessibility }: HomeViewProps
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
                 <span className="material-symbols-outlined text-brand-red !text-base">wifi</span>
-                <span>Atitude_Guest</span>
+                <span>{brand.wifi}</span>
               </div>
               <div className="w-[1px] h-4 bg-white/20" />
               <div className="flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-brand-red !text-base">location_on</span>
-                <span>Auditório Principal</span>
+                <span>{brand.type === 'synagogue' ? 'Salão de Orações' : 'Auditório Principal'}</span>
               </div>
             </div>
           </div>

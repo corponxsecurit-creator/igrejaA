@@ -4,13 +4,15 @@ import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
 import LiveClock from './LiveClock';
 import { speakText } from '../utils/tts';
+import { BrandConfig } from '../utils/brand';
 
 interface DonationViewProps {
   onBack: () => void;
   onGoHome: () => void;
+  brand: BrandConfig;
 }
 
-export default function DonationView({ onBack, onGoHome }: DonationViewProps) {
+export default function DonationView({ onBack, onGoHome, brand }: DonationViewProps) {
   const [state, setState] = useState<DonationState>({
     category: '',
     value: 0,
@@ -48,13 +50,18 @@ export default function DonationView({ onBack, onGoHome }: DonationViewProps) {
 
   const handleCopyKey = () => {
     playSuccessSound();
-    navigator.clipboard.writeText('pixsaopaulo@ibatitude.com.br');
+    navigator.clipboard.writeText(brand.pixKey);
     setCopied(true);
     speakText('Chave Copiada');
     setTimeout(() => setCopied(false), 3000);
   };
 
-  const categories = [
+  const categories = brand.type === 'synagogue' ? [
+    { title: 'Tsedaká Geral', icon: 'payments', desc: 'Contribuição regular para os custos e preces da sinagoga.' },
+    { title: 'Estudos e Shabat', icon: 'volunteer_activism', desc: 'Oferta voluntária para festividades de Cabalat Shabat e shiurim.' },
+    { title: 'Auxílio de Israel', icon: 'public', desc: 'Apoio direto a projetos humanitários e de assistência em Israel.' },
+    { title: 'Ação Social (Chesed)', icon: 'spa', desc: 'Distribuição de cestas kosher e auxílio aos necessitados locais.' }
+  ] : [
     { title: 'Dízimo Geral', icon: 'payments', desc: 'Devolução regular de comunhão financeira de dízimo.' },
     { title: 'Oferta de Celebração', icon: 'volunteer_activism', desc: 'Oferta voluntária para sustentação da casa e dos cultos.' },
     { title: 'Missões Globais', icon: 'public', desc: 'Sustento direto aos nossos missionários no sertão e no exterior.' },
@@ -117,8 +124,8 @@ export default function DonationView({ onBack, onGoHome }: DonationViewProps) {
       {/* Header bar */}
       <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
         <div>
-          <span className="text-xs uppercase tracking-widest text-brand-red font-black block">Altar &amp; Generosidade</span>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Contribuições Atitude</h1>
+          <span className="text-xs uppercase tracking-widest text-brand-red font-black block">{brand.termDonations}</span>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Contribuições {brand.name}</h1>
         </div>
 
         <div className="hidden md:block">
@@ -146,7 +153,7 @@ export default function DonationView({ onBack, onGoHome }: DonationViewProps) {
                 Qual será o destino da sua contribuição?
               </h2>
               <p className="text-sm text-slate-500 font-semibold uppercase tracking-wider">
-                Selecione uma categoria abaixo para fazer seu dízimo ou oferta
+                Selecione uma categoria abaixo para fazer seu {brand.termDonation.toLowerCase()}
               </p>
             </header>
 
@@ -158,13 +165,15 @@ export default function DonationView({ onBack, onGoHome }: DonationViewProps) {
                 </div>
                 <div className="space-y-1.5">
                   <span className="text-[10px] uppercase tracking-widest font-black text-brand-red bg-brand-red/10 px-2.5 py-0.5 rounded-full inline-block">
-                    Generosidade Alphaville
+                    {brand.type === 'synagogue' ? 'Tsedaká Comunitária' : `Generosidade ${brand.campusName}`}
                   </span>
                   <h3 className="text-lg font-black text-brand-dark tracking-tight">
                     Meta de Gratidão Diária 🎯
                   </h3>
                   <p className="text-xs md:text-sm text-slate-650 font-medium leading-relaxed">
-                     No dia de ontem, nossa amada comunidade somou um total acumulado incrível de <strong className="text-brand-red font-black text-sm">R$ 5.480,00</strong> em dízimos e ofertas voluntárias! Nossa meta hoje é igualar ou ultrapassar essa bênção para apoiar as ações sociais.
+                    {brand.type === 'synagogue'
+                      ? `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 em tsedakás! Nossa meta hoje é alcançar esse valor para apoiar a manutenção da sinagoga e auxílio social.`
+                      : `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 em dízimos e ofertas voluntárias! Nossa meta hoje é igualar ou ultrapassar essa bênção para apoiar as ações sociais.`}
                   </p>
                 </div>
               </div>
@@ -206,6 +215,7 @@ export default function DonationView({ onBack, onGoHome }: DonationViewProps) {
             </div>
           </div>
         )}
+
 
         {/* STEP 2: CHOOSE VALUE PRESET OR CUSTOM VALUE */}
         {state.step === 'value' && (
@@ -340,18 +350,30 @@ export default function DonationView({ onBack, onGoHome }: DonationViewProps) {
             <div className="space-y-2">
               <h2 className="text-3xl font-black text-brand-dark tracking-tight">Muito Obrigado!</h2>
               <p className="text-base text-slate-600 font-semibold">
-                Sua generosidade faz a igreja de Cristo crescer e transbordar amor e bênçãos em nossa região de Alphaville.
+                {brand.type === 'synagogue'
+                  ? 'Sua tsedaká apoia os estudos da Torá, os serviços diários e as ações de auxílio social da nossa comunidade.'
+                  : `Sua generosidade faz a igreja de Cristo crescer e transbordar amor e bênçãos em nossa região de ${brand.campusName}.`}
               </p>
             </div>
 
             {/* Biblical snippet graphic style card */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm">
-              <span className="absolute -top-3 left-6 px-3 py-0.5 bg-brand-red text-white font-black text-[10px] uppercase rounded-full tracking-widest block">
-                Palavra do Altar
-              </span>
-              "Cada um dê conforme determinou em seu coração, não com pesar ou por obrigação, pois Deus ama a quem dá com alegria."
-              <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">2 Coríntios 9:7</p>
-            </div>
+            {brand.type === 'synagogue' ? (
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm">
+                <span className="absolute -top-3 left-6 px-3 py-0.5 bg-brand-red text-white font-black text-[10px] uppercase rounded-full tracking-widest block">
+                  Palavra da Torá
+                </span>
+                "Abra a sua mão para o seu irmão, para o seu pobre e para o seu necessitado na sua terra."
+                <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">Deuteronômio 15:11</p>
+              </div>
+            ) : (
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm">
+                <span className="absolute -top-3 left-6 px-3 py-0.5 bg-brand-red text-white font-black text-[10px] uppercase rounded-full tracking-widest block">
+                  Palavra do Altar
+                </span>
+                "Cada um dê conforme determinou em seu coração, não com pesar ou por obrigação, pois Deus ama a quem dá com alegria."
+                <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">2 Coríntios 9:7</p>
+              </div>
+            )}
 
             <button
               type="button"
