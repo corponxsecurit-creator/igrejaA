@@ -87,7 +87,7 @@ export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeVi
         <div className="flex flex-col items-center mx-auto text-center">
           <img 
             src={brand.logoUrl} 
-            className={`h-24 object-contain ${brand.id === 'atitude' ? 'invert brightness-0 filter drop-shadow-xl' : 'filter drop-shadow-xl'}`} 
+            className={`h-24 object-contain ${brand.id === 'atitude' ? 'logo-white filter drop-shadow-xl' : 'filter drop-shadow-xl'}`} 
             alt={brand.name} 
           />
           <span className="text-[10px] uppercase tracking-[0.4em] font-black text-brand-red mt-2 drop-shadow-md">
