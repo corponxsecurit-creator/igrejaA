@@ -62,15 +62,15 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             rgba(245,195,30,.08) 0%,
             rgba(15,23,42,.95)  40%,
             rgba(2,6,23,1)      100%
-          )`,
-        }}
-        aria-hidden="true"
+      {/* Background Image with Dark Glassmorphism Overlay */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 opacity-60"
+        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(8px)' }}
       />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#020617]/90 via-[#020617]/80 to-[#020617]/95 backdrop-blur-xl" />
 
-      {/* ════════════════════════════════════════════════
-          BACKGROUND LAYER 2 — Particle system
-          ════════════════════════════════════════════════ */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      {/* Particle background system (subtle) */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40 mix-blend-screen">
         {PARTICLES.map(p => (
           <div
             key={p.id}
@@ -140,16 +140,16 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('new_member')}
-            className="col-span-12 md:col-span-8 bg-brand-dark text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md hover:shadow-lg min-h-[190px] md:min-h-[220px] relative overflow-hidden group border border-[#121212]"
+            className="col-span-12 md:col-span-8 bg-gradient-to-br from-indigo-900/80 to-violet-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[190px] md:min-h-[220px] relative overflow-hidden group border border-indigo-400/20 hover:border-indigo-400/40"
           >
-            <span className="material-symbols-outlined !text-[56px] text-brand-red group-hover:scale-110 transition-transform duration-300">
+            <span className="material-symbols-outlined !text-[56px] text-indigo-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
               person_add
             </span>
             <div className="text-left mt-4 z-10">
-              <span className="text-xs tracking-widest uppercase font-bold text-slate-400 block mb-1">Membro ou Visitante</span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block">{brand.termMember}</span>
+              <span className="text-xs tracking-widest uppercase font-bold text-indigo-200/80 block mb-1">Membro ou Visitante</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termMember}</span>
             </div>
-            <div className="absolute right-6 bottom-6 opacity-15 text-white">
+            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
               <span className="material-symbols-outlined !text-[120px]">id_card</span>
             </div>
           </button>
@@ -158,18 +158,18 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('prayer')}
-            className="col-span-12 md:col-span-4 bg-brand-red text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md min-h-[190px] md:min-h-[220px] relative overflow-hidden group border-2 border-brand-red-hover"
+            className="col-span-12 md:col-span-4 bg-gradient-to-br from-rose-900/80 to-red-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[190px] md:min-h-[220px] relative overflow-hidden group border border-rose-400/20 hover:border-rose-400/40"
           >
-            <span className="material-symbols-outlined !text-[56px] text-white group-hover:scale-110 transition-transform duration-300">
+            <span className="material-symbols-outlined !text-[56px] text-rose-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
               volunteer_activism
             </span>
             <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-white/80 block mb-1">Intercessão</span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block leading-tight">
+              <span className="text-xs tracking-widest uppercase font-bold text-rose-200/80 block mb-1">Intercessão</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block leading-tight drop-shadow-sm">
                 {brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
               </span>
             </div>
-            <div className="absolute right-6 bottom-6 opacity-10 text-white animate-pulse">
+            <div className="absolute right-6 bottom-6 opacity-10 text-white animate-pulse mix-blend-overlay">
               <span className="material-symbols-outlined !text-[100px]">chat</span>
             </div>
           </button>
@@ -178,16 +178,19 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('checkin')}
-            className="col-span-12 md:col-span-4 bg-brand-charcoal text-[#e5e2e1] rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md min-h-[190px] md:min-h-[220px] group border border-slate-800"
+            className="col-span-12 md:col-span-4 bg-gradient-to-br from-emerald-900/80 to-teal-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[190px] md:min-h-[220px] group border border-emerald-400/20 hover:border-emerald-400/40 relative overflow-hidden"
           >
-            <span className="material-symbols-outlined !text-[56px] text-brand-red group-hover:scale-110 transition-transform duration-300">
+            <span className="material-symbols-outlined !text-[56px] text-emerald-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
               calendar_month
             </span>
-            <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-slate-500 block mb-1">
+            <div className="text-left mt-4 z-10">
+              <span className="text-xs tracking-widest uppercase font-bold text-emerald-200/80 block mb-1">
                 {brand.type === 'synagogue' ? 'Shabat & Festividades' : 'Agenda & Encontros'}
               </span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block">{brand.termCults}</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termCults}</span>
+            </div>
+            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
+              <span className="material-symbols-outlined !text-[100px]">event</span>
             </div>
           </button>
 
@@ -195,16 +198,16 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('donations')}
-            className="col-span-12 md:col-span-8 bg-[#1f2937] text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md min-h-[190px] md:min-h-[220px] relative overflow-hidden group border border-[#111827]"
+            className="col-span-12 md:col-span-8 bg-gradient-to-br from-amber-800/80 to-orange-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[190px] md:min-h-[220px] relative overflow-hidden group border border-amber-400/20 hover:border-amber-400/40"
           >
-            <span className="material-symbols-outlined !text-[56px] text-brand-red group-hover:scale-110 transition-transform duration-300">
+            <span className="material-symbols-outlined !text-[56px] text-amber-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
               payments
             </span>
             <div className="text-left mt-4 z-10">
-              <span className="text-xs tracking-widest uppercase font-bold text-slate-400 block mb-1">{brand.termDonations}</span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block">{brand.termDonation}</span>
+              <span className="text-xs tracking-widest uppercase font-bold text-amber-200/80 block mb-1">{brand.termDonations}</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termDonation}</span>
             </div>
-            <div className="absolute right-6 bottom-6 opacity-15 text-white">
+            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
               <span className="material-symbols-outlined !text-[120px]">qr_code</span>
             </div>
           </button>
@@ -213,16 +216,19 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('ministries')}
-            className="col-span-12 md:col-span-6 bg-[#0f172a] text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md min-h-[180px] md:min-h-[200px] relative overflow-hidden group border border-slate-800"
+            className="col-span-12 md:col-span-6 bg-gradient-to-br from-cyan-900/80 to-blue-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[180px] md:min-h-[200px] relative overflow-hidden group border border-cyan-400/20 hover:border-cyan-400/40"
           >
-            <span className="material-symbols-outlined !text-[52px] text-brand-red group-hover:scale-110 transition-transform duration-300">
+            <span className="material-symbols-outlined !text-[52px] text-cyan-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
               groups
             </span>
-            <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-slate-400 block mb-1">
+            <div className="text-left mt-4 z-10">
+              <span className="text-xs tracking-widest uppercase font-bold text-cyan-200/80 block mb-1">
                 {brand.type === 'synagogue' ? 'Engajamento & Mitzvot' : 'Voluntariado'}
               </span>
-              <span className="text-xl md:text-2xl font-black uppercase tracking-wider block">Quero Participar</span>
+              <span className="text-xl md:text-2xl font-black uppercase tracking-wider block drop-shadow-sm">Quero Participar</span>
+            </div>
+            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
+              <span className="material-symbols-outlined !text-[100px]">handshake</span>
             </div>
           </button>
 
@@ -230,62 +236,67 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('checkin')}
-            className="col-span-12 md:col-span-3 bg-white text-[#191c1e] rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:bg-slate-50 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-sm min-h-[180px] md:min-h-[200px] border-2 border-[#c4c6ce] group"
+            className="col-span-12 md:col-span-3 bg-gradient-to-br from-fuchsia-900/80 to-purple-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[180px] md:min-h-[200px] border border-fuchsia-400/20 hover:border-fuchsia-400/40 relative overflow-hidden group"
           >
-            <span className="material-symbols-outlined !text-[52px] text-brand-red group-hover:rotate-6 transition-transform">
+            <span className="material-symbols-outlined !text-[52px] text-fuchsia-300 group-hover:rotate-6 transition-transform drop-shadow-md">
               how_to_reg
             </span>
-            <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-[#43474d] block mb-1">
+            <div className="text-left mt-4 z-10">
+              <span className="text-xs tracking-widest uppercase font-bold text-fuchsia-200/80 block mb-1">
                 {brand.type === 'synagogue' ? 'Registrar Presença' : 'Confirmar Presença'}
               </span>
-              <span className="text-xl md:text-2xl font-black uppercase tracking-wider block">Check-in</span>
+              <span className="text-xl md:text-2xl font-black uppercase tracking-wider block drop-shadow-sm">Check-in</span>
+            </div>
+            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
+              <span className="material-symbols-outlined !text-[80px]">task_alt</span>
             </div>
           </button>
 
+          {/* MY CELL / CONEXÃO GRUPOS */}
           <button
             type="button"
             onClick={() => handleSelect('my_cell')}
-            className="col-span-12 md:col-span-3 bg-[#e6e8eb] text-[#191c1e] rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:bg-[#e0e3e6] hover:scale-[1.02] active:scale-[0.98] transition-all shadow-sm min-h-[180px] md:min-h-[200px] border border-[#c4c6ce] group overflow-hidden"
+            className="col-span-12 md:col-span-3 bg-gradient-to-br from-slate-800/80 to-zinc-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[180px] md:min-h-[200px] border border-slate-400/20 hover:border-slate-400/40 relative overflow-hidden group"
           >
-            <span className="material-symbols-outlined !text-[52px] text-brand-dark group-hover:scale-105 transition-transform">
-              hub
+            <span className="material-symbols-outlined !text-[52px] text-slate-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
+              diversity_3
             </span>
-            <div className="text-left mt-4 w-full overflow-hidden">
-              <span className="text-xs tracking-widest uppercase font-bold text-[#43474d] block mb-1 truncate">
+            <div className="text-left mt-4 z-10 w-full">
+              <span className="text-xs tracking-widest uppercase font-bold text-slate-400 block mb-1 truncate">
                 {brand.type === 'synagogue' ? 'Grupos de Estudo' : 'Conexão Grupos'}
               </span>
-              <span className="text-lg font-black uppercase tracking-wide block leading-tight line-clamp-2 break-words">
+              <span className="text-lg font-black uppercase tracking-wide block leading-tight line-clamp-2 break-words drop-shadow-sm">
                 {brand.termConnects}
               </span>
             </div>
+            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
+              <span className="material-symbols-outlined !text-[80px]">hub</span>
+            </div>
           </button>
-
 
           {/* ATENDIMENTO PASTORAL */}
           <button
             type="button"
             onClick={() => handleSelect('pastoral')}
-            className="col-span-12 bg-white hover:bg-slate-50 text-brand-dark rounded-3xl p-6 flex items-center justify-between cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all shadow-sm md:min-h-[120px] border-2 border-dashed border-brand-red/30 group"
+            className="col-span-12 bg-white/5 hover:bg-white/10 backdrop-blur-md text-white rounded-3xl p-6 flex items-center justify-between cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all shadow-xl md:min-h-[120px] border border-white/10 hover:border-white/20 group overflow-hidden relative"
           >
-            <div className="flex items-center gap-6">
-              <div className="w-16 h-16 rounded-full bg-brand-red/10 flex items-center justify-center text-brand-red">
-                <span className="material-symbols-outlined !text-[36px]">chat_bubble</span>
+            <div className="flex items-center gap-6 z-10">
+              <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm border border-white/5">
+                <span className="material-symbols-outlined !text-[36px] group-hover:scale-110 transition-transform">chat_bubble</span>
               </div>
               <div className="text-left">
-                <span className="font-sans text-xs uppercase tracking-widest font-black text-brand-red block mb-1">
+                <span className="font-sans text-xs uppercase tracking-widest font-bold text-white/60 block mb-1">
                   {brand.type === 'synagogue' ? 'Orientação Espiritual' : 'Conselhamento'}
                 </span>
-                <span className="font-sans text-xl md:text-2xl font-black uppercase tracking-wider text-brand-dark">
+                <span className="text-xl md:text-2xl font-black uppercase tracking-wider block drop-shadow-sm">
                   {brand.termPastoral}
                 </span>
               </div>
             </div>
-            
-            <div className="flex items-center gap-2 text-brand-red">
+            <div className="flex items-center gap-2 text-white/50 group-hover:text-white/90 transition-colors">
               <span className="text-sm font-bold tracking-widest uppercase hidden md:inline">Iniciar Conversa</span>
               <span className="material-symbols-outlined !text-4xl group-hover:translate-x-1.5 transition-transform">
-                arrow_forward
+                arrow_forward_ios
               </span>
             </div>
           </button>
