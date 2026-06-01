@@ -5,6 +5,17 @@ import LiveClock from './LiveClock';
 import { speakText } from '../utils/tts';
 import { BrandConfig } from '../utils/brand';
 
+/* ─── Particle data ─────────── */
+const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
+  id: i,
+  left:     `${5  + (i * 5.3) % 90}%`,
+  top:      `${10 + (i * 7.1) % 80}%`,
+  size:     `${1.5 + (i % 4) * 0.7}px`,
+  delay:    `${(i * 1.3) % 8}s`,
+  duration: `${8 + (i % 5) * 2.5}s`,
+  opacity:  `${0.15 + (i % 5) * 0.08}`,
+}));
+
 interface DashboardViewProps {
   onSelectView: (view: ViewState) => void;
   onGoHome: () => void;
@@ -35,12 +46,52 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
     onOpenAccessibility();
   };
 
+  const accent = '#F5C31E'; // Institutional generic yellow
+
   return (
-    <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden animate-fade-in font-sans">
+    <div className="relative min-h-screen bg-[#020617] text-white flex flex-col justify-between overflow-x-hidden animate-fade-in font-sans">
       
+      {/* ════════════════════════════════════════════════
+          BACKGROUND LAYER 1 — Radial deep gradient
+          ════════════════════════════════════════════════ */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          background: `radial-gradient(
+            circle at center,
+            rgba(245,195,30,.08) 0%,
+            rgba(15,23,42,.95)  40%,
+            rgba(2,6,23,1)      100%
+          )`,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* ════════════════════════════════════════════════
+          BACKGROUND LAYER 2 — Particle system
+          ════════════════════════════════════════════════ */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        {PARTICLES.map(p => (
+          <div
+            key={p.id}
+            className="particle"
+            style={{
+              left:            p.left,
+              top:             p.top,
+              width:           p.size,
+              height:          p.size,
+              backgroundColor: accent,
+              opacity:         p.opacity,
+              animationDelay:    p.delay,
+              animationDuration: p.duration,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Top App Bar inside main panel */}
-      <nav className="fixed top-0 left-0 w-full z-45 flex justify-between items-center px-8 md:px-20 py-4 bg-white/90 backdrop-blur-md shadow-sm border-b border-[#eceef1]">
-        <div className="flex items-center gap-2">
+      <nav className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-8 md:px-20 py-4 bg-white/5 backdrop-blur-xl shadow-sm border-b border-white/10">
+        <div className="flex items-center gap-3">
           <img 
             src={brand.logoUrl} 
             className="h-12 object-contain" 
@@ -56,13 +107,13 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <LiveClock />
         </div>
         
-        <div className="flex gap-4">
+        <div className="flex gap-4 text-white">
           <button 
             type="button" 
-            className="flex items-center gap-2 text-slate-600 hover:bg-slate-100 p-3 rounded-lg transition-all active:scale-95 text-sm font-semibold cursor-pointer"
+            className="flex items-center gap-2 text-white/90 hover:bg-white/10 p-3 rounded-lg transition-all active:scale-95 text-sm font-semibold cursor-pointer"
             onClick={() => handleSelect('pastoral')}
           >
-            <span className="material-symbols-outlined !text-xl text-brand-red">volunteer_activism</span>
+            <span className="material-symbols-outlined !text-xl" style={{ color: accent }}>volunteer_activism</span>
             <span>{brand.termPastoral}</span>
           </button>
         </div>
@@ -70,13 +121,13 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
 
 
       {/* Main Grid Area */}
-      <main className="flex-grow pt-28 pb-36 px-6 md:px-20 max-w-7xl mx-auto w-full flex flex-col justify-center">
+      <main className="flex-grow pt-28 pb-36 px-6 md:px-20 max-w-7xl mx-auto w-full flex flex-col justify-center relative z-10">
         {/* Header Title */}
         <header className="mb-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-black text-brand-dark tracking-tight mb-2 animate-fade-in">
+          <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2 animate-fade-in">
             Bem-vindo à {brand.name}
           </h2>
-          <p className="text-base md:text-lg text-[#43474d] font-medium">
+          <p className="text-base md:text-lg text-white/75 font-medium">
             Como podemos caminhar com você hoje?
           </p>
         </header>

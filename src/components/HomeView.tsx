@@ -54,12 +54,12 @@ function getBrandSlides(brand: BrandConfig): Slide[] {
     ],
     ibmalphaville: [
       {
-        bgUrl: 'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=1920&auto=format&fit=crop&q=85',
+        bgUrl: 'https://static.wixstatic.com/media/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg/v1/fill/w_1600,h_1000,al_c/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg',
         verse: 'E conhecereis a verdade, e a verdade vos libertará.',
         verseRef: 'João 8:32',
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1460518451285-97b6aa326961?w=1920&auto=format&fit=crop&q=85',
+        bgUrl: 'https://static.wixstatic.com/media/25a297_23c72b225cde4d3cbdf6d25bf78440cc~mv2.jpg/v1/fill/w_1600,h_1000,al_c/25a297_23c72b225cde4d3cbdf6d25bf78440cc~mv2.jpg',
         verse: 'Buscai primeiro o reino de Deus e a sua justiça.',
         verseRef: 'Mateus 6:33',
       },
@@ -71,34 +71,34 @@ function getBrandSlides(brand: BrandConfig): Slide[] {
     ],
     lagoinha: [
       {
-        bgUrl: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=1920&auto=format&fit=crop&q=85',
+        bgUrl: 'https://static.wixstatic.com/media/nsplsh_684f463162576f65745f51~mv2_d_9000_6000_s_4_2.jpg/v1/fill/w_1600,h_1000,al_c/nsplsh_684f463162576f65745f51~mv2_d_9000_6000_s_4_2.jpg',
         verse: 'Louvai ao Senhor porque ele é bom; o seu amor é eterno.',
         verseRef: 'Salmos 107:1',
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1920&auto=format&fit=crop&q=85',
+        bgUrl: 'https://static.wixstatic.com/media/d7e284_9980a324f46540919ac27aa5fd0dd79d~mv2.jpg/v1/fill/w_1600,h_1000,al_c/d7e284_9980a324f46540919ac27aa5fd0dd79d~mv2.jpg',
         verse: 'O Senhor é a minha força e o meu escudo.',
         verseRef: 'Salmos 28:7',
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1920&auto=format&fit=crop&q=85',
+        bgUrl: 'https://static.wixstatic.com/media/d7e284_4ad952e22e284bf6b8724ea5a70c1b16~mv2.jpg/v1/fill/w_1600,h_1000,al_c/d7e284_4ad952e22e284bf6b8724ea5a70c1b16~mv2.jpg',
         verse: 'Alegrai-vos sempre no Senhor.',
         verseRef: 'Filipenses 4:4',
       },
     ],
     universal: [
       {
-        bgUrl: 'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=1920&auto=format&fit=crop&q=85',
+        bgUrl: 'https://portalwp.s3.amazonaws.com/wp-content/uploads/2026/05/27164318/Templo-de-Salomao-disponibiliza-atendimento-espiritual-diario-ao-publico-2.jpg',
         verse: 'Pedi e dar-se-vos-á; buscai e encontrareis.',
         verseRef: 'Mateus 7:7',
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&auto=format&fit=crop&q=85',
+        bgUrl: 'https://portalwp.s3.amazonaws.com/wp-content/uploads/2026/05/29125252/Amadora-STOP-POBREZA-2.jpg',
         verse: 'Tudo posso naquele que me fortalece.',
         verseRef: 'Filipenses 4:13',
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&auto=format&fit=crop&q=85',
+        bgUrl: 'https://portalwp.s3.amazonaws.com/wp-content/uploads/2026/05/19112324/Formatura-UNP-do-ABC_Maua3.jpg',
         verse: 'Se Deus é por nós, quem será contra nós?',
         verseRef: 'Romanos 8:31',
       },
@@ -362,22 +362,21 @@ export default function HomeView({
 
         {/* ── Logo placeholder (centre, absolutely positioned) ── */}
         <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-          {/* Circular generic logo */}
+          {/* Actual brand logo requested by user */}
           <div
-            className="logo-ring-pulse w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-white/5 backdrop-blur-xl"
+            className="logo-ring-pulse px-6 py-2.5 rounded-2xl flex items-center justify-center bg-white/5 backdrop-blur-xl"
             style={{
               border: `2px solid ${accent}`,
             }}
             role="img"
             aria-label={`${brand.name} — Totem de Atendimento`}
           >
-            <span
-              className="material-symbols-outlined !text-4xl md:!text-5xl"
-              style={{ color: accent }}
-              aria-hidden="true"
-            >
-              {logoIcon}
-            </span>
+            <img
+              src={brand.logoUrl}
+              className={`h-12 object-contain ${brand.id === 'atitude' ? 'logo-white' : ''}`}
+              alt={brand.name}
+              referrerPolicy="no-referrer"
+            />
           </div>
 
           {/* Badge pill */}
