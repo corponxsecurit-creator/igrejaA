@@ -243,7 +243,7 @@ export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps
           </div>
 
           <div className="space-y-2 flex-grow">
-            {Object.values(allBrands).map((b) => (
+            {Object.values(allBrands).map((b: any) => (
               <div
                 key={b.id}
                 onClick={() => {
@@ -751,7 +751,7 @@ export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {currentEditingBrand.pastors.map((p) => (
+                      {currentEditingBrand.pastors.map((p: any) => (
                         <div key={p.id} className="bg-white border border-slate-200 p-3 rounded-2xl flex items-center justify-between gap-3 shadow-sm hover:border-slate-300 transition-colors">
                           <div className="flex items-center gap-3 truncate">
                             <img className="w-12 h-12 rounded-xl object-cover border border-slate-200" src={p.photoUrl} alt={p.name} />
