@@ -9,10 +9,11 @@ interface DashboardViewProps {
   onSelectView: (view: ViewState) => void;
   onGoHome: () => void;
   onOpenAccessibility: () => void;
+  onOpenAdmin?: () => void;
   brand: BrandConfig;
 }
 
-export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibility, brand }: DashboardViewProps) {
+export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibility, onOpenAdmin, brand }: DashboardViewProps) {
   const handleSelect = (view: ViewState) => {
     playTapSound();
     onSelectView(view);
@@ -279,6 +280,21 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <span className="material-symbols-outlined !text-2xl">settings_accessibility</span>
           <span className="text-[12px] uppercase tracking-wider mt-0.5">Acessibilidade</span>
         </button>
+
+        {/* Administração */}
+        {onOpenAdmin && (
+          <button
+            type="button"
+            onClick={() => {
+              playTapSound();
+              onOpenAdmin();
+            }}
+            className="flex flex-col items-center justify-center text-[#43474d] hover:bg-slate-100 px-8 py-3 rounded-2xl transition-all active:scale-95 cursor-pointer font-bold font-sans"
+          >
+            <span className="material-symbols-outlined !text-2xl">admin_panel_settings</span>
+            <span className="text-[12px] uppercase tracking-wider mt-0.5">Admin</span>
+          </button>
+        )}
       </footer>
 
     </div>

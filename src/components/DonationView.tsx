@@ -42,6 +42,19 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
     return () => clearInterval(timer);
   }, [state.step, state.value]);
 
+  useEffect(() => {
+    if (state.step !== 'card') return;
+
+    speakText(`Aguardando pagamento no cartão no valor de R$ ${state.value.toFixed(2)}. Por favor, insira ou aproxime o seu cartão na maquininha.`);
+
+    // Auto-simulate card reading success after 6 seconds
+    const timer = setTimeout(() => {
+      handleCompletePayment();
+    }, 6000);
+
+    return () => clearTimeout(timer);
+  }, [state.step, state.value]);
+
   const formatTimer = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -77,7 +90,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
 
   const handleSelectPreset = (val: number) => {
     playSuccessSound();
-    setState((prev) => ({ ...prev, value: val, customValue: '', step: 'pix' }));
+    setState((prev) => ({ ...prev, value: val, customValue: '', step: 'method' }));
   };
 
   const handleCustomValueKeyPress = (char: string) => {
@@ -103,10 +116,10 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
       return;
     }
     playSuccessSound();
-    setState((prev) => ({ ...prev, value: val, step: 'pix' }));
+    setState((prev) => ({ ...prev, value: val, step: 'method' }));
   };
 
-  const handleCompletePix = () => {
+  const handleCompletePayment = () => {
     playSuccessSound();
     setState((prev) => ({ ...prev, step: 'success' }));
   };
@@ -114,7 +127,8 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
   const handleGoBack = () => {
     playTapSound();
     if (state.step === 'value') setState(prev => ({ ...prev, step: 'category' }));
-    else if (state.step === 'pix') setState(prev => ({ ...prev, step: 'value' }));
+    else if (state.step === 'method') setState(prev => ({ ...prev, step: 'value' }));
+    else if (state.step === 'pix' || state.step === 'card') setState(prev => ({ ...prev, step: 'method' }));
     else onBack();
   };
 
@@ -281,6 +295,91 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
           </div>
         )}
 
+        {/* STEP 2.5: SELECT PAYMENT METHOD */}
+        {state.step === 'method' && (
+          <div className="space-y-6 animate-fade-in text-center max-w-4xl mx-auto">
+            <header className="max-w-xl mx-auto">
+              <span className="bg-brand-red/10 text-brand-red text-[10px] font-black tracking-widest px-3 py-1 rounded-full uppercase border border-brand-red/20">
+                R$ {state.value.toFixed(2)} - {state.category}
+              </span>
+              <h2 className="text-2xl md:text-3xl font-black text-brand-dark mt-3">
+                Selecione a forma de pagamento
+              </h2>
+            </header>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+              {/* PIX Method */}
+              <button
+                type="button"
+                onClick={() => {
+                  playSuccessSound();
+                  setState(prev => ({ ...prev, step: 'pix', paymentMethod: 'pix' }));
+                }}
+                className="bg-white hover:bg-slate-50 rounded-2xl p-8 border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col items-center text-center justify-between shadow-sm group active:scale-98"
+              >
+                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4">
+                  <span className="material-symbols-outlined !text-4xl font-black">qr_code_2</span>
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-xl text-brand-dark mb-2 group-hover:text-brand-red transition-colors">PIX</h3>
+                  <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+                    Pagamento instantâneo com QR Code ou Chave Copia e Cola.
+                  </p>
+                </div>
+                <div className="mt-6 font-bold text-xs uppercase text-slate-400 group-hover:text-brand-red tracking-wider">
+                  Selecionar PIX →
+                </div>
+              </button>
+
+              {/* Credit Card Method */}
+              <button
+                type="button"
+                onClick={() => {
+                  playSuccessSound();
+                  setState(prev => ({ ...prev, step: 'card', paymentMethod: 'credit' }));
+                }}
+                className="bg-white hover:bg-slate-50 rounded-2xl p-8 border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col items-center text-center justify-between shadow-sm group active:scale-98"
+              >
+                <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mb-4">
+                  <span className="material-symbols-outlined !text-4xl font-black">credit_card</span>
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-xl text-brand-dark mb-2 group-hover:text-brand-red transition-colors">Crédito</h3>
+                  <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+                    Pague com seu cartão de crédito aproximando ou inserindo na maquininha.
+                  </p>
+                </div>
+                <div className="mt-6 font-bold text-xs uppercase text-slate-400 group-hover:text-brand-red tracking-wider">
+                  Pagar no Crédito →
+                </div>
+              </button>
+
+              {/* Debit Card Method */}
+              <button
+                type="button"
+                onClick={() => {
+                  playSuccessSound();
+                  setState(prev => ({ ...prev, step: 'card', paymentMethod: 'debit' }));
+                }}
+                className="bg-white hover:bg-slate-50 rounded-2xl p-8 border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col items-center text-center justify-between shadow-sm group active:scale-98"
+              >
+                <div className="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mb-4">
+                  <span className="material-symbols-outlined !text-4xl font-black">contactless</span>
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-xl text-brand-dark mb-2 group-hover:text-brand-red transition-colors">Débito</h3>
+                  <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+                    Pagamento imediato em débito. Aproxime ou insira o seu cartão.
+                  </p>
+                </div>
+                <div className="mt-6 font-bold text-xs uppercase text-slate-400 group-hover:text-brand-red tracking-wider">
+                  Pagar no Débito →
+                </div>
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* STEP 3: PIX QR CODE DISPLAY AND SIMULATE */}
         {state.step === 'pix' && (
           <div className="space-y-6 animate-fade-in text-center max-w-xl mx-auto">
@@ -331,11 +430,80 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
 
             <button
               type="button"
-              onClick={handleCompletePix}
+              onClick={handleCompletePayment}
               className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-md active:scale-98 transition-transform"
             >
               <span className="material-symbols-outlined !text-2xl">check_circle</span>
               <span>Simular Pagamento Confirmado</span>
+            </button>
+          </div>
+        )}
+
+        {/* STEP 3.5: CARD PAYMENT INTERACTION */}
+        {state.step === 'card' && (
+          <div className="space-y-6 animate-fade-in text-center max-w-xl mx-auto">
+            <header className="space-y-2">
+              <span className="text-xs uppercase tracking-widest font-black text-slate-500 block">
+                Pagamento em Cartão de {state.paymentMethod === 'credit' ? 'Crédito' : 'Débito'}
+              </span>
+              <h2 className="text-2xl font-black text-brand-dark">Aproxime ou Insira o Cartão</h2>
+              <div className="text-xl font-extrabold text-brand-red bg-brand-red/10 rounded-full px-6 py-2.5 inline-block border border-brand-red/30 shadow-sm">
+                Valor: R$ {state.value.toFixed(2)} ({state.category})
+              </div>
+            </header>
+
+            {/* Card Machine visual */}
+            <div className="bg-white rounded-3xl p-8 border-2 border-slate-200 shadow-lg flex flex-col items-center relative overflow-hidden space-y-6">
+              <div className="relative w-48 h-48 flex items-center justify-center">
+                {/* Simulated payment machine or terminal icon */}
+                <div className="absolute inset-0 bg-brand-red/5 rounded-full animate-ping opacity-30 animate-duration-3000" />
+                <div className="relative w-36 h-36 bg-slate-800 text-white rounded-2xl p-4 shadow-xl border border-slate-700 flex flex-col justify-between">
+                  {/* Terminal Screen */}
+                  <div className="bg-emerald-950 text-emerald-400 font-mono text-[10px] p-2 rounded border border-emerald-900 text-left space-y-1 shadow-inner min-h-[50px]">
+                    <div className="flex justify-between">
+                      <span>VALOR:</span>
+                      <span>R$ {state.value.toFixed(2)}</span>
+                    </div>
+                    <div className="animate-pulse flex items-center gap-1 mt-1 text-[9px] text-emerald-300">
+                      <span className="material-symbols-outlined !text-[10px]">contactless</span>
+                      <span>APROXIME OU INSIRA</span>
+                    </div>
+                  </div>
+                  {/* Keyboard Area */}
+                  <div className="grid grid-cols-3 gap-1 pt-2">
+                    {[1,2,3,4,5,6,7,8,9].map(n => (
+                      <div key={n} className="w-full h-1.5 bg-slate-700 rounded-[2px]" />
+                    ))}
+                    <div className="h-1.5 bg-red-600 rounded-[2px]" />
+                    <div className="h-1.5 bg-amber-500 rounded-[2px]" />
+                    <div className="h-1.5 bg-emerald-600 rounded-[2px]" />
+                  </div>
+                </div>
+
+                {/* Hand contactless animation */}
+                <div className="absolute -bottom-2 -right-2 bg-brand-red text-white p-3 rounded-full shadow-lg border-2 border-white animate-bounce">
+                  <span className="material-symbols-outlined !text-2xl">contactless</span>
+                </div>
+              </div>
+
+              {/* Waiting status */}
+              <div className="flex items-center justify-center gap-2 text-slate-700 bg-slate-100 border border-slate-200 px-5 py-3 rounded-2xl w-full">
+                <span className="material-symbols-outlined text-brand-red !text-xl animate-pulse">sync_saved_locally</span>
+                <span className="text-xs font-black uppercase tracking-wider">Aguardando maquininha...</span>
+              </div>
+
+              <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+                Utilize o leitor de cartões integrado na lateral do totem. Caso o pagamento não seja processado automaticamente, você pode simular a aprovação abaixo.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleCompletePayment}
+              className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-md active:scale-98 transition-transform"
+            >
+              <span className="material-symbols-outlined !text-2xl">check_circle</span>
+              <span>Simular Cartão Aprovado</span>
             </button>
           </div>
         )}

@@ -6,10 +6,11 @@ import { BrandConfig } from '../utils/brand';
 interface HomeViewProps {
   onStart: () => void;
   onOpenAccessibility: () => void;
+  onOpenAdmin?: () => void;
   brand: BrandConfig;
 }
 
-export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeViewProps) {
+export default function HomeView({ onStart, onOpenAccessibility, onOpenAdmin, brand }: HomeViewProps) {
   const [activeCard, setActiveCard] = useState(0);
 
   // Welcome voice message on mount
@@ -151,6 +152,19 @@ export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeVi
 
         {/* Accessibility Buttons (Absolute Right overlay style) */}
         <div className="absolute right-6 md:right-20 flex gap-4">
+          {onOpenAdmin && (
+            <button 
+              type="button" 
+              onClick={() => {
+                playTapSound();
+                onOpenAdmin();
+              }}
+              className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center text-white cursor-pointer"
+              title="Painel Administrativo"
+            >
+              <span className="material-symbols-outlined font-light !text-2xl">settings</span>
+            </button>
+          )}
           <button 
             type="button" 
             onClick={() => handleAccessibilityClick('lang')}

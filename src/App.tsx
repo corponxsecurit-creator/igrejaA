@@ -10,6 +10,7 @@ import MinistryView from './components/MinistryView';
 import DonationView from './components/DonationView';
 import MyCellView from './components/MyCellView';
 import PastoralView from './components/PastoralView';
+import AdminView from './components/AdminView';
 import InactivityTimer from './components/InactivityTimer';
 import { playTapSound, playSuccessSound } from './utils/audio';
 import { speakText, setVoiceAssistEnabled } from './utils/tts';
@@ -74,6 +75,10 @@ export default function App() {
           <HomeView 
             onStart={handleStart} 
             onOpenAccessibility={() => setShowAccessModal(true)}
+            onOpenAdmin={() => {
+              setView('admin');
+              speakText('Acessando painel administrativo.');
+            }}
             brand={brand}
           />
         )}
@@ -93,6 +98,10 @@ export default function App() {
             }} 
             onGoHome={handleGoHome} 
             onOpenAccessibility={() => setShowAccessModal(true)}
+            onOpenAdmin={() => {
+              setView('admin');
+              speakText('Acessando painel administrativo.');
+            }}
             brand={brand}
           />
         )}
@@ -156,6 +165,13 @@ export default function App() {
           <PastoralView 
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
+            brand={brand}
+          />
+        )}
+
+        {view === 'admin' && (
+          <AdminView 
+            onBack={handleBackToDashboard} 
             brand={brand}
           />
         )}

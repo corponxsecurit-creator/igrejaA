@@ -26,7 +26,8 @@ export interface DonationState {
   category: string;
   value: number;
   customValue: string;
-  step: 'category' | 'value' | 'pix' | 'success';
+  step: 'category' | 'value' | 'method' | 'pix' | 'card' | 'success';
+  paymentMethod?: 'pix' | 'credit' | 'debit';
 }
 
 export interface NewMemberState {

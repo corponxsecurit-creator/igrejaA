@@ -481,6 +481,29 @@ export const brands: Record<string, BrandConfig> = {
   }
 };
 
+export function getStoredBrands(): Record<string, BrandConfig> {
+  if (typeof window === 'undefined') {
+    return brands;
+  }
+  const stored = localStorage.getItem('santuario_brands');
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (e) {
+      console.error("Failed to parse stored brands", e);
+    }
+  }
+  // Initialize storage if empty
+  localStorage.setItem('santuario_brands', JSON.stringify(brands));
+  return brands;
+}
+
+export function saveStoredBrands(updatedBrands: Record<string, BrandConfig>) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('santuario_brands', JSON.stringify(updatedBrands));
+  }
+}
+
 export function getCurrentBrand(): BrandConfig {
   if (typeof window === 'undefined') {
     return brands.atitude;
@@ -499,5 +522,6 @@ export function getCurrentBrand(): BrandConfig {
     client = 'beityaacov';
   }
   
-  return brands[client] || brands.atitude;
+  const dynamicBrands = getStoredBrands();
+  return dynamicBrands[client] || dynamicBrands.atitude || brands.atitude;
 }
