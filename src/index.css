@@ -30,6 +30,69 @@ body {
   animation: fadeIn 0.4s ease-out forwards;
 }
 
+/* Custom ctaPulse animation with 20px spread */
+@keyframes ctaPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--color-brand-red-rgb, 227, 6, 19), 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(var(--color-brand-red-rgb, 227, 6, 19), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--color-brand-red-rgb, 227, 6, 19), 0);
+  }
+}
+
+.animate-cta-pulse {
+  animation: ctaPulse 2.0s infinite;
+}
+
+/* Custom handBounce animation */
+@keyframes handBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-hand-bounce {
+  animation: handBounce 1.2s ease-in-out infinite;
+}
+
+/* Shine effect on hover/active */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 30%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  transition: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.btn-shine:hover::after,
+.btn-shine:active::after {
+  left: 130%;
+  opacity: 1;
+  transition: all 0.6s ease-in-out;
+}
+
 /* Material Icons size utilities */
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 48;

@@ -15,6 +15,15 @@ import { playTapSound, playSuccessSound } from './utils/audio';
 import { speakText, setVoiceAssistEnabled } from './utils/tts';
 import { getCurrentBrand } from './utils/brand';
 
+const hexToRgb = (hex: string): string => {
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  const fullHex = hex.replace(shorthandRegex, (_, r, g, b) => r + r + g + g + b + b);
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(fullHex);
+  return result 
+    ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
+    : '227, 6, 19';
+};
+
 export default function App() {
   const [view, setView] = useState<ViewState>('home');
   const [highContrast, setHighContrast] = useState(false);
@@ -27,6 +36,11 @@ export default function App() {
   useEffect(() => {
     document.documentElement.style.setProperty('--color-brand-red', brand.primaryColor);
     document.documentElement.style.setProperty('--color-brand-red-hover', brand.primaryColorHover);
+    document.documentElement.style.setProperty('--color-brand-red-rgb', hexToRgb(brand.primaryColor));
+    document.documentElement.style.setProperty('--color-brand-glow', brand.glowColor);
+    document.documentElement.style.setProperty('--color-brand-badge-bg', brand.badgeBgColor);
+    document.documentElement.style.setProperty('--color-brand-badge-text', brand.badgeTextColor);
+    document.documentElement.style.setProperty('--color-brand-accent-splash', brand.accentSplashColor);
     document.title = `Santuário Digital - ${brand.name}`;
   }, [brand]);
 

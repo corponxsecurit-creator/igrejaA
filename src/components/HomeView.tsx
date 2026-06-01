@@ -75,7 +75,12 @@ export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeVi
   const carouselCards = getCarouselData();
 
   return (
-    <div className="relative h-screen w-full select-none overflow-hidden bg-brand-dark text-white">
+    <div 
+      className="relative h-screen w-full select-none overflow-hidden text-white"
+      style={{
+        background: 'radial-gradient(circle at center, var(--color-brand-glow) 0%, #060814 100%)'
+      }}
+    >
       {/* Background Image with Kiosk ambiance - Overlay style */}
       <div className="absolute inset-0 z-0">
         <img
@@ -84,7 +89,7 @@ export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeVi
           alt={`Ambiente Kiosk ${brand.name}`}
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1c1b1d]/50 via-transparent to-[#1c1b1d]/95" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#060814]/90 via-[#060814]/40 to-[#060814]/95" />
       </div>
 
       {/* Top Header */}
@@ -113,15 +118,35 @@ export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeVi
           </select>
         </div>
 
-        <div className="flex flex-col items-center mx-auto text-center">
-          <img 
-            src={brand.logoUrl} 
-            className={`h-24 object-contain ${brand.id === 'atitude' ? 'logo-white filter drop-shadow-xl' : 'filter drop-shadow-xl'}`} 
-            alt={brand.name} 
-          />
-          <span className="text-[10px] uppercase tracking-[0.4em] font-black text-brand-red mt-2 drop-shadow-md">
-            {brand.campusName}
-          </span>
+        <div className="flex flex-col items-center mx-auto text-center mt-4">
+          <div 
+            className="px-6 py-3 rounded-2xl border-2 bg-white/5 backdrop-blur-md transition-all duration-300 flex items-center justify-center h-20 shadow-lg"
+            style={{ 
+              borderColor: 'var(--color-brand-accent-splash)',
+              boxShadow: '0 0 15px var(--color-brand-glow)' 
+            }}
+          >
+            <img 
+              src={brand.logoUrl} 
+              className={`h-14 object-contain ${brand.id === 'atitude' ? 'logo-white' : ''}`} 
+              alt={brand.name} 
+            />
+          </div>
+          
+          {/* Badge Pill with Dot */}
+          <div 
+            className="mt-3.5 flex items-center gap-2 px-4 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-md transition-all duration-300"
+            style={{ 
+              backgroundColor: 'var(--color-brand-badge-bg)', 
+              color: 'var(--color-brand-badge-text)' 
+            }}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: 'var(--color-brand-badge-text)' }}></span>
+              <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: 'var(--color-brand-badge-text)' }}></span>
+            </span>
+            <span>{brand.badgeLabel}</span>
+          </div>
         </div>
 
         {/* Accessibility Buttons (Absolute Right overlay style) */}
@@ -146,13 +171,22 @@ export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeVi
       </nav>
 
       {/* Main Touch Canvas */}
-      <main className="relative z-10 h-screen flex flex-col items-center justify-center px-6 text-center">
+      <main className="relative z-10 h-screen flex flex-col items-center justify-center px-6 text-center pt-24">
         {/* Welcome Section */}
-        <div className="mb-10 animate-fade-in">
-          <h2 className="font-sans text-3xl md:text-5xl lg:text-6xl text-white font-light tracking-wide drop-shadow-lg">
-            Bem-vindo à <span className="font-bold">{brand.name} {brand.campusName}</span>
+        <div className="mb-10 animate-fade-in flex flex-col items-center">
+          <span 
+            className="text-sm uppercase tracking-[0.3em] font-black mb-2" 
+            style={{ color: 'var(--color-brand-accent-splash)' }}
+          >
+            Bem-vindo
+          </span>
+          <h2 className="font-sans text-5xl md:text-6xl lg:text-[64px] text-white font-extrabold uppercase tracking-[0.15em] drop-shadow-2xl leading-none">
+            {brand.name}
           </h2>
-          <p className="font-sans text-lg md:text-2xl text-white/80 mt-4 max-w-3xl mx-auto drop-shadow">
+          <span className="text-[11px] uppercase tracking-[0.4em] font-black text-white/50 mt-3 mb-6">
+            {brand.campusName}
+          </span>
+          <p className="font-sans text-lg md:text-xl text-white/70 max-w-2xl mx-auto drop-shadow leading-relaxed">
             {brand.type === 'synagogue' 
               ? 'Um espaço sagrado de oração, estudo da Torá e acolhimento comunitário.' 
               : 'Um lugar de novos começos e experiências extraordinárias com Deus.'}
@@ -161,13 +195,17 @@ export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeVi
 
         {/* Central Pulsing Start Action */}
         <div className="relative flex flex-col items-center group cursor-pointer" onClick={handleStartClick}>
-          <div className="absolute -inset-10 bg-brand-red/20 rounded-full blur-3xl animate-pulse" />
+          {/* Blur accent glow background */}
+          <div 
+            className="absolute -inset-10 rounded-full blur-3xl opacity-35 transition-all duration-300"
+            style={{ backgroundColor: 'var(--color-brand-accent-splash)' }}
+          />
           
           <button
             type="button"
-            className="relative w-[300px] md:w-[540px] h-24 md:h-28 bg-brand-red hover:bg-brand-red-hover text-white font-semibold text-xl md:text-2xl flex items-center justify-center rounded-full border-4 border-white/20 hover:scale-105 transition-all cursor-pointer shadow-2xl active:scale-95 duration-150 ease-out"
+            className="relative w-[300px] md:w-[540px] h-24 md:h-28 bg-brand-red hover:bg-brand-red-hover text-white font-semibold text-xl md:text-2xl flex items-center justify-center rounded-full border-4 border-white/20 hover:scale-105 transition-all cursor-pointer shadow-2xl active:scale-95 duration-150 ease-out animate-cta-pulse btn-shine"
           >
-            <span className="material-symbols-outlined !text-4xl mr-3 font-semibold text-stroke animate-bounce">
+            <span className="material-symbols-outlined !text-4xl mr-3 font-semibold text-stroke animate-hand-bounce">
               touch_app
             </span>
             Como podemos ajudar você hoje?
@@ -224,8 +262,20 @@ export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeVi
           {/* Indicators and Network Connection (Kiosk Detail) */}
           <div className="flex flex-col items-center md:items-end gap-3 w-full md:w-auto">
             <div className="flex gap-2">
-              <span className={`w-2.5 h-2.5 rounded-full transition-colors ${activeCard === 0 ? 'bg-brand-red' : 'bg-white/20'}`} />
-              <span className={`w-2.5 h-2.5 rounded-full transition-colors ${activeCard === 1 ? 'bg-brand-red' : 'bg-white/20'}`} />
+              <span 
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${activeCard === 0 ? 'scale-110' : ''}`}
+                style={{
+                  backgroundColor: activeCard === 0 ? 'var(--color-brand-accent-splash)' : 'rgba(255, 255, 255, 0.25)',
+                  boxShadow: activeCard === 0 ? '0 0 8px var(--color-brand-accent-splash)' : 'none'
+                }}
+              />
+              <span 
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${activeCard === 1 ? 'scale-110' : ''}`}
+                style={{
+                  backgroundColor: activeCard === 1 ? 'var(--color-brand-accent-splash)' : 'rgba(255, 255, 255, 0.25)',
+                  boxShadow: activeCard === 1 ? '0 0 8px var(--color-brand-accent-splash)' : 'none'
+                }}
+              />
             </div>
 
             <div className="flex items-center bg-white/5 backdrop-blur-md px-5 py-2.5 rounded-full text-white/95 text-xs font-medium border border-white/10 gap-4">

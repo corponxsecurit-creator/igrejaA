@@ -25,6 +25,11 @@ export interface BrandConfig {
   pixKey: string;
   pastors: Pastor[];
   cellGroups: CellGroup[];
+  glowColor: string;
+  badgeBgColor: string;
+  badgeTextColor: string;
+  badgeLabel: string;
+  accentSplashColor: string;
 }
 
 export const brands: Record<string, BrandConfig> = {
@@ -37,6 +42,11 @@ export const brands: Record<string, BrandConfig> = {
     primaryColor: '#e30613',
     primaryColorHover: '#c61118',
     accentColor: '#e30613',
+    glowColor: 'rgba(245, 195, 30, 0.15)',
+    badgeBgColor: '#f5c31e',
+    badgeTextColor: '#0a0a0a',
+    badgeLabel: 'Igreja Batista Atitude',
+    accentSplashColor: '#f5c31e',
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',
@@ -138,6 +148,11 @@ export const brands: Record<string, BrandConfig> = {
     primaryColor: '#d4af37',
     primaryColorHover: '#b8942a',
     accentColor: '#d4af37',
+    glowColor: 'rgba(212, 175, 55, 0.15)',
+    badgeBgColor: '#d4af37',
+    badgeTextColor: '#0a0a0a',
+    badgeLabel: 'Lagoinha Alphaville',
+    accentSplashColor: '#d4af37',
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',
@@ -214,6 +229,11 @@ export const brands: Record<string, BrandConfig> = {
     primaryColor: '#102a43',
     primaryColorHover: '#0b1d33',
     accentColor: '#cf2e2e',
+    glowColor: 'rgba(207, 46, 46, 0.15)',
+    badgeBgColor: '#cf2e2e',
+    badgeTextColor: '#ffffff',
+    badgeLabel: 'Universal - Templo de Salomão',
+    accentSplashColor: '#cf2e2e',
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Bispos e Pastores',
@@ -290,6 +310,11 @@ export const brands: Record<string, BrandConfig> = {
     primaryColor: '#0d47a1',
     primaryColorHover: '#0a3580',
     accentColor: '#ffb300',
+    glowColor: 'rgba(255, 179, 0, 0.15)',
+    badgeBgColor: '#ffb300',
+    badgeTextColor: '#0a0a0a',
+    badgeLabel: 'Sinagoga Beit Yaacov',
+    accentSplashColor: '#ffb300',
     type: 'synagogue',
     termPastor: 'Rabino',
     termPastors: 'Rabinos',
@@ -366,6 +391,11 @@ export const brands: Record<string, BrandConfig> = {
     primaryColor: '#ffb22a',
     primaryColorHover: '#e59a16',
     accentColor: '#116dff',
+    glowColor: 'rgba(255, 178, 42, 0.15)',
+    badgeBgColor: '#ffb22a',
+    badgeTextColor: '#0a0a0a',
+    badgeLabel: 'IBM Alphaville',
+    accentSplashColor: '#ffb22a',
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',
