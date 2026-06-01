@@ -373,7 +373,7 @@ export default function HomeView({
           >
             <img
               src={brand.logoUrl}
-              className={`h-12 object-contain ${brand.id === 'atitude' ? 'logo-white' : ''}`}
+              className={`h-12 object-contain ${brand.id === 'atitude' || brand.id === 'ibmalphaville' ? 'logo-white' : ''}`}
               alt={brand.name}
               referrerPolicy="no-referrer"
             />

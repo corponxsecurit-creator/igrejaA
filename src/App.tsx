@@ -42,6 +42,15 @@ export default function App() {
     document.documentElement.style.setProperty('--color-brand-badge-bg', brand.badgeBgColor);
     document.documentElement.style.setProperty('--color-brand-badge-text', brand.badgeTextColor);
     document.documentElement.style.setProperty('--color-brand-accent-splash', brand.accentSplashColor);
+    
+    if (brand.id === 'ibmalphaville') {
+      document.documentElement.style.setProperty('--font-sans', '"Montserrat", sans-serif');
+      document.documentElement.style.setProperty('--font-body', '"Montserrat", sans-serif');
+    } else {
+      document.documentElement.style.setProperty('--font-sans', '"Inter", system-ui, -apple-system, sans-serif');
+      document.documentElement.style.setProperty('--font-body', '"Inter", system-ui, -apple-system, sans-serif');
+    }
+    
     document.title = `Santuário Digital - ${brand.name}`;
   }, [brand]);
 
