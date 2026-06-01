@@ -70,9 +70,9 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
       {/* Background Image with Dark Glassmorphism Overlay */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 opacity-60"
-        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(8px)' }}
+        style={{ backgroundImage: `url(${brand.dashboardBgUrl || brand.bgUrl})`, filter: 'blur(8px)' }}
       />
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#020617]/90 via-[#020617]/80 to-[#020617]/95 backdrop-blur-xl" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#020617]/60 via-[#020617]/50 to-[#020617]/80 backdrop-blur-xl" />
 
       {/* Particle background system (subtle) */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40 mix-blend-screen">

@@ -6,6 +6,7 @@ export interface BrandConfig {
   campusName: string;
   logoUrl: string;
   bgUrl: string;
+  dashboardBgUrl?: string;
   primaryColor: string;
   primaryColorHover: string;
   accentColor: string;
@@ -138,6 +139,38 @@ export const brands: Record<string, BrandConfig> = {
         phone: '(11) 94455-6677',
       }
     ]
+  },
+  icconselheira: {
+    id: 'icconselheira',
+    name: 'Igreja Cristã Conselheira',
+    campusName: 'ICC',
+    logoUrl: 'https://static.wixstatic.com/media/6ffcad_55af5a6f2fdf47cea5b964593486122e~mv2.png/v1/fill/w_298,h_277,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/ICC_logo_vertical_cor.png',
+    bgUrl: 'https://static.wixstatic.com/media/6ffcad_074e01478e384e37a4e59dd024c7c5ca~mv2.png/v1/crop/x_0,y_129,w_2048,h_894/fill/w_1966,h_858,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMAGEM%20DE%20ABERTURA%20PARA%20SITE.png',
+    dashboardBgUrl: 'https://static.wixstatic.com/media/6ffcad_3f8d653f42e04ddf9ec57a6f5d3e188c~mv2.jpg/v1/fill/w_2500,h_1250,al_c/6ffcad_3f8d653f42e04ddf9ec57a6f5d3e188c~mv2.jpg',
+    primaryColor: '#4BD1A0',
+    primaryColorHover: '#b8942a',
+    accentColor: '#d4af37',
+    glowColor: 'rgba(212, 175, 55, 0.25)',
+    badgeBgColor: '#d4af37',
+    badgeTextColor: '#0a0a0a',
+    badgeLabel: 'ICC',
+    accentSplashColor: '#d4af37',
+    type: 'church',
+    termPastor: 'Pastor',
+    termPastors: 'Pastores',
+    termPastoral: 'Atendimento Pastoral',
+    termCult: 'Culto',
+    termCults: 'Cultos',
+    termDonation: 'Contribuição',
+    termDonations: 'Contribuições',
+    termConnect: 'Grupo',
+    termConnects: 'Grupos',
+    termMember: 'Membro',
+    location: 'São Paulo, SP',
+    wifi: 'ICC_Wifi',
+    pixKey: 'pix@icc.com.br',
+    pastors: [],
+    cellGroups: []
   },
   lagoinha: {
     id: 'lagoinha',
@@ -520,6 +553,8 @@ export function getCurrentBrand(): BrandConfig {
     client = 'universal';
   } else if (client === 'beityaacov' || client === 'beit-yaacov' || client === 'morasha') {
     client = 'beityaacov';
+  } else if (client === 'icc' || client === 'icconselheira') {
+    client = 'icconselheira';
   }
   
   const dynamicBrands = getStoredBrands();
