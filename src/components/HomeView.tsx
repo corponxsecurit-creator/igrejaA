@@ -115,9 +115,26 @@ function getBrandSlides(brand: BrandConfig): Slide[] {
         verseRef: 'Provérbios 3:18',
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1519817650390-64a93db51149?w=1920&auto=format&fit=crop&q=85',
-        verse: 'Que a luz do Eterno ilumine o teu caminho.',
-        verseRef: 'Números 6:25',
+        bgUrl: 'https://www.morasha.com.br/wp-content/uploads/2023/06/120_ed87.jpg',
+        verse: 'Quão boas são as tuas tendas, ó Jacó, as tuas moradas, ó Israel.',
+        verseRef: 'Números 24:5',
+      },
+    ],
+    icconselheira: [
+      {
+        bgUrl: 'https://static.wixstatic.com/media/6ffcad_074e01478e384e37a4e59dd024c7c5ca~mv2.png/v1/crop/x_0,y_129,w_2048,h_894/fill/w_1966,h_858,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMAGEM%20DE%20ABERTURA%20PARA%20SITE.png',
+        verse: 'E conhecereis a verdade, e a verdade vos libertará.',
+        verseRef: 'João 8:32',
+      },
+      {
+        bgUrl: 'https://static.wixstatic.com/media/6ffcad_3f8d653f42e04ddf9ec57a6f5d3e188c~mv2.jpg/v1/fill/w_2500,h_1250,al_c/6ffcad_3f8d653f42e04ddf9ec57a6f5d3e188c~mv2.jpg',
+        verse: 'Porque nele vivemos, e nos movemos, e existimos.',
+        verseRef: 'Atos 17:28',
+      },
+      {
+        bgUrl: 'https://static.wixstatic.com/media/6ffcad_19cb063f32a9490695f16c15daff22caf000.jpg/v1/fill/w_1280,h_720,al_c,q_85,enc_avif,quality_auto/6ffcad_19cb063f32a9490695f16c15daff22caf000.jpg',
+        verse: 'O Senhor é o meu pastor, nada me faltará.',
+        verseRef: 'Salmos 23:1',
       },
     ],
   };
