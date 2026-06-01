@@ -27,6 +27,7 @@ export default function App() {
   useEffect(() => {
     document.documentElement.style.setProperty('--color-brand-red', brand.primaryColor);
     document.documentElement.style.setProperty('--color-brand-red-hover', brand.primaryColorHover);
+    document.title = `Santuário Digital - ${brand.name}`;
   }, [brand]);
 
   const handleStart = () => {

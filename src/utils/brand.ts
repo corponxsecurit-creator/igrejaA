@@ -459,8 +459,14 @@ export function getCurrentBrand(): BrandConfig {
   const params = new URLSearchParams(window.location.search);
   let client = (params.get('client') || 'atitude').toLowerCase().trim();
   
-  if (client === 'ibm') {
+  if (client === 'ibm' || client === 'ibm-alphaville' || client === 'ibmalphaville') {
     client = 'ibmalphaville';
+  } else if (client === 'lagoinha' || client === 'lagoinhaalphaville' || client === 'lagoinha-alphaville') {
+    client = 'lagoinha';
+  } else if (client === 'universal' || client === 'iurd') {
+    client = 'universal';
+  } else if (client === 'beityaacov' || client === 'beit-yaacov' || client === 'morasha') {
+    client = 'beityaacov';
   }
   
   return brands[client] || brands.atitude;
