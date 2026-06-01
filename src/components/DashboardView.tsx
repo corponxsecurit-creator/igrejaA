@@ -94,10 +94,11 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         <div className="flex items-center gap-3">
           <img 
             src={brand.logoUrl} 
-            className="h-12 object-contain" 
+            className={`h-12 object-contain ${brand.id === 'atitude' ? 'logo-white' : ''}`} 
             alt={brand.name} 
+            referrerPolicy="no-referrer"
           />
-          <span className="text-xs uppercase tracking-[0.25em] font-black text-brand-red mt-1">
+          <span className="text-xs uppercase tracking-[0.25em] font-black mt-1" style={{ color: accent }}>
             {brand.campusName}
           </span>
         </div>
