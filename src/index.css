@@ -39,7 +39,7 @@ body {
   100% { transform: scale(1.12) translate(0.5%, -0.5%); }
 }
 .ken-burns {
-  animation: kenBurns 14s ease-in-out infinite alternate;
+  animation: kenBurns 18s ease-in-out infinite alternate;
   will-change: transform;
   transform-origin: center center;
 }
@@ -70,17 +70,17 @@ body {
 /* Icon bounce — smooth, reduced amplitude */
 @keyframes handBounce {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
-  30%       { transform: translateY(-6px) rotate(-3deg); }
-  60%       { transform: translateY(-3px) rotate(2deg); }
+  30%       { transform: translateY(-4px) rotate(-2deg); }
+  60%       { transform: translateY(-2px) rotate(1deg); }
 }
 .animate-hand-bounce { animation: handBounce 1.6s ease-in-out infinite; }
 
 /* Badge pulse dot */
 @keyframes pulseDot {
   0%, 100% { transform: scale(1);   opacity: 1; }
-  50%       { transform: scale(1.8); opacity: 0.5; }
+  50%       { transform: scale(1.5); opacity: 0.5; }
 }
-.animate-pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+.animate-pulse-dot { animation: pulseDot 2s infinite; }
 
 /* Shine — 0.8s diagonal sweep */
 .btn-shine {

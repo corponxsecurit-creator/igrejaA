@@ -222,8 +222,8 @@ export default function HomeView({
   const slide = slides[currentSlide];
 
   /* ── Accent / glow colour ────────────────────────── */
-  const accent = brand.accentSplashColor || '#F5C31E';
-  const glow   = brand.glowColor || 'rgba(245,195,30,0.25)';
+  const accent = '#F5C31E'; // Institutional generic yellow
+  const glow   = 'rgba(245,195,30,0.25)';
 
   /* ── Logo icon (generic per type) ───────────────── */
   const logoIcon = brand.type === 'synagogue' ? 'synagogue' : 'church';
@@ -458,8 +458,8 @@ export default function HomeView({
         >
           {/* Eyebrow */}
           <span
-            className="text-sm uppercase tracking-[0.4em] font-black mb-4 slide-reveal"
-            style={{ color: accent }}
+            className="uppercase tracking-[0.4em] font-black mb-4 slide-reveal"
+            style={{ color: accent, fontSize: '24px', fontWeight: 600 }}
           >
             Bem-vindo
           </span>
@@ -468,7 +468,7 @@ export default function HomeView({
           <h1
             className="font-sans text-white font-extrabold uppercase leading-none drop-shadow-2xl slide-reveal"
             style={{
-              fontSize:      'clamp(42px, 6vw, 72px)',
+              fontSize:      '64px',
               fontWeight:    800,
               letterSpacing: '4px',
               lineHeight:    1,
@@ -480,8 +480,8 @@ export default function HomeView({
 
           {/* Campus subtitle */}
           <p
-            className="text-xs uppercase tracking-[0.5em] font-bold text-white/40 mt-3 mb-6 slide-reveal"
-            style={{ animationDelay: '0.16s' }}
+            className="uppercase tracking-[0.5em] text-white mt-3 mb-6 slide-reveal"
+            style={{ fontSize: '24px', fontWeight: 600, color: '#F5C31E', animationDelay: '0.16s' }}
           >
             {brand.campusName}
           </p>
@@ -493,7 +493,7 @@ export default function HomeView({
           >
             <p
               className="font-sans text-base md:text-lg leading-relaxed italic"
-              style={{ color: 'rgba(255,255,255,0.72)' }}
+              style={{ color: 'rgba(255,255,255,0.75)' }}
             >
               "{slide.verse}"
             </p>
