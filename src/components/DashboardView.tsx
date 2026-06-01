@@ -191,22 +191,24 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </div>
           </button>
 
-          {/* MINHA CELULA */}
           <button
             type="button"
             onClick={() => handleSelect('my_cell')}
-            className="col-span-12 md:col-span-3 bg-[#e6e8eb] text-[#191c1e] rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:bg-[#e0e3e6] hover:scale-[1.02] active:scale-[0.98] transition-all shadow-sm min-h-[180px] md:min-h-[200px] border border-[#c4c6ce] group"
+            className="col-span-12 md:col-span-3 bg-[#e6e8eb] text-[#191c1e] rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:bg-[#e0e3e6] hover:scale-[1.02] active:scale-[0.98] transition-all shadow-sm min-h-[180px] md:min-h-[200px] border border-[#c4c6ce] group overflow-hidden"
           >
             <span className="material-symbols-outlined !text-[52px] text-brand-dark group-hover:scale-105 transition-transform">
               hub
             </span>
-            <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-[#43474d] block mb-1">
-                {brand.type === 'synagogue' ? 'Grupos de Estudo' : 'Conexão Pequenos Grupos'}
+            <div className="text-left mt-4 w-full overflow-hidden">
+              <span className="text-xs tracking-widest uppercase font-bold text-[#43474d] block mb-1 truncate">
+                {brand.type === 'synagogue' ? 'Grupos de Estudo' : 'Conexão Grupos'}
               </span>
-              <span className="text-xl md:text-2xl font-black uppercase tracking-wider block">{brand.termConnects}</span>
+              <span className="text-lg font-black uppercase tracking-wide block leading-tight line-clamp-2 break-words">
+                {brand.termConnects}
+              </span>
             </div>
           </button>
+
 
           {/* ATENDIMENTO PASTORAL */}
           <button
