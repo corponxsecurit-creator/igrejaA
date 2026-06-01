@@ -58,6 +58,11 @@ export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeVi
           { title: brand.termCults, time: 'Sexta às 19:00h e Sábado às 9:30h', subtitle: 'Preces e Cabalat Shabat', icon: 'event' },
           { title: brand.termConnects, time: 'Segunda a Quinta', subtitle: 'Aulas de Cabalá e Torá', icon: 'group' }
         ];
+      case 'ibmalphaville':
+        return [
+          { title: brand.termCults, time: 'Domingo às 08h30, 11h15 e 18h30', subtitle: 'Celebrações de Domingo', icon: 'event' },
+          { title: brand.termConnects, time: 'Diversos dias e horários', subtitle: 'Grupos de Relacionamento (GR)', icon: 'group' }
+        ];
       case 'atitude':
       default:
         return [
@@ -84,6 +89,30 @@ export default function HomeView({ onStart, onOpenAccessibility, brand }: HomeVi
 
       {/* Top Header */}
       <nav className="absolute top-0 left-0 z-50 flex w-full justify-between items-center px-12 md:px-20 py-8">
+        
+        {/* Brand Switcher Selection Dropdown */}
+        <div className="absolute left-6 md:left-20 flex items-center gap-2">
+          <span className="material-symbols-outlined font-light !text-lg text-white/50">swap_horizontal_circle</span>
+          <select
+            value={brand.id}
+            onChange={(e) => {
+              playTapSound();
+              const selected = e.target.value;
+              const url = new URL(window.location.href);
+              url.searchParams.set('client', selected);
+              window.location.href = url.toString();
+            }}
+            className="bg-white/10 text-white border border-white/20 rounded-xl px-3 py-1.5 text-xs font-black uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-brand-red cursor-pointer backdrop-blur-md transition-all hover:bg-white/20"
+            title="Selecionar Cliente / Versão"
+          >
+            <option value="atitude" className="bg-slate-900 text-white font-bold">Atitude</option>
+            <option value="lagoinha" className="bg-slate-900 text-white font-bold">Lagoinha</option>
+            <option value="universal" className="bg-slate-900 text-white font-bold">Universal</option>
+            <option value="beityaacov" className="bg-slate-900 text-white font-bold">Beit Yaacov</option>
+            <option value="ibmalphaville" className="bg-slate-900 text-white font-bold">IBM Alphaville</option>
+          </select>
+        </div>
+
         <div className="flex flex-col items-center mx-auto text-center">
           <img 
             src={brand.logoUrl} 

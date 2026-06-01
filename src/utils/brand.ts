@@ -356,6 +356,98 @@ export const brands: Record<string, BrandConfig> = {
         phone: '(11) 97777-5544',
       }
     ]
+  },
+  ibmalphaville: {
+    id: 'ibmalphaville',
+    name: 'IBM Alphaville',
+    campusName: 'Sede Tamboré',
+    logoUrl: 'https://static.wixstatic.com/media/33ca7d_8cb69c0ba912431985faa315621a35eb~mv2_d_3985_1810_s_2.png',
+    bgUrl: 'https://images.unsplash.com/photo-1548625361-155deea22300?w=1600&fit=crop&q=80',
+    primaryColor: '#116dff',
+    primaryColorHover: '#0b55cc',
+    accentColor: '#ff8c00',
+    type: 'church',
+    termPastor: 'Pastor',
+    termPastors: 'Pastores',
+    termPastoral: 'Atendimento Pastoral',
+    termCult: 'Celebração',
+    termCults: 'Celebrações de Domingo',
+    termDonation: 'Dízimo ou Oferta',
+    termDonations: 'Dízimos e Ofertas',
+    termConnect: 'Grupo de Relacionamento',
+    termConnects: 'Grupos de Relacionamento',
+    termMember: 'Novo por Aqui',
+    location: 'Av. Tamboré, 1603 – Tamboré, Barueri - SP',
+    wifi: 'IBM_Alphaville',
+    pixKey: '07.838.266/0001-57',
+    pastors: [
+      {
+        id: '1',
+        name: 'Pr. Sidney Costa',
+        role: 'Pastor Sênior',
+        available: true,
+        photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&fit=crop&q=80',
+      },
+      {
+        id: '2',
+        name: 'Pr. Hugo Ksenhuk',
+        role: 'Pastor de Comunicação e Ensino',
+        available: true,
+        photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&fit=crop&q=80',
+      },
+      {
+        id: '3',
+        name: 'Pr. Fabiano Bispo',
+        role: 'Cuidado Pastoral e Integração',
+        available: true,
+        photoUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&fit=crop&q=80',
+      },
+      {
+        id: '4',
+        name: 'Pr. Reinaldo Rodrigues',
+        role: 'Família e Casais',
+        available: true,
+        photoUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&fit=crop&q=80',
+      }
+    ],
+    cellGroups: [
+      {
+        id: '1',
+        name: 'GR Tamboré - Jovens',
+        neighborhood: 'Tamboré',
+        day: 'Terça-feira',
+        hour: '20:00',
+        leader: 'André & Amanda',
+        phone: '(11) 99988-1122',
+      },
+      {
+        id: '2',
+        name: 'GR Alphaville 1 - Casais',
+        neighborhood: 'Alphaville',
+        day: 'Quarta-feira',
+        hour: '20:00',
+        leader: 'Thiago & Gabi',
+        phone: '(11) 99988-3344',
+      },
+      {
+        id: '3',
+        name: 'GR Centro Barueri - Misto',
+        neighborhood: 'Centro Barueri',
+        day: 'Quinta-feira',
+        hour: '19:30',
+        leader: 'Renato & Paula',
+        phone: '(11) 99988-5566',
+      },
+      {
+        id: '4',
+        name: 'GR Aldeia da Serra - Famílias',
+        neighborhood: 'Aldeia da Serra',
+        day: 'Sábado',
+        hour: '18:00',
+        leader: 'Felipe & Carol',
+        phone: '(11) 99988-7788',
+      }
+    ]
   }
 };
 
