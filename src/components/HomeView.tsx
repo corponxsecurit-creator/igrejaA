@@ -64,7 +64,7 @@ function getBrandSlides(brand: BrandConfig): Slide[] {
         verseRef: 'Mateus 6:33',
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1920&auto=format&fit=crop&q=85',
+        bgUrl: 'https://static.wixstatic.com/media/25a297_ff16b9b398df49cf9d84dd61e389cb43~mv2.png/v1/fill/w_1600,h_1000,al_c/25a297_ff16b9b398df49cf9d84dd61e389cb43~mv2.png',
         verse: 'Eu vim para que tenham vida, e a tenham em abundância.',
         verseRef: 'João 10:10',
       },
@@ -105,8 +105,8 @@ function getBrandSlides(brand: BrandConfig): Slide[] {
     ],
     beityaacov: [
       {
-        bgUrl: 'https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=1920&auto=format&fit=crop&q=85',
-        verse: 'Shemá Israel: Adonai Eloheinu, Adonai Echad.',
+        bgUrl: 'https://www.morasha.com.br/wp-content/uploads/2023/06/beityaacov.jpg',
+        verse: 'Ouve, Israel, o Senhor nosso Deus é o único Senhor.',
         verseRef: 'Deuteronômio 6:4',
       },
       {
