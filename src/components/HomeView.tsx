@@ -374,6 +374,7 @@ export default function HomeView({
             <option value="universal"    className="bg-slate-900">Universal</option>
             <option value="beityaacov"   className="bg-slate-900">Beit Yaacov</option>
             <option value="ibmalphaville" className="bg-slate-900">IBM Alphaville</option>
+            <option value="icconselheira" className="bg-slate-900">ICC</option>
           </select>
         </div>
 
