@@ -362,10 +362,10 @@ export const brands: Record<string, BrandConfig> = {
     name: 'IBM Alphaville',
     campusName: 'Sede Tamboré',
     logoUrl: 'https://static.wixstatic.com/media/33ca7d_8cb69c0ba912431985faa315621a35eb~mv2_d_3985_1810_s_2.png',
-    bgUrl: 'https://images.unsplash.com/photo-1548625361-155deea22300?w=1600&fit=crop&q=80',
-    primaryColor: '#116dff',
-    primaryColorHover: '#0b55cc',
-    accentColor: '#ff8c00',
+    bgUrl: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?w=1600&auto=format&fit=crop&q=80',
+    primaryColor: '#ffb22a',
+    primaryColorHover: '#e59a16',
+    accentColor: '#116dff',
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',
@@ -457,7 +457,11 @@ export function getCurrentBrand(): BrandConfig {
   }
   
   const params = new URLSearchParams(window.location.search);
-  const client = params.get('client') || 'atitude';
+  let client = params.get('client') || 'atitude';
+  
+  if (client === 'ibm') {
+    client = 'ibmalphaville';
+  }
   
   return brands[client] || brands.atitude;
 }
