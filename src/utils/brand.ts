@@ -457,7 +457,7 @@ export function getCurrentBrand(): BrandConfig {
   }
   
   const params = new URLSearchParams(window.location.search);
-  let client = params.get('client') || 'atitude';
+  let client = (params.get('client') || 'atitude').toLowerCase().trim();
   
   if (client === 'ibm') {
     client = 'ibmalphaville';
