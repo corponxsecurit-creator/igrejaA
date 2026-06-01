@@ -94,7 +94,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         <div className="flex items-center gap-3">
           <img 
             src={brand.logoUrl} 
-            className={`h-12 object-contain ${brand.id === 'atitude' || brand.id === 'ibmalphaville' ? 'logo-white' : ''}`} 
+            className={`h-12 object-contain ${brand.id === 'atitude' ? 'logo-white' : ''}`} 
             alt={brand.name} 
             referrerPolicy="no-referrer"
           />

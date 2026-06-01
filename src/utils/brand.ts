@@ -386,7 +386,7 @@ export const brands: Record<string, BrandConfig> = {
     id: 'ibmalphaville',
     name: 'IBM Alphaville',
     campusName: 'Sede Tamboré',
-    logoUrl: 'https://static.wixstatic.com/media/33ca7d_8cb69c0ba912431985faa315621a35eb~mv2_d_3985_1810_s_2.png',
+    logoUrl: 'https://static.wixstatic.com/media/33ca7d_3ea707e37e3749d89300bb7311ddc189~mv2.png',
     bgUrl: 'https://static.wixstatic.com/media/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg/v1/fill/w_1600,h_1000,al_c/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg',
     primaryColor: '#ea492e',
     primaryColorHover: '#c43c24',
