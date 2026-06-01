@@ -62,6 +62,11 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             rgba(245,195,30,.08) 0%,
             rgba(15,23,42,.95)  40%,
             rgba(2,6,23,1)      100%
+          )`,
+        }}
+        aria-hidden="true"
+      />
+
       {/* Background Image with Dark Glassmorphism Overlay */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 opacity-60"
