@@ -37,19 +37,19 @@ function getBrandSlides(brand: BrandConfig): Slide[] {
   const institutionalSlides = {
     atitude: [
       {
-        bgUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&auto=format&fit=crop&q=85&sat=-20',
-        verse: 'Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito.',
-        verseRef: 'João 3:16',
+        bgUrl: 'https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png',
+        verse: 'Mas o fruto do Espírito é amor, alegria, paz, paciência, amabilidade, bondade, fidelidade.',
+        verseRef: 'Gálatas 5:22',
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1920&auto=format&fit=crop&q=85',
-        verse: 'Tudo posso naquele que me fortalece.',
-        verseRef: 'Filipenses 4:13',
+        bgUrl: 'https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/welcome_image.png',
+        verse: 'O Senhor é o meu pastor; de nada terei falta.',
+        verseRef: 'Salmos 23:1',
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1548690312-e3b507d8c110?w=1920&auto=format&fit=crop&q=85',
-        verse: 'O Senhor é a minha luz e a minha salvação; a quem temerei?',
-        verseRef: 'Salmos 27:1',
+        bgUrl: 'https://igrejaatitude.com.br/wp-content/uploads/2026/05/SITE_MARGEM_DE_SEGURANCA-v2.png',
+        verse: 'Entrega o teu caminho ao Senhor; confia nele, e ele tudo fará.',
+        verseRef: 'Salmos 37:5',
       },
     ],
     ibmalphaville: [
