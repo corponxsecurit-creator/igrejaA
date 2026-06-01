@@ -20,77 +20,121 @@ body {
 }
 
 
-/* Custom fade in animation */
+/* ============================================
+   SPLASH SCREEN — PREMIUM ANIMATIONS
+   GPU-accelerated, WCAG AA compliant
+   ============================================ */
+
+/* Fade in base */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+
+/* Ken Burns — slow zoom for carousel BG */
+@keyframes kenBurns {
+  0%   { transform: scale(1.00) translate(0%, 0%); }
+  50%  { transform: scale(1.08) translate(-1%, 0.5%); }
+  100% { transform: scale(1.12) translate(0.5%, -0.5%); }
+}
+.ken-burns {
+  animation: kenBurns 14s ease-in-out infinite alternate;
+  will-change: transform;
+  transform-origin: center center;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+/* Particle float */
+@keyframes particleFloat {
+  0%   { transform: translateY(0px) translateX(0px);   opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-120px) translateX(20px); opacity: 0; }
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: particleFloat linear infinite;
 }
 
-/* Custom ctaPulse animation with 20px spread */
+/* CTA Pulse with golden glow */
 @keyframes ctaPulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(var(--color-brand-red-rgb, 227, 6, 19), 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 20px rgba(var(--color-brand-red-rgb, 227, 6, 19), 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(var(--color-brand-red-rgb, 227, 6, 19), 0);
-  }
+  0%   { box-shadow: 0 0 20px rgba(245,195,30,.35), 0 0 40px rgba(245,195,30,.20), 0 0 0 0 rgba(245,195,30,.50); }
+  70%  { box-shadow: 0 0 20px rgba(245,195,30,.35), 0 0 40px rgba(245,195,30,.20), 0 0 0 22px rgba(245,195,30,0); }
+  100% { box-shadow: 0 0 20px rgba(245,195,30,.35), 0 0 40px rgba(245,195,30,.20), 0 0 0 0  rgba(245,195,30,0); }
 }
+.animate-cta-pulse { animation: ctaPulse 2.2s ease-out infinite; }
 
-.animate-cta-pulse {
-  animation: ctaPulse 2.0s infinite;
-}
-
-/* Custom handBounce animation */
+/* Icon bounce — smooth, reduced amplitude */
 @keyframes handBounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  30%       { transform: translateY(-6px) rotate(-3deg); }
+  60%       { transform: translateY(-3px) rotate(2deg); }
 }
+.animate-hand-bounce { animation: handBounce 1.6s ease-in-out infinite; }
 
-.animate-hand-bounce {
-  animation: handBounce 1.2s ease-in-out infinite;
+/* Badge pulse dot */
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%       { transform: scale(1.8); opacity: 0.5; }
 }
+.animate-pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
 
-/* Shine effect on hover/active */
+/* Shine — 0.8s diagonal sweep */
 .btn-shine {
   position: relative;
   overflow: hidden;
 }
-
 .btn-shine::after {
   content: '';
   position: absolute;
   top: -50%;
-  left: -60%;
-  width: 30%;
+  left: -75%;
+  width: 40%;
   height: 200%;
   background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0) 100%
+    105deg,
+    rgba(255,255,255,0)    0%,
+    rgba(255,255,255,0.32) 50%,
+    rgba(255,255,255,0)    100%
   );
-  transform: rotate(30deg);
-  transition: none;
+  transform: skewX(-20deg);
   opacity: 0;
   pointer-events: none;
+  transition: none;
 }
-
 .btn-shine:hover::after,
 .btn-shine:active::after {
   left: 130%;
   opacity: 1;
-  transition: all 0.6s ease-in-out;
+  transition: left 0.8s cubic-bezier(.4,0,.2,1), opacity 0.1s;
+}
+
+/* Slide text reveal */
+@keyframes slideReveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide-reveal { animation: slideReveal 0.6s cubic-bezier(.4,0,.2,1) forwards; }
+
+/* Logo placeholder ring pulse */
+@keyframes ringPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(245,195,30,.25), 0 0 40px rgba(245,195,30,.10); }
+  50%       { box-shadow: 0 0 30px rgba(245,195,30,.40), 0 0 60px rgba(245,195,30,.20); }
+}
+.logo-ring-pulse { animation: ringPulse 3s ease-in-out infinite; }
+
+/* Backdrop slide fade */
+@keyframes slideFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* General fade */
+.animate-fade-in-slow {
+  animation: fadeIn 1.2s ease-out forwards;
 }
 
 /* Material Icons size utilities */

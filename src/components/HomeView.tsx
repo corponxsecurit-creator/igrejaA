@@ -1,110 +1,132 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { playTapSound } from '../utils/audio';
 import { speakText } from '../utils/tts';
 import { BrandConfig } from '../utils/brand';
 
+/* ─── Types ─────────────────────────────────────────── */
 interface Slide {
   bgUrl: string;
   verse: string;
   verseRef: string;
 }
 
-function getBrandSlides(brand: BrandConfig): Slide[] {
-  switch (brand.id) {
-    case 'ibmalphaville':
-      return [
-        {
-          bgUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1600&auto=format&fit=crop&q=80',
-          verse: 'E conhecereis a verdade, e a verdade vos libertará.',
-          verseRef: 'João 8:32',
-        },
-        {
-          bgUrl: 'https://images.unsplash.com/photo-1460518451285-97b6aa326961?w=1600&auto=format&fit=crop&q=80',
-          verse: 'Buscai primeiro o reino de Deus e a sua justiça.',
-          verseRef: 'Mateus 6:33',
-        },
-        {
-          bgUrl: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?w=1600&auto=format&fit=crop&q=80',
-          verse: 'Eu vim para que tenham vida, e a tenham em abundância.',
-          verseRef: 'João 10:10',
-        },
-      ];
-    case 'lagoinha':
-      return [
-        {
-          bgUrl: 'https://static.wixstatic.com/media/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg/v1/fill/w_1600,h_1000,al_c/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg',
-          verse: 'Louvai ao Senhor porque ele é bom; o seu amor é eterno.',
-          verseRef: 'Salmos 107:1',
-        },
-        {
-          bgUrl: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=1600&auto=format&fit=crop&q=80',
-          verse: 'O Senhor é a minha força e o meu escudo.',
-          verseRef: 'Salmos 28:7',
-        },
-        {
-          bgUrl: 'https://images.unsplash.com/photo-1507036066871-b7e8032b3dea?w=1600&auto=format&fit=crop&q=80',
-          verse: 'Alegrai-vos sempre no Senhor. Outra vez digo: Alegrai-vos.',
-          verseRef: 'Filipenses 4:4',
-        },
-      ];
-    case 'universal':
-      return [
-        {
-          bgUrl: 'https://portalwp.s3.amazonaws.com/wp-content/uploads/2024/05/16161154/templo.jpg',
-          verse: 'Pedi e dar-se-vos-á; buscai e encontrareis.',
-          verseRef: 'Mateus 7:7',
-        },
-        {
-          bgUrl: 'https://images.unsplash.com/photo-1519817650390-64a93db51149?w=1600&auto=format&fit=crop&q=80',
-          verse: 'Tudo posso naquele que me fortalece.',
-          verseRef: 'Filipenses 4:13',
-        },
-        {
-          bgUrl: 'https://images.unsplash.com/photo-1548690312-e3b507d8c110?w=1600&auto=format&fit=crop&q=80',
-          verse: 'Se Deus é por nós, quem será contra nós?',
-          verseRef: 'Romanos 8:31',
-        },
-      ];
-    case 'beityaacov':
-      return [
-        {
-          bgUrl: 'https://www.morasha.com.br/wp-content/uploads/2023/06/beityaacov.jpg',
-          verse: 'Shemá Israel: Adonai Eloheinu, Adonai Echad.',
-          verseRef: 'Deuteronômio 6:4',
-        },
-        {
-          bgUrl: 'https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=1600&auto=format&fit=crop&q=80',
-          verse: 'A Torá é uma árvore de vida para quem a abraça.',
-          verseRef: 'Provérbios 3:18',
-        },
-        {
-          bgUrl: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1600&auto=format&fit=crop&q=80',
-          verse: 'Que a luz do Eterno ilumine o teu caminho.',
-          verseRef: 'Números 6:25',
-        },
-      ];
-    case 'atitude':
-    default:
-      return [
-        {
-          bgUrl: 'https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png',
-          verse: 'Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito.',
-          verseRef: 'João 3:16',
-        },
-        {
-          bgUrl: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=1600&auto=format&fit=crop&q=80',
-          verse: 'Tudo posso naquele que me fortalece.',
-          verseRef: 'Filipenses 4:13',
-        },
-        {
-          bgUrl: 'https://images.unsplash.com/photo-1548690312-e3b507d8c110?w=1600&auto=format&fit=crop&q=80',
-          verse: 'O Senhor é a minha luz e a minha salvação; a quem temerei?',
-          verseRef: 'Salmos 27:1',
-        },
-      ];
-  }
+/* ─── Particle data (stable across renders) ─────────── */
+interface ParticleData {
+  id: number;
+  left: string;
+  top: string;
+  size: string;
+  delay: string;
+  duration: string;
+  opacity: string;
 }
 
+const PARTICLES: ParticleData[] = Array.from({ length: 18 }, (_, i) => ({
+  id: i,
+  left:     `${5  + (i * 5.3) % 90}%`,
+  top:      `${10 + (i * 7.1) % 80}%`,
+  size:     `${1.5 + (i % 4) * 0.7}px`,
+  delay:    `${(i * 1.3) % 8}s`,
+  duration: `${8 + (i % 5) * 2.5}s`,
+  opacity:  `${0.15 + (i % 5) * 0.08}`,
+}));
+
+/* ─── Institutional slide images (no logos / branding) ─ */
+function getBrandSlides(brand: BrandConfig): Slide[] {
+  /* Neutral, architectural images only — no faces, no logos */
+  const institutionalSlides = {
+    atitude: [
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&auto=format&fit=crop&q=85&sat=-20',
+        verse: 'Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito.',
+        verseRef: 'João 3:16',
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1920&auto=format&fit=crop&q=85',
+        verse: 'Tudo posso naquele que me fortalece.',
+        verseRef: 'Filipenses 4:13',
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1548690312-e3b507d8c110?w=1920&auto=format&fit=crop&q=85',
+        verse: 'O Senhor é a minha luz e a minha salvação; a quem temerei?',
+        verseRef: 'Salmos 27:1',
+      },
+    ],
+    ibmalphaville: [
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=1920&auto=format&fit=crop&q=85',
+        verse: 'E conhecereis a verdade, e a verdade vos libertará.',
+        verseRef: 'João 8:32',
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1460518451285-97b6aa326961?w=1920&auto=format&fit=crop&q=85',
+        verse: 'Buscai primeiro o reino de Deus e a sua justiça.',
+        verseRef: 'Mateus 6:33',
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1920&auto=format&fit=crop&q=85',
+        verse: 'Eu vim para que tenham vida, e a tenham em abundância.',
+        verseRef: 'João 10:10',
+      },
+    ],
+    lagoinha: [
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=1920&auto=format&fit=crop&q=85',
+        verse: 'Louvai ao Senhor porque ele é bom; o seu amor é eterno.',
+        verseRef: 'Salmos 107:1',
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1920&auto=format&fit=crop&q=85',
+        verse: 'O Senhor é a minha força e o meu escudo.',
+        verseRef: 'Salmos 28:7',
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1920&auto=format&fit=crop&q=85',
+        verse: 'Alegrai-vos sempre no Senhor.',
+        verseRef: 'Filipenses 4:4',
+      },
+    ],
+    universal: [
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=1920&auto=format&fit=crop&q=85',
+        verse: 'Pedi e dar-se-vos-á; buscai e encontrareis.',
+        verseRef: 'Mateus 7:7',
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&auto=format&fit=crop&q=85',
+        verse: 'Tudo posso naquele que me fortalece.',
+        verseRef: 'Filipenses 4:13',
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&auto=format&fit=crop&q=85',
+        verse: 'Se Deus é por nós, quem será contra nós?',
+        verseRef: 'Romanos 8:31',
+      },
+    ],
+    beityaacov: [
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=1920&auto=format&fit=crop&q=85',
+        verse: 'Shemá Israel: Adonai Eloheinu, Adonai Echad.',
+        verseRef: 'Deuteronômio 6:4',
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1920&auto=format&fit=crop&q=85',
+        verse: 'A Torá é uma árvore de vida para quem a abraça.',
+        verseRef: 'Provérbios 3:18',
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1519817650390-64a93db51149?w=1920&auto=format&fit=crop&q=85',
+        verse: 'Que a luz do Eterno ilumine o teu caminho.',
+        verseRef: 'Números 6:25',
+      },
+    ],
+  };
+
+  return institutionalSlides[brand.id as keyof typeof institutionalSlides]
+    ?? institutionalSlides.atitude;
+}
+
+/* ─── Component Props ───────────────────────────────── */
 interface HomeViewProps {
   onStart: () => void;
   onOpenAccessibility: () => void;
@@ -112,298 +134,488 @@ interface HomeViewProps {
   brand: BrandConfig;
 }
 
-export default function HomeView({ onStart, onOpenAccessibility, onOpenAdmin, brand }: HomeViewProps) {
-  const slides = getBrandSlides(brand);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const touchStartX = useRef<number | null>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+/* ─── HomeView ──────────────────────────────────────── */
+export default function HomeView({
+  onStart,
+  onOpenAccessibility,
+  onOpenAdmin,
+  brand,
+}: HomeViewProps) {
+  const slides = useMemo(() => getBrandSlides(brand), [brand]);
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [prevSlide,    setPrevSlide]    = useState<number | null>(null);
+  const [isExiting,   setIsExiting]    = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const timerRef    = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  /* Voice greeting */
   useEffect(() => {
-    speakText(`Bem-vindo à ${brand.name} ${brand.campusName}. Toque na tela para iniciar o atendimento.`);
+    const t = setTimeout(() => {
+      speakText(
+        `Bem-vindo. Toque na tela para iniciar o atendimento.`
+      );
+    }, 800);
+    return () => clearTimeout(t);
   }, [brand]);
 
-  const goToSlide = useCallback((index: number) => {
-    setIsTransitioning(true);
+  /* ── Slide transition ─────────────────────────────── */
+  const goToSlide = useCallback((next: number) => {
+    if (next === currentSlide) return;
+    setPrevSlide(currentSlide);
+    setIsExiting(true);
     setTimeout(() => {
-      setCurrentSlide(index);
-      setIsTransitioning(false);
-    }, 350);
-  }, []);
+      setCurrentSlide(next);
+      setPrevSlide(null);
+      setIsExiting(false);
+    }, 700); // crossfade duration
+  }, [currentSlide]);
 
   const nextSlide = useCallback(() => {
-    setCurrentSlide(prev => (prev + 1) % slides.length);
-  }, [slides.length]);
+    goToSlide((currentSlide + 1) % slides.length);
+  }, [currentSlide, slides.length, goToSlide]);
 
-  useEffect(() => {
-    timerRef.current = setInterval(nextSlide, 5000);
-    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  const startTimer = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(nextSlide, 6000);
   }, [nextSlide]);
 
-  const resetTimer = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(nextSlide, 5000);
-  };
+  useEffect(() => {
+    startTimer();
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [startTimer]);
 
-  const handleDotClick = (i: number) => {
-    goToSlide(i);
-    resetTimer();
-  };
-
+  /* ── Touch / swipe ───────────────────────────────── */
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
-
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null) return;
     const delta = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(delta) > 50) {
+    if (Math.abs(delta) > 48) {
       const next = delta < 0
         ? (currentSlide + 1) % slides.length
         : (currentSlide - 1 + slides.length) % slides.length;
       goToSlide(next);
-      resetTimer();
+      startTimer();
     }
     touchStartX.current = null;
   };
 
-  const handleStartClick = () => {
+  /* ── Actions ─────────────────────────────────────── */
+  const handleStart = () => { playTapSound(); onStart(); };
+  const handleLang  = () => {
     playTapSound();
-    onStart();
+    speakText('Idioma selecionado: Português do Brasil.');
+    alert('Idioma: Português (Brasil)');
   };
+  const handleAccessibility = () => { playTapSound(); onOpenAccessibility(); };
 
-  const handleAccessibilityClick = (type: string) => {
+  /* ── Brand switcher ──────────────────────────────── */
+  const handleBrandChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     playTapSound();
-    if (type === 'lang') {
-      speakText('Idioma selecionado: Português do Brasil.');
-      alert('Idioma: Português (Brasil) selecionado.');
-    } else {
-      onOpenAccessibility();
-    }
+    const url = new URL(window.location.href);
+    url.searchParams.set('client', e.target.value);
+    window.location.href = url.toString();
   };
 
   const slide = slides[currentSlide];
 
+  /* ── Accent / glow colour ────────────────────────── */
+  const accent = brand.accentSplashColor || '#F5C31E';
+  const glow   = brand.glowColor || 'rgba(245,195,30,0.25)';
+
+  /* ── Logo icon (generic per type) ───────────────── */
+  const logoIcon = brand.type === 'synagogue' ? 'synagogue' : 'church';
+
   return (
     <div
       className="relative h-screen w-full select-none overflow-hidden text-white"
-      style={{ background: '#060814' }}
+      style={{ background: '#020617' }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      aria-label="Totem de atendimento — Toque para iniciar"
+      role="main"
     >
-      {/* === CAROUSEL SLIDES BACKGROUND === */}
-      {slides.map((s, i) => (
-        <div
-          key={i}
-          className="absolute inset-0 z-0"
-          style={{
-            opacity: i === currentSlide ? 1 : 0,
-            transition: 'opacity 0.7s ease-in-out',
-          }}
-        >
-          <img
-            src={s.bgUrl}
-            alt={`Slide ${i + 1}`}
-            className="h-full w-full object-cover"
-            style={{ opacity: 0.38 }}
-            referrerPolicy="no-referrer"
-          />
-          {/* Gradient navy profundo */}
-          <div className="absolute inset-0" style={{
-            background: `linear-gradient(
-              to bottom,
-              rgba(6,8,20,0.92) 0%,
-              rgba(6,8,20,0.38) 35%,
-              rgba(6,8,20,0.50) 65%,
-              rgba(6,8,20,0.96) 100%
-            )`
-          }} />
-          {/* Glow radial da marca */}
-          <div className="absolute inset-0" style={{
-            background: `radial-gradient(ellipse at 50% 48%, ${brand.glowColor} 0%, transparent 65%)`
-          }} />
-        </div>
-      ))}
 
-      {/* === TOP NAV === */}
-      <nav className="absolute top-0 left-0 z-50 flex w-full justify-between items-center px-8 md:px-16 py-6">
+      {/* ════════════════════════════════════════════════
+          LAYER 1 — Radial deep gradient (always visible)
+          ════════════════════════════════════════════════ */}
+      <div
+        className="absolute inset-0 z-[1]"
+        style={{
+          background: `radial-gradient(
+            circle at center,
+            rgba(245,195,30,.08) 0%,
+            rgba(15,23,42,.95)  40%,
+            rgba(2,6,23,1)      100%
+          )`,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* ════════════════════════════════════════════════
+          LAYER 2 — Particle system
+          ════════════════════════════════════════════════ */}
+      <div className="absolute inset-0 z-[2] overflow-hidden pointer-events-none" aria-hidden="true">
+        {PARTICLES.map(p => (
+          <div
+            key={p.id}
+            className="particle"
+            style={{
+              left:            p.left,
+              top:             p.top,
+              width:           p.size,
+              height:          p.size,
+              backgroundColor: accent,
+              opacity:         p.opacity,
+              animationDelay:    p.delay,
+              animationDuration: p.duration,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* ════════════════════════════════════════════════
+          LAYER 3 — Fullscreen carousel (Ken Burns)
+          ════════════════════════════════════════════════ */}
+      {slides.map((s, i) => {
+        const isActive = i === currentSlide;
+        const isLeaving = i === prevSlide && isExiting;
+        const visible = isActive || isLeaving;
+        return (
+          <div
+            key={i}
+            className="absolute inset-0 z-[3]"
+            style={{
+              opacity:    visible ? (isLeaving ? 0 : 1) : 0,
+              transition: 'opacity 0.7s ease-in-out',
+              willChange: 'opacity',
+            }}
+            aria-hidden="true"
+          >
+            {/* Image with Ken Burns */}
+            <div className="absolute inset-0 overflow-hidden">
+              <img
+                src={s.bgUrl}
+                alt=""
+                role="presentation"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+                className={`h-full w-full object-cover ${isActive ? 'ken-burns' : ''}`}
+                style={{ opacity: 0.45, willChange: 'transform' }}
+                referrerPolicy="no-referrer"
+              />
+            </div>
+
+            {/* Cinematic overlay */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: `linear-gradient(
+                  180deg,
+                  rgba(5,15,35,.85)  0%,
+                  rgba(5,15,35,.55)  40%,
+                  rgba(5,15,35,.78)  100%
+                )`,
+              }}
+            />
+          </div>
+        );
+      })}
+
+      {/* ════════════════════════════════════════════════
+          LAYER 4 — Brand accent glow (central radial)
+          ════════════════════════════════════════════════ */}
+      <div
+        className="absolute inset-0 z-[4] pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse at 50% 52%, ${glow} 0%, transparent 62%)`,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* ════════════════════════════════════════════════
+          TOP NAV
+          ════════════════════════════════════════════════ */}
+      <nav
+        className="absolute top-0 left-0 z-50 w-full flex items-center justify-between px-8 md:px-16 py-5"
+        aria-label="Navegação principal"
+      >
         {/* Brand Switcher */}
-        <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined font-light !text-lg text-white/40">swap_horizontal_circle</span>
+        <div className="flex items-center gap-2" role="group" aria-label="Selecionar instituição">
+          <span className="material-symbols-outlined !text-base text-white/35" aria-hidden="true">swap_horizontal_circle</span>
           <select
             value={brand.id}
-            onChange={(e) => {
-              playTapSound();
-              const url = new URL(window.location.href);
-              url.searchParams.set('client', e.target.value);
-              window.location.href = url.toString();
-            }}
-            className="bg-white/10 text-white border border-white/20 rounded-xl px-3 py-1.5 text-xs font-black uppercase tracking-wider focus:outline-none cursor-pointer backdrop-blur-md transition-all hover:bg-white/20"
-            title="Selecionar Cliente"
+            onChange={handleBrandChange}
+            aria-label="Selecionar cliente"
+            className="bg-white/8 text-white border border-white/15 rounded-xl px-3 py-1.5 text-xs font-bold uppercase tracking-wider focus:outline-none focus:ring-2 cursor-pointer backdrop-blur-xl transition-all hover:bg-white/15"
+            style={{ focusRingColor: accent } as React.CSSProperties}
           >
-            <option value="atitude" className="bg-slate-900">Atitude</option>
-            <option value="lagoinha" className="bg-slate-900">Lagoinha</option>
-            <option value="universal" className="bg-slate-900">Universal</option>
-            <option value="beityaacov" className="bg-slate-900">Beit Yaacov</option>
+            <option value="atitude"      className="bg-slate-900">Atitude</option>
+            <option value="lagoinha"     className="bg-slate-900">Lagoinha</option>
+            <option value="universal"    className="bg-slate-900">Universal</option>
+            <option value="beityaacov"   className="bg-slate-900">Beit Yaacov</option>
             <option value="ibmalphaville" className="bg-slate-900">IBM Alphaville</option>
           </select>
         </div>
 
-        {/* Logo + Badge - Centro */}
-        <div className="flex flex-col items-center mx-auto text-center absolute left-1/2 -translate-x-1/2">
+        {/* ── Logo placeholder (centre, absolutely positioned) ── */}
+        <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+          {/* Circular generic logo */}
           <div
-            className="px-6 py-2.5 rounded-2xl border-2 bg-white/5 backdrop-blur-md flex items-center justify-center shadow-xl"
+            className="logo-ring-pulse w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-white/5 backdrop-blur-xl"
             style={{
-              borderColor: brand.accentSplashColor,
-              boxShadow: `0 0 18px ${brand.glowColor}, 0 0 36px ${brand.glowColor}`
+              border: `2px solid ${accent}`,
             }}
+            role="img"
+            aria-label={`${brand.name} — Totem de Atendimento`}
           >
-            <img
-              src={brand.logoUrl}
-              className={`h-12 object-contain ${brand.id === 'atitude' ? 'logo-white' : ''}`}
-              alt={brand.name}
-              referrerPolicy="no-referrer"
-            />
+            <span
+              className="material-symbols-outlined !text-4xl md:!text-5xl"
+              style={{ color: accent }}
+              aria-hidden="true"
+            >
+              {logoIcon}
+            </span>
           </div>
+
+          {/* Badge pill */}
           <div
-            className="mt-3 flex items-center gap-2 px-4 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-lg"
-            style={{ backgroundColor: brand.badgeBgColor, color: brand.badgeTextColor }}
+            className="flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-widest backdrop-blur-xl"
+            style={{
+              background: 'rgba(245,195,30,.18)',
+              border:     '1px solid rgba(245,195,30,.35)',
+              color:      accent,
+            }}
+            role="status"
+            aria-label={brand.badgeLabel}
           >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: brand.badgeTextColor }} />
-              <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: brand.badgeTextColor }} />
+            {/* Pulsing dot */}
+            <span className="relative flex h-2 w-2" aria-hidden="true">
+              <span
+                className="animate-pulse-dot absolute inline-flex h-full w-full rounded-full"
+                style={{ backgroundColor: accent }}
+              />
+              <span
+                className="relative inline-flex h-2 w-2 rounded-full"
+                style={{ backgroundColor: accent }}
+              />
             </span>
             <span>{brand.badgeLabel}</span>
           </div>
         </div>
 
-        {/* Action Buttons - Direita */}
-        <div className="flex gap-3">
+        {/* Action buttons */}
+        <div className="flex items-center gap-2" role="group" aria-label="Ações">
           {onOpenAdmin && (
-            <button type="button" onClick={() => { playTapSound(); onOpenAdmin(); }}
-              className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
-              title="Painel Admin"
+            <button
+              type="button"
+              onClick={() => { playTapSound(); onOpenAdmin(); }}
+              className="w-11 h-11 rounded-full bg-white/8 hover:bg-white/18 border border-white/12 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer backdrop-blur-xl"
+              aria-label="Abrir painel administrativo"
+              title="Admin"
             >
-              <span className="material-symbols-outlined font-light !text-xl">settings</span>
+              <span className="material-symbols-outlined font-light !text-xl" aria-hidden="true">settings</span>
             </button>
           )}
-          <button type="button" onClick={() => handleAccessibilityClick('lang')}
-            className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
+          <button
+            type="button"
+            onClick={handleLang}
+            className="w-11 h-11 rounded-full bg-white/8 hover:bg-white/18 border border-white/12 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer backdrop-blur-xl"
+            aria-label="Mudar idioma"
+            title="Idioma"
           >
-            <span className="material-symbols-outlined font-light !text-xl">language</span>
+            <span className="material-symbols-outlined font-light !text-xl" aria-hidden="true">language</span>
           </button>
-          <button type="button" onClick={() => handleAccessibilityClick('access')}
-            className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
+          <button
+            type="button"
+            onClick={handleAccessibility}
+            className="w-11 h-11 rounded-full bg-white/8 hover:bg-white/18 border border-white/12 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer backdrop-blur-xl"
+            aria-label="Abrir opções de acessibilidade"
+            title="Acessibilidade"
           >
-            <span className="material-symbols-outlined font-light !text-xl">accessibility_new</span>
+            <span className="material-symbols-outlined font-light !text-xl" aria-hidden="true">accessibility_new</span>
           </button>
         </div>
       </nav>
 
-      {/* === MAIN CONTENT === */}
-      <main className="relative z-10 h-screen flex flex-col items-center justify-center px-6 text-center pt-20 pb-32">
-        {/* Título + Versículo - anima na troca de slide */}
+      {/* ════════════════════════════════════════════════
+          MAIN CONTENT
+          ════════════════════════════════════════════════ */}
+      <main
+        className="relative z-40 h-screen flex flex-col items-center justify-center px-8 text-center"
+        style={{ paddingTop: '5rem', paddingBottom: '6rem' }}
+      >
+        {/* Title block — animates on slide change */}
         <div
           className="mb-10 flex flex-col items-center"
           style={{
-            opacity: isTransitioning ? 0 : 1,
-            transform: isTransitioning ? 'translateY(10px)' : 'translateY(0)',
-            transition: 'opacity 0.35s ease, transform 0.35s ease',
+            opacity:    slide ? 1 : 0,
+            transform:  slide ? 'translateY(0)' : 'translateY(16px)',
+            transition: 'opacity .5s ease, transform .5s ease',
           }}
         >
+          {/* Eyebrow */}
           <span
-            className="text-sm uppercase tracking-[0.35em] font-black mb-3"
-            style={{ color: brand.accentSplashColor }}
+            className="text-sm uppercase tracking-[0.4em] font-black mb-4 slide-reveal"
+            style={{ color: accent }}
           >
             Bem-vindo
           </span>
-          <h2
-            className="font-sans text-[56px] md:text-[72px] text-white font-extrabold uppercase leading-none drop-shadow-2xl"
-            style={{ letterSpacing: '0.12em' }}
-          >
-            {brand.name}
-          </h2>
-          <span className="text-[11px] uppercase tracking-[0.45em] font-black text-white/45 mt-3 mb-5">
-            {brand.campusName}
-          </span>
-          <p className="font-sans text-base md:text-lg max-w-xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
-            <em>"{slide.verse}"</em>
-            <span className="block text-xs mt-2 font-bold uppercase tracking-widest" style={{ color: brand.accentSplashColor }}>
-              — {slide.verseRef}
-            </span>
-          </p>
-        </div>
 
-        {/* CTA Button */}
-        <div className="relative flex flex-col items-center group cursor-pointer" onClick={handleStartClick}>
-          <div
-            className="absolute -inset-10 rounded-full blur-3xl opacity-30 transition-all duration-300 group-hover:opacity-50"
-            style={{ backgroundColor: brand.accentSplashColor }}
-          />
-          <button
-            type="button"
-            className="relative w-[280px] md:w-[500px] h-20 md:h-24 text-white font-bold text-xl md:text-2xl flex items-center justify-center rounded-full border-4 hover:scale-105 transition-all cursor-pointer shadow-2xl active:scale-95 duration-150 ease-out animate-cta-pulse btn-shine"
+          {/* H1 — 64px / 800 / letter-spacing 4px */}
+          <h1
+            className="font-sans text-white font-extrabold uppercase leading-none drop-shadow-2xl slide-reveal"
             style={{
-              background: `linear-gradient(135deg, ${brand.primaryColor}, ${brand.primaryColorHover})`,
-              borderColor: `${brand.accentSplashColor}55`,
+              fontSize:      'clamp(42px, 6vw, 72px)',
+              fontWeight:    800,
+              letterSpacing: '4px',
+              lineHeight:    1,
+              animationDelay: '0.08s',
             }}
           >
-            <span className="material-symbols-outlined !text-4xl mr-3 font-semibold animate-hand-bounce">
+            {brand.name}
+          </h1>
+
+          {/* Campus subtitle */}
+          <p
+            className="text-xs uppercase tracking-[0.5em] font-bold text-white/40 mt-3 mb-6 slide-reveal"
+            style={{ animationDelay: '0.16s' }}
+          >
+            {brand.campusName}
+          </p>
+
+          {/* Verse */}
+          <div
+            className="max-w-lg mx-auto slide-reveal"
+            style={{ animationDelay: '0.24s' }}
+          >
+            <p
+              className="font-sans text-base md:text-lg leading-relaxed italic"
+              style={{ color: 'rgba(255,255,255,0.72)' }}
+            >
+              "{slide.verse}"
+            </p>
+            <span
+              className="block text-xs mt-2 font-bold uppercase tracking-widest not-italic"
+              style={{ color: accent }}
+            >
+              — {slide.verseRef}
+            </span>
+          </div>
+        </div>
+
+        {/* ── CTA Button ─────────────────────────────── */}
+        <div
+          className="relative flex flex-col items-center group cursor-pointer slide-reveal"
+          style={{ animationDelay: '0.36s' }}
+          onClick={handleStart}
+          role="button"
+          tabIndex={0}
+          aria-label="Tocar para iniciar o atendimento"
+          onKeyDown={(e) => e.key === 'Enter' && handleStart()}
+        >
+          {/* Ambient glow behind button */}
+          <div
+            className="absolute -inset-8 rounded-full blur-3xl opacity-25 group-hover:opacity-45 transition-opacity duration-500 pointer-events-none"
+            style={{ backgroundColor: accent }}
+            aria-hidden="true"
+          />
+
+          <button
+            type="button"
+            className="relative w-[280px] md:w-[520px] h-20 md:h-24 text-white font-bold text-xl md:text-2xl flex items-center justify-center rounded-full border-2 hover:scale-[1.03] active:scale-[0.97] transition-transform duration-150 cursor-pointer shadow-2xl animate-cta-pulse btn-shine"
+            style={{
+              background:   `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+              borderColor:  `${accent}55`,
+              fontFamily:   'Inter, Segoe UI, Roboto, Arial, sans-serif',
+              fontWeight:   700,
+            }}
+            aria-label="Iniciar atendimento"
+          >
+            <span
+              className="material-symbols-outlined !text-4xl mr-3 animate-hand-bounce"
+              aria-hidden="true"
+            >
               touch_app
             </span>
             Como podemos ajudar você?
           </button>
-          <div className="mt-5 flex gap-4 items-center">
-            <span className="w-8 h-[1px] bg-white/25" />
-            <span className="text-white/55 text-xs uppercase tracking-widest font-semibold animate-pulse">
+
+          {/* Tap prompt */}
+          <div className="mt-5 flex items-center gap-3" aria-hidden="true">
+            <span className="w-8 h-px bg-white/20" />
+            <span className="text-white/45 text-xs uppercase tracking-[0.3em] font-semibold animate-pulse">
               Toque para iniciar
             </span>
-            <span className="w-8 h-[1px] bg-white/25" />
+            <span className="w-8 h-px bg-white/20" />
           </div>
         </div>
       </main>
 
-      {/* === BOTTOM: DOTS + WIFI === */}
-      <section className="absolute bottom-0 left-0 z-20 w-full pb-8 px-8 md:px-16">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+      {/* ════════════════════════════════════════════════
+          BOTTOM RAIL — Dots + WiFi/Location
+          ════════════════════════════════════════════════ */}
+      <footer
+        className="absolute bottom-0 left-0 z-50 w-full pb-6 px-8 md:px-16"
+        aria-label="Informações de conexão e navegação do carrossel"
+      >
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
 
-          {/* Carousel Dots */}
-          <div className="flex gap-3 items-center">
-            {slides.map((_, i) => (
+          {/* ── Carousel dots ─────────────────────────── */}
+          <div
+            className="flex items-center gap-3"
+            role="tablist"
+            aria-label="Slides do carrossel"
+          >
+            {slides.map((s, i) => (
               <button
                 key={i}
                 type="button"
-                onClick={() => handleDotClick(i)}
-                className="rounded-full cursor-pointer"
+                role="tab"
+                aria-selected={i === currentSlide}
+                aria-label={`Slide ${i + 1}: ${s.verseRef}`}
+                onClick={() => { goToSlide(i); startTimer(); }}
+                className="cursor-pointer"
                 style={{
-                  width: i === currentSlide ? '28px' : '10px',
-                  height: '10px',
-                  backgroundColor: i === currentSlide ? brand.accentSplashColor : 'rgba(255,255,255,0.25)',
+                  width:           i === currentSlide ? '28px' : '10px',
+                  height:          '10px',
+                  borderRadius:    '999px',
+                  backgroundColor: i === currentSlide
+                    ? accent
+                    : 'rgba(255,255,255,0.25)',
                   boxShadow: i === currentSlide
-                    ? `0 0 10px ${brand.accentSplashColor}, 0 0 22px ${brand.glowColor}`
+                    ? `0 0 8px rgba(245,195,30,.40), 0 0 16px rgba(245,195,30,.20)`
                     : 'none',
-                  transition: 'all 0.4s ease',
+                  transition: 'all 0.4s cubic-bezier(.4,0,.2,1)',
+                  border: 'none',
+                  padding: 0,
                 }}
-                aria-label={`Slide ${i + 1}`}
               />
             ))}
           </div>
 
-          {/* WiFi + Location */}
-          <div className="flex items-center bg-white/5 backdrop-blur-md px-5 py-2.5 rounded-full text-white/90 text-xs font-medium border border-white/10 gap-4">
+          {/* ── WiFi + Location pill ──────────────────── */}
+          <div
+            className="flex items-center bg-white/5 backdrop-blur-xl px-5 py-2 rounded-full text-white/80 text-xs font-medium border border-white/10 gap-4"
+            aria-label="Informações do local"
+          >
             <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-              <span className="material-symbols-outlined !text-base" style={{ color: brand.primaryColor }}>wifi</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+              <span className="material-symbols-outlined !text-sm" style={{ color: accent }} aria-hidden="true">wifi</span>
               <span>{brand.wifi}</span>
             </div>
-            <div className="w-[1px] h-4 bg-white/20" />
+            <div className="w-px h-4 bg-white/15" aria-hidden="true" />
             <div className="flex items-center gap-1.5">
-              <span className="material-symbols-outlined !text-base" style={{ color: brand.primaryColor }}>location_on</span>
-              <span>{brand.type === 'synagogue' ? 'Salão de Orações' : 'Auditório Principal'}</span>
+              <span className="material-symbols-outlined !text-sm" style={{ color: accent }} aria-hidden="true">location_on</span>
+              <span>
+                {brand.type === 'synagogue' ? 'Salão de Orações' : 'Auditório Principal'}
+              </span>
             </div>
           </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 }
