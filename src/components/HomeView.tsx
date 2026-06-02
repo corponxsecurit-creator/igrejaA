@@ -554,8 +554,8 @@ export default function HomeView({
                 onClick={() => { goToSlide(i); startTimer(); }}
                 className="cursor-pointer"
                 style={{
-                  width:           i === currentSlide ? '28px' : '10px',
-                  height:          '10px',
+                  width:           i === currentSlide ? '16px' : '6px',
+                  height:          '6px',
                   borderRadius:    '999px',
                   backgroundColor: i === currentSlide
                     ? accent
