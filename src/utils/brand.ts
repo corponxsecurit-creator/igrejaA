@@ -566,7 +566,16 @@ export function getStoredBrands(): Record<string, BrandConfig> {
   const stored = localStorage.getItem('santuario_brands');
   if (stored) {
     try {
-      return JSON.parse(stored);
+      const parsed = JSON.parse(stored);
+      // Mescla com as configurações hardcoded para garantir que novos clientes e dados apareçam
+      const merged = { ...brands, ...parsed };
+      
+      // Força a atualização do ICC se no cache ele estiver sem grupos
+      if (merged.icconselheira && merged.icconselheira.cellGroups && merged.icconselheira.cellGroups.length === 0) {
+        merged.icconselheira = brands.icconselheira;
+      }
+      
+      return merged;
     } catch (e) {
       console.error("Failed to parse stored brands", e);
     }
