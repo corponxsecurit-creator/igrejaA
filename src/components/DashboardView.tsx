@@ -165,7 +165,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('donations')}
-            className="col-span-12 md:col-span-6 lg:col-span-8 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-amber-400/60 hover:bg-amber-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
+            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-amber-400/60 hover:bg-amber-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-bl from-amber-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="material-symbols-outlined !text-[48px] text-amber-300 group-hover:text-amber-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
@@ -173,10 +173,10 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </span>
             <div className="text-left mt-4 z-10">
               <span className="text-xs tracking-widest uppercase font-bold text-white/60 block mb-1">{brand.termDonations}</span>
-              <span className="text-2xl md:text-4xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termDonation}</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termDonation}</span>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-12 group-hover:scale-125 z-0">
-              <span className="material-symbols-outlined !text-[180px]">qr_code</span>
+              <span className="material-symbols-outlined !text-[160px]">qr_code</span>
             </div>
           </button>
 
@@ -184,7 +184,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('ministries')}
-            className="col-span-12 md:col-span-6 lg:col-span-5 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-cyan-400/60 hover:bg-cyan-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
+            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-cyan-400/60 hover:bg-cyan-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="material-symbols-outlined !text-[48px] text-cyan-300 group-hover:text-cyan-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
@@ -194,7 +194,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               <span className="text-xs tracking-widest uppercase font-bold text-white/60 block mb-1">
                 {brand.type === 'synagogue' ? 'Engajamento & Mitzvot' : 'Voluntariado'}
               </span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">Quero Participar</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">Participar</span>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:rotate-6 group-hover:scale-125 z-0">
               <span className="material-symbols-outlined !text-[160px]">handshake</span>
@@ -226,7 +226,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('my_cell')}
-            className="col-span-12 md:col-span-6 lg:col-span-3 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-slate-400/60 hover:bg-slate-800/60 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
+            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-slate-400/60 hover:bg-slate-800/60 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-bl from-slate-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="material-symbols-outlined !text-[48px] text-slate-300 group-hover:text-white group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
@@ -236,39 +236,33 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               <span className="text-xs tracking-widest uppercase font-bold text-white/60 block mb-1">
                 {brand.type === 'synagogue' ? 'Grupos de Estudo' : 'Conexão Grupos'}
               </span>
-              <span className="text-xl md:text-2xl font-black uppercase tracking-wider block drop-shadow-sm line-clamp-2">
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm line-clamp-2">
                 {brand.termConnects}
               </span>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:scale-125 z-0">
-              <span className="material-symbols-outlined !text-[140px]">hub</span>
+              <span className="material-symbols-outlined !text-[160px]">hub</span>
             </div>
           </button>
 
-          {/* PEDIDO DE ORAÇÃO (Full width at bottom) */}
+          {/* PEDIDO DE ORAÇÃO */}
           <button
             type="button"
             onClick={() => handleSelect('prayer')}
-            className="col-span-12 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-rose-400/60 hover:bg-rose-900/40 text-white rounded-[2rem] p-8 flex items-center justify-between cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 shadow-2xl min-h-[140px] relative overflow-hidden group"
+            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-rose-400/60 hover:bg-rose-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="flex items-center gap-6 z-10">
-              <div className="w-16 h-16 rounded-2xl bg-rose-500/20 flex items-center justify-center text-rose-200 border border-rose-500/30 group-hover:bg-rose-500/40 transition-colors duration-300">
-                <span className="material-symbols-outlined !text-[36px] group-hover:scale-110 transition-transform">volunteer_activism</span>
-              </div>
-              <div className="text-left">
-                <span className="text-xs tracking-widest uppercase font-bold text-white/60 block mb-1">Intercessão</span>
-                <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">
-                  {brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
-                </span>
-              </div>
+            <span className="material-symbols-outlined !text-[48px] text-rose-300 group-hover:text-rose-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
+              volunteer_activism
+            </span>
+            <div className="text-left mt-4 z-10">
+              <span className="text-xs tracking-widest uppercase font-bold text-white/60 block mb-1">Intercessão</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">
+                {brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
+              </span>
             </div>
-            <div className="hidden md:flex items-center gap-3 text-white/50 group-hover:text-white transition-colors duration-300 z-10 bg-white/5 px-6 py-3 rounded-full border border-white/10 group-hover:border-white/30">
-              <span className="text-sm font-bold tracking-widest uppercase">Enviar Pedido</span>
-              <span className="material-symbols-outlined !text-2xl">arrow_forward</span>
-            </div>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-[0.05] group-hover:opacity-[0.12] text-white transition-all duration-500 group-hover:-translate-x-8 z-0">
-              <span className="material-symbols-outlined !text-[200px]">chat</span>
+            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-12 group-hover:scale-125 z-0">
+              <span className="material-symbols-outlined !text-[160px]">chat</span>
             </div>
           </button>
 
