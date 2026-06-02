@@ -562,17 +562,17 @@ export const brands: Record<string, BrandConfig> = {
     accentSplashColor: '#ea492e',
     slides: [
       {
-        bgUrl: 'https://images.unsplash.com/photo-1437603562860-1e52f14ea3b1?w=1600&fit=crop&q=80',
+        bgUrl: '/images/ibm/img_1.jpg',
         verse: 'Porque dele, e por ele, e para ele são todas as coisas; glória, pois, a ele.',
         verseRef: 'Romanos 11:36'
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1525096538644-d890885e3a89?w=1600&fit=crop&q=80',
+        bgUrl: '/images/ibm/img_2.jpg',
         verse: 'Louvai ao SENHOR, porque ele é bom, porque a sua benignidade dura para sempre.',
         verseRef: 'Salmos 136:1'
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1437603562860-1e52f14ea3b1?w=1600&fit=crop&q=80',
+        bgUrl: '/images/ibm/img_3.jpg',
         verse: 'Confie no Senhor de todo o seu coração e não se apoie em seu próprio entendimento.',
         verseRef: 'Provérbios 3:5'
       }
