@@ -4,7 +4,16 @@ import { speakText } from '../utils/tts';
 import { BrandConfig } from '../utils/brand';
 import { Slide } from '../types';
 
-
+/* ─── Particle data ─────────── */
+const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
+  id: i,
+  left:     `${5  + (i * 5.3) % 90}%`,
+  top:      `${10 + (i * 7.1) % 80}%`,
+  size:     `${1.5 + (i % 4) * 0.7}px`,
+  delay:    `${(i * 1.3) % 8}s`,
+  duration: `${8 + (i % 5) * 2.5}s`,
+  opacity:  `${0.15 + (i % 5) * 0.08}`,
+}));
 
 /* ─── Component Props ───────────────────────────────── */
 interface HomeViewProps {

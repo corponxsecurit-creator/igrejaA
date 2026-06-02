@@ -31,6 +31,7 @@ export interface BrandConfig {
   badgeTextColor: string;
   badgeLabel: string;
   accentSplashColor: string;
+  slides?: Slide[];
 }
 
 export const brands: Record<string, BrandConfig> = {
