@@ -56,3 +56,9 @@ export interface Pastor {
   available: boolean;
   photoUrl: string;
 }
+
+export interface Slide {
+  bgUrl: string;
+  verse: string;
+  verseRef: string;
+}

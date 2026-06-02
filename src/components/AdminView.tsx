@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrandConfig, getStoredBrands, saveStoredBrands } from '../utils/brand';
-import { Pastor, CellGroup } from '../types';
+import { Pastor, CellGroup, Slide } from '../types';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import { speakText } from '../utils/tts';
 
@@ -9,7 +9,7 @@ interface AdminViewProps {
   brand: BrandConfig;
 }
 
-type ActiveTab = 'general' | 'visual' | 'vocabulary' | 'pastors' | 'cells';
+type ActiveTab = 'general' | 'visual' | 'vocabulary' | 'pastors' | 'cells' | 'slides';
 
 export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps) {
   const [allBrands, setAllBrands] = useState<Record<string, BrandConfig>>(() => getStoredBrands());
@@ -35,6 +35,13 @@ export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps
     hour: '20:00',
     leader: '',
     phone: '',
+  });
+
+  // Slide adding state
+  const [newSlide, setNewSlide] = useState<Slide>({
+    bgUrl: '',
+    verse: '',
+    verseRef: '',
   });
 
   const handleFieldChange = (key: keyof BrandConfig, value: any) => {
@@ -175,6 +182,25 @@ export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps
     handleFieldChange('cellGroups', updatedCells);
   };
 
+  // Slides Management
+  const handleAddSlide = () => {
+    if (!newSlide.bgUrl || !newSlide.verse) {
+      alert('Preencha a URL da imagem e o texto (aviso/versículo).');
+      return;
+    }
+    playSuccessSound();
+    const updatedSlides = [...(currentEditingBrand.slides || []), { ...newSlide }];
+    handleFieldChange('slides', updatedSlides);
+    setNewSlide({ bgUrl: '', verse: '', verseRef: '' });
+    speakText('Slide adicionado.');
+  };
+
+  const handleDeleteSlide = (index: number) => {
+    playTapSound();
+    const updatedSlides = (currentEditingBrand.slides || []).filter((_, i) => i !== index);
+    handleFieldChange('slides', updatedSlides);
+  };
+
   return (
     <div className="min-h-screen bg-[#f3f5f8] text-[#191c1e] flex flex-col font-sans">
       
@@ -293,6 +319,7 @@ export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps
               { id: 'vocabulary', label: 'Vocabulário', icon: 'dictionary' },
               { id: 'pastors', label: 'Pastores/Líderes', icon: 'groups' },
               { id: 'cells', label: 'Células/GCs', icon: 'hub' },
+              { id: 'slides', label: 'Avisos/Carrossel', icon: 'view_carousel' },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -876,6 +903,87 @@ export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps
                           >
                             <span className="material-symbols-outlined !text-lg">delete</span>
                           </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* TAB 6: SLIDES */}
+            {activeTab === 'slides' && (
+              <div className="space-y-6 animate-fade-in">
+                <h3 className="text-lg font-black text-slate-800 border-b pb-2 border-slate-100 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-slate-500">view_carousel</span>
+                  <span>Avisos e Imagens do Carrossel (Tela Inicial)</span>
+                </h3>
+
+                {/* Form to Add New Slide */}
+                <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-4">
+                  <h4 className="text-xs font-black text-slate-600 uppercase tracking-widest">Adicionar Novo Slide</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input
+                      type="text"
+                      placeholder="URL da Imagem de Fundo (16:9 Recomendado)"
+                      value={newSlide.bgUrl}
+                      onChange={(e) => setNewSlide(prev => ({ ...prev, bgUrl: e.target.value }))}
+                      className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-semibold focus:border-slate-800 outline-none md:col-span-2"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Texto do Aviso ou Versículo"
+                      value={newSlide.verse}
+                      onChange={(e) => setNewSlide(prev => ({ ...prev, verse: e.target.value }))}
+                      className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-semibold focus:border-slate-800 outline-none"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Referência (Opcional, Ex: João 3:16 ou Eventos)"
+                      value={newSlide.verseRef}
+                      onChange={(e) => setNewSlide(prev => ({ ...prev, verseRef: e.target.value }))}
+                      className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-semibold focus:border-slate-800 outline-none"
+                    />
+                  </div>
+
+                  <div className="flex justify-end pt-2">
+                    <button
+                      type="button"
+                      onClick={handleAddSlide}
+                      className="bg-slate-900 text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl cursor-pointer hover:bg-slate-800 shadow-sm active:scale-95"
+                    >
+                      Adicionar Slide
+                    </button>
+                  </div>
+                </div>
+
+                {/* Slides List */}
+                <div className="space-y-3 pt-2">
+                  <h4 className="text-xs font-black text-slate-500 uppercase tracking-widest">Slides Atuais</h4>
+                  
+                  {(!currentEditingBrand.slides || currentEditingBrand.slides.length === 0) ? (
+                    <div className="text-center py-6 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-bold text-xs">
+                      Nenhum slide cadastrado nesta unidade.
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {currentEditingBrand.slides.map((s, idx) => (
+                        <div key={idx} className="bg-white border border-slate-200 p-4 rounded-2xl flex flex-col gap-3 shadow-sm hover:border-slate-300 transition-colors">
+                          <img src={s.bgUrl} alt="Slide Background" className="w-full h-32 object-cover rounded-xl border border-slate-100" />
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="space-y-1 truncate">
+                              <h5 className="font-extrabold text-sm text-slate-800 truncate">"{s.verse}"</h5>
+                              <p className="text-xs text-slate-500 font-semibold">— {s.verseRef || 'Sem referência'}</p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteSlide(idx)}
+                              className="w-8 h-8 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                            >
+                              <span className="material-symbols-outlined !text-lg">delete</span>
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>

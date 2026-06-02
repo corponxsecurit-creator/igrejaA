@@ -1,4 +1,4 @@
-import { CellGroup, Pastor } from '../types';
+import { CellGroup, Pastor, Slide } from '../types';
 
 export interface BrandConfig {
   id: string;
