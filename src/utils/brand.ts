@@ -49,11 +49,23 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#0a0a0a',
     badgeLabel: 'Igreja Batista Atitude',
     accentSplashColor: '#f5c31e',
-    slides: [{
-      bgUrl: 'https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png',
-      verse: 'Seja forte e corajoso! Não se apavore, nem se desanime, pois o Senhor, o seu Deus, estará com você por onde você andar.',
-      verseRef: 'Josué 1:9'
-    }],
+    slides: [
+      {
+        bgUrl: 'https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png',
+        verse: 'Seja forte e corajoso! Não se apavore, nem se desanime.',
+        verseRef: 'Josué 1:9'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1600&fit=crop&q=80',
+        verse: 'Alegrei-me com os que me disseram: Vamos à casa do Senhor!',
+        verseRef: 'Salmos 122:1'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1600&fit=crop&q=80',
+        verse: 'Deem graças ao Senhor, porque ele é bom.',
+        verseRef: 'Salmos 136:1'
+      }
+    ],
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',
@@ -161,11 +173,23 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#0a0a0a',
     badgeLabel: 'ICC',
     accentSplashColor: '#d4af37',
-    slides: [{
-      bgUrl: 'https://static.wixstatic.com/media/6ffcad_074e01478e384e37a4e59dd024c7c5ca~mv2.png/v1/crop/x_0,y_129,w_2048,h_894/fill/w_1966,h_858,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMAGEM%20DE%20ABERTURA%20PARA%20SITE.png',
-      verse: 'O Senhor é o meu pastor; de nada terei falta.',
-      verseRef: 'Salmos 23:1'
-    }],
+    slides: [
+      {
+        bgUrl: 'https://static.wixstatic.com/media/6ffcad_074e01478e384e37a4e59dd024c7c5ca~mv2.png/v1/crop/x_0,y_129,w_2048,h_894/fill/w_1966,h_858,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMAGEM%20DE%20ABERTURA%20PARA%20SITE.png',
+        verse: 'O Senhor é o meu pastor; de nada terei falta.',
+        verseRef: 'Salmos 23:1'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1548625361-ec4682df6250?w=1600&fit=crop&q=80',
+        verse: 'Onde estiverem dois ou três reunidos em meu nome, aí estou eu.',
+        verseRef: 'Mateus 18:20'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1438032005730-c779502fac39?w=1600&fit=crop&q=80',
+        verse: 'Ensina-nos a contar os nossos dias para que o nosso coração alcance sabedoria.',
+        verseRef: 'Salmos 90:12'
+      }
+    ],
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',
@@ -242,11 +266,23 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#0a0a0a',
     badgeLabel: 'Lagoinha Alphaville',
     accentSplashColor: '#d4af37',
-    slides: [{
-      bgUrl: 'https://static.wixstatic.com/media/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg/v1/fill/w_1600,h_1000,al_c/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg',
-      verse: 'Grandes coisas fez o Senhor por nós, por isso estamos alegres.',
-      verseRef: 'Salmos 126:3'
-    }],
+    slides: [
+      {
+        bgUrl: 'https://static.wixstatic.com/media/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg/v1/fill/w_1600,h_1000,al_c/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg',
+        verse: 'Grandes coisas fez o Senhor por nós, por isso estamos alegres.',
+        verseRef: 'Salmos 126:3'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1510590337019-5ef8d3d32116?w=1600&fit=crop&q=80',
+        verse: 'Entrem por suas portas com ações de graças, e em seus átrios, com louvor.',
+        verseRef: 'Salmos 100:4'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1600&fit=crop&q=80',
+        verse: 'Tudo o que tem fôlego louve ao Senhor. Aleluia!',
+        verseRef: 'Salmos 150:6'
+      }
+    ],
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',
@@ -328,11 +364,23 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#ffffff',
     badgeLabel: 'Universal - Templo de Salomão',
     accentSplashColor: '#cf2e2e',
-    slides: [{
-      bgUrl: 'https://www.universal.org/wp-content/uploads/2025/01/24180424/corrente-dos-70-2025.jpg',
-      verse: 'Tudo posso naquele que me fortalece.',
-      verseRef: 'Filipenses 4:13'
-    }],
+    slides: [
+      {
+        bgUrl: 'https://www.universal.org/wp-content/uploads/2025/01/24180424/corrente-dos-70-2025.jpg',
+        verse: 'Tudo posso naquele que me fortalece.',
+        verseRef: 'Filipenses 4:13'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1544256718-3baf237f3974?w=1600&fit=crop&q=80',
+        verse: 'O meu Deus suprirá todas as necessidades de vocês.',
+        verseRef: 'Filipenses 4:19'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1600&fit=crop&q=80',
+        verse: 'Entrega o teu caminho ao Senhor; confia nele, e ele o fará.',
+        verseRef: 'Salmos 37:5'
+      }
+    ],
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Bispos e Pastores',
@@ -414,11 +462,23 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#0a0a0a',
     badgeLabel: 'Sinagoga Beit Yaacov',
     accentSplashColor: '#ffb300',
-    slides: [{
-      bgUrl: 'https://www.morasha.com.br/wp-content/uploads/2023/06/beityaacov.jpg',
-      verse: 'Ouve, Israel, o Senhor nosso Deus é o único Senhor.',
-      verseRef: 'Deuteronômio 6:4'
-    }],
+    slides: [
+      {
+        bgUrl: 'https://www.morasha.com.br/wp-content/uploads/2023/06/beityaacov.jpg',
+        verse: 'Ouve, Israel, o Senhor nosso Deus é o único Senhor.',
+        verseRef: 'Deuteronômio 6:4'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1616499849206-8fb531779d7d?w=1600&fit=crop&q=80',
+        verse: 'Como são belas as tuas tendas, ó Jacó, as tuas habitações, ó Israel!',
+        verseRef: 'Números 24:5'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1582234372722-50d7ccc30ebd?w=1600&fit=crop&q=80',
+        verse: 'A Torá que Moisés nos ordenou é a herança da congregação de Jacó.',
+        verseRef: 'Deuteronômio 33:4'
+      }
+    ],
     type: 'synagogue',
     termPastor: 'Rabino',
     termPastors: 'Rabinos',
@@ -500,11 +560,23 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#ffffff',
     badgeLabel: 'IBM Alphaville',
     accentSplashColor: '#ea492e',
-    slides: [{
-      bgUrl: 'https://static.wixstatic.com/media/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg/v1/fill/w_1600,h_1000,al_c/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg',
-      verse: 'Porque dele, e por ele, e para ele são todas as coisas; glória, pois, a ele eternamente. Amém!',
-      verseRef: 'Romanos 11:36'
-    }],
+    slides: [
+      {
+        bgUrl: 'https://static.wixstatic.com/media/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg/v1/fill/w_1600,h_1000,al_c/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg',
+        verse: 'Porque dele, e por ele, e para ele são todas as coisas; glória, pois, a ele.',
+        verseRef: 'Romanos 11:36'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1525096538644-d890885e3a89?w=1600&fit=crop&q=80',
+        verse: 'Louvai ao SENHOR, porque ele é bom, porque a sua benignidade dura para sempre.',
+        verseRef: 'Salmos 136:1'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1437603562860-1e52f14ea3b1?w=1600&fit=crop&q=80',
+        verse: 'Confie no Senhor de todo o seu coração e não se apoie em seu próprio entendimento.',
+        verseRef: 'Provérbios 3:5'
+      }
+    ],
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',

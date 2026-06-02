@@ -127,75 +127,37 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
 
 
       {/* Main Grid Area */}
-      <main className="flex-grow pt-28 pb-36 px-6 md:px-20 max-w-7xl mx-auto w-full flex flex-col justify-center relative z-10">
+      <main className="flex-grow pt-32 pb-40 px-6 md:px-12 w-full max-w-[1400px] mx-auto flex flex-col justify-center relative z-10">
+        
         {/* Header Title */}
-        <header className="mb-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2 animate-fade-in">
+        <header className="mb-6 text-center">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-2 drop-shadow-lg">
             Bem-vindo à {brand.name}
           </h2>
-          <p className="text-base md:text-lg text-white/75 font-medium">
+          <p className="text-lg md:text-xl text-white/80 font-medium tracking-wide">
             Como podemos caminhar com você hoje?
           </p>
         </header>
 
-        {/* Bento Grid Layout */}
-        <div className="grid grid-cols-12 gap-5 md:gap-6 w-full">
+        {/* Bento Grid Layout - Tighter gap, better proportions */}
+        <div className="grid grid-cols-12 gap-4 w-full">
           
-          {/* SOU NOVO AQUI / NOVO MEMBRO */}
+          {/* SOU NOVO AQUI */}
           <button
             type="button"
             onClick={() => handleSelect('new_member')}
-            className="col-span-12 md:col-span-8 bg-gradient-to-br from-indigo-900/80 to-violet-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[190px] md:min-h-[220px] relative overflow-hidden group border border-indigo-400/20 hover:border-indigo-400/40"
+            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-indigo-400/60 hover:bg-indigo-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
           >
-            <span className="material-symbols-outlined !text-[56px] text-indigo-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <span className="material-symbols-outlined !text-[48px] text-indigo-300 group-hover:text-indigo-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
               person_add
             </span>
             <div className="text-left mt-4 z-10">
-              <span className="text-xs tracking-widest uppercase font-bold text-indigo-200/80 block mb-1">Membro ou Visitante</span>
+              <span className="text-xs tracking-widest uppercase font-bold text-white/60 block mb-1">Membro ou Visitante</span>
               <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termMember}</span>
             </div>
-            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
-              <span className="material-symbols-outlined !text-[120px]">id_card</span>
-            </div>
-          </button>
-
-          {/* PEDIDO DE ORAÇÃO */}
-          <button
-            type="button"
-            onClick={() => handleSelect('prayer')}
-            className="col-span-12 md:col-span-4 bg-gradient-to-br from-rose-900/80 to-red-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[190px] md:min-h-[220px] relative overflow-hidden group border border-rose-400/20 hover:border-rose-400/40"
-          >
-            <span className="material-symbols-outlined !text-[56px] text-rose-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
-              volunteer_activism
-            </span>
-            <div className="text-left mt-4">
-              <span className="text-xs tracking-widest uppercase font-bold text-rose-200/80 block mb-1">Intercessão</span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block leading-tight drop-shadow-sm">
-                {brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
-              </span>
-            </div>
-            <div className="absolute right-6 bottom-6 opacity-10 text-white animate-pulse mix-blend-overlay">
-              <span className="material-symbols-outlined !text-[100px]">chat</span>
-            </div>
-          </button>
-
-          {/* EVENTOS / CULTOS */}
-          <button
-            type="button"
-            onClick={() => handleSelect('checkin')}
-            className="col-span-12 md:col-span-4 bg-gradient-to-br from-emerald-900/80 to-teal-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[190px] md:min-h-[220px] group border border-emerald-400/20 hover:border-emerald-400/40 relative overflow-hidden"
-          >
-            <span className="material-symbols-outlined !text-[56px] text-emerald-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
-              calendar_month
-            </span>
-            <div className="text-left mt-4 z-10">
-              <span className="text-xs tracking-widest uppercase font-bold text-emerald-200/80 block mb-1">
-                {brand.type === 'synagogue' ? 'Shabat & Festividades' : 'Agenda & Encontros'}
-              </span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termCults}</span>
-            </div>
-            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
-              <span className="material-symbols-outlined !text-[100px]">event</span>
+            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 z-0">
+              <span className="material-symbols-outlined !text-[160px]">id_card</span>
             </div>
           </button>
 
@@ -203,17 +165,18 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('donations')}
-            className="col-span-12 md:col-span-8 bg-gradient-to-br from-amber-800/80 to-orange-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[190px] md:min-h-[220px] relative overflow-hidden group border border-amber-400/20 hover:border-amber-400/40"
+            className="col-span-12 md:col-span-6 lg:col-span-8 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-amber-400/60 hover:bg-amber-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
           >
-            <span className="material-symbols-outlined !text-[56px] text-amber-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
+            <div className="absolute inset-0 bg-gradient-to-bl from-amber-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <span className="material-symbols-outlined !text-[48px] text-amber-300 group-hover:text-amber-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
               payments
             </span>
             <div className="text-left mt-4 z-10">
-              <span className="text-xs tracking-widest uppercase font-bold text-amber-200/80 block mb-1">{brand.termDonations}</span>
-              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termDonation}</span>
+              <span className="text-xs tracking-widest uppercase font-bold text-white/60 block mb-1">{brand.termDonations}</span>
+              <span className="text-2xl md:text-4xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termDonation}</span>
             </div>
-            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
-              <span className="material-symbols-outlined !text-[120px]">qr_code</span>
+            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-12 group-hover:scale-125 z-0">
+              <span className="material-symbols-outlined !text-[180px]">qr_code</span>
             </div>
           </button>
 
@@ -221,39 +184,41 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('ministries')}
-            className="col-span-12 md:col-span-6 bg-gradient-to-br from-cyan-900/80 to-blue-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[180px] md:min-h-[200px] relative overflow-hidden group border border-cyan-400/20 hover:border-cyan-400/40"
+            className="col-span-12 md:col-span-6 lg:col-span-5 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-cyan-400/60 hover:bg-cyan-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
           >
-            <span className="material-symbols-outlined !text-[52px] text-cyan-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
+            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <span className="material-symbols-outlined !text-[48px] text-cyan-300 group-hover:text-cyan-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
               groups
             </span>
             <div className="text-left mt-4 z-10">
-              <span className="text-xs tracking-widest uppercase font-bold text-cyan-200/80 block mb-1">
+              <span className="text-xs tracking-widest uppercase font-bold text-white/60 block mb-1">
                 {brand.type === 'synagogue' ? 'Engajamento & Mitzvot' : 'Voluntariado'}
               </span>
-              <span className="text-xl md:text-2xl font-black uppercase tracking-wider block drop-shadow-sm">Quero Participar</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">Quero Participar</span>
             </div>
-            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
-              <span className="material-symbols-outlined !text-[100px]">handshake</span>
+            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:rotate-6 group-hover:scale-125 z-0">
+              <span className="material-symbols-outlined !text-[160px]">handshake</span>
             </div>
           </button>
 
-          {/* CHECK-IN */}
+          {/* EVENTOS / CULTOS */}
           <button
             type="button"
             onClick={() => handleSelect('checkin')}
-            className="col-span-12 md:col-span-3 bg-gradient-to-br from-fuchsia-900/80 to-purple-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[180px] md:min-h-[200px] border border-fuchsia-400/20 hover:border-fuchsia-400/40 relative overflow-hidden group"
+            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-emerald-400/60 hover:bg-emerald-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
           >
-            <span className="material-symbols-outlined !text-[52px] text-fuchsia-300 group-hover:rotate-6 transition-transform drop-shadow-md">
-              how_to_reg
+            <div className="absolute inset-0 bg-gradient-to-tl from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <span className="material-symbols-outlined !text-[48px] text-emerald-300 group-hover:text-emerald-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
+              calendar_month
             </span>
             <div className="text-left mt-4 z-10">
-              <span className="text-xs tracking-widest uppercase font-bold text-fuchsia-200/80 block mb-1">
-                {brand.type === 'synagogue' ? 'Registrar Presença' : 'Confirmar Presença'}
+              <span className="text-xs tracking-widest uppercase font-bold text-white/60 block mb-1">
+                {brand.type === 'synagogue' ? 'Shabat & Festividades' : 'Agenda & Encontros'}
               </span>
-              <span className="text-xl md:text-2xl font-black uppercase tracking-wider block drop-shadow-sm">Check-in</span>
+              <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termCults}</span>
             </div>
-            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
-              <span className="material-symbols-outlined !text-[80px]">task_alt</span>
+            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-6 group-hover:scale-125 z-0">
+              <span className="material-symbols-outlined !text-[160px]">event</span>
             </div>
           </button>
 
@@ -261,94 +226,98 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('my_cell')}
-            className="col-span-12 md:col-span-3 bg-gradient-to-br from-slate-800/80 to-zinc-900/90 backdrop-blur-lg text-white rounded-3xl p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl min-h-[180px] md:min-h-[200px] border border-slate-400/20 hover:border-slate-400/40 relative overflow-hidden group"
+            className="col-span-12 md:col-span-6 lg:col-span-3 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-slate-400/60 hover:bg-slate-800/60 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl min-h-[220px] relative overflow-hidden group"
           >
-            <span className="material-symbols-outlined !text-[52px] text-slate-300 group-hover:scale-110 transition-transform duration-300 drop-shadow-md">
+            <div className="absolute inset-0 bg-gradient-to-bl from-slate-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <span className="material-symbols-outlined !text-[48px] text-slate-300 group-hover:text-white group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
               diversity_3
             </span>
-            <div className="text-left mt-4 z-10 w-full">
-              <span className="text-xs tracking-widest uppercase font-bold text-slate-400 block mb-1 truncate">
+            <div className="text-left mt-4 z-10">
+              <span className="text-xs tracking-widest uppercase font-bold text-white/60 block mb-1">
                 {brand.type === 'synagogue' ? 'Grupos de Estudo' : 'Conexão Grupos'}
               </span>
-              <span className="text-lg font-black uppercase tracking-wide block leading-tight line-clamp-2 break-words drop-shadow-sm">
+              <span className="text-xl md:text-2xl font-black uppercase tracking-wider block drop-shadow-sm line-clamp-2">
                 {brand.termConnects}
               </span>
             </div>
-            <div className="absolute right-6 bottom-6 opacity-10 text-white mix-blend-overlay">
-              <span className="material-symbols-outlined !text-[80px]">hub</span>
+            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:scale-125 z-0">
+              <span className="material-symbols-outlined !text-[140px]">hub</span>
             </div>
           </button>
 
-          {/* ATENDIMENTO PASTORAL */}
+          {/* PEDIDO DE ORAÇÃO (Full width at bottom) */}
           <button
             type="button"
-            onClick={() => handleSelect('pastoral')}
-            className="col-span-12 bg-white/5 hover:bg-white/10 backdrop-blur-md text-white rounded-3xl p-6 flex items-center justify-between cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all shadow-xl md:min-h-[120px] border border-white/10 hover:border-white/20 group overflow-hidden relative"
+            onClick={() => handleSelect('prayer')}
+            className="col-span-12 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-rose-400/60 hover:bg-rose-900/40 text-white rounded-[2rem] p-8 flex items-center justify-between cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 shadow-2xl min-h-[140px] relative overflow-hidden group"
           >
+            <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="flex items-center gap-6 z-10">
-              <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm border border-white/5">
-                <span className="material-symbols-outlined !text-[36px] group-hover:scale-110 transition-transform">chat_bubble</span>
+              <div className="w-16 h-16 rounded-2xl bg-rose-500/20 flex items-center justify-center text-rose-200 border border-rose-500/30 group-hover:bg-rose-500/40 transition-colors duration-300">
+                <span className="material-symbols-outlined !text-[36px] group-hover:scale-110 transition-transform">volunteer_activism</span>
               </div>
               <div className="text-left">
-                <span className="font-sans text-xs uppercase tracking-widest font-bold text-white/60 block mb-1">
-                  {brand.type === 'synagogue' ? 'Orientação Espiritual' : 'Conselhamento'}
-                </span>
-                <span className="text-xl md:text-2xl font-black uppercase tracking-wider block drop-shadow-sm">
-                  {brand.termPastoral}
+                <span className="text-xs tracking-widest uppercase font-bold text-white/60 block mb-1">Intercessão</span>
+                <span className="text-2xl md:text-3xl font-black uppercase tracking-wider block drop-shadow-sm">
+                  {brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-white/50 group-hover:text-white/90 transition-colors">
-              <span className="text-sm font-bold tracking-widest uppercase hidden md:inline">Iniciar Conversa</span>
-              <span className="material-symbols-outlined !text-4xl group-hover:translate-x-1.5 transition-transform">
-                arrow_forward_ios
-              </span>
+            <div className="hidden md:flex items-center gap-3 text-white/50 group-hover:text-white transition-colors duration-300 z-10 bg-white/5 px-6 py-3 rounded-full border border-white/10 group-hover:border-white/30">
+              <span className="text-sm font-bold tracking-widest uppercase">Enviar Pedido</span>
+              <span className="material-symbols-outlined !text-2xl">arrow_forward</span>
+            </div>
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-[0.05] group-hover:opacity-[0.12] text-white transition-all duration-500 group-hover:-translate-x-8 z-0">
+              <span className="material-symbols-outlined !text-[200px]">chat</span>
             </div>
           </button>
 
         </div>
       </main>
 
-      {/* Shared Kiosk Bottom NavBar */}
-      <footer className="fixed bottom-0 left-0 w-full z-45 h-28 flex justify-around items-center px-6 md:px-20 pb-4 bg-white shadow-lg rounded-t-3xl border-t border-[#c4c6ce]">
+      {/* Floating Glass Dock Footer */}
+      <footer className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 p-2 bg-white/10 backdrop-blur-2xl shadow-2xl rounded-[2rem] border border-white/20">
+        
         {/* Início */}
         <button
           type="button"
           onClick={handleHomeClick}
-          className="flex flex-col items-center justify-center bg-brand-red hover:bg-brand-red-hover text-white rounded-full px-10 py-2.5 scale-95 hover:scale-100 transition-all duration-150 cursor-pointer shadow-md font-bold font-sans"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 text-white rounded-full px-6 py-3 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-rose-500/25 active:scale-95 font-bold font-sans"
         >
-          <span className="material-symbols-fill !text-2xl">home</span>
-          <span className="text-[12px] uppercase tracking-wider mt-0.5">Início</span>
+          <span className="material-symbols-fill !text-xl">home</span>
+          <span className="text-[13px] uppercase tracking-wider">Início</span>
         </button>
 
         {/* Voltar */}
         <button
           type="button"
           onClick={handleHomeClick}
-          className="flex flex-col items-center justify-center text-[#43474d] hover:bg-slate-100 px-8 py-3 rounded-2xl transition-all active:scale-95 cursor-pointer font-bold font-sans"
+          className="w-12 h-12 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+          title="Voltar"
         >
-          <span className="material-symbols-outlined !text-2xl">arrow_back</span>
-          <span className="text-[12px] uppercase tracking-wider mt-0.5">Voltar</span>
+          <span className="material-symbols-outlined !text-xl">arrow_back</span>
         </button>
+
+        <div className="w-px h-8 bg-white/10 mx-1" aria-hidden="true" />
 
         {/* Ajuda */}
         <button
           type="button"
           onClick={handleHelpClick}
-          className="flex flex-col items-center justify-center text-[#43474d] hover:bg-slate-100 px-8 py-3 rounded-2xl transition-all active:scale-95 cursor-pointer font-bold font-sans"
+          className="w-12 h-12 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+          title="Ajuda"
         >
-          <span className="material-symbols-outlined !text-2xl">help_outline</span>
-          <span className="text-[12px] uppercase tracking-wider mt-0.5">Ajuda</span>
+          <span className="material-symbols-outlined !text-xl">help_outline</span>
         </button>
 
         {/* Acessibilidade */}
         <button
           type="button"
           onClick={handleAccessibilityClick}
-          className="flex flex-col items-center justify-center text-[#43474d] hover:bg-slate-100 px-8 py-3 rounded-2xl transition-all active:scale-95 cursor-pointer font-bold font-sans"
+          className="w-12 h-12 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+          title="Acessibilidade"
         >
-          <span className="material-symbols-outlined !text-2xl">settings_accessibility</span>
-          <span className="text-[12px] uppercase tracking-wider mt-0.5">Acessibilidade</span>
+          <span className="material-symbols-outlined !text-xl">settings_accessibility</span>
         </button>
 
         {/* Administração */}
@@ -359,10 +328,10 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               playTapSound();
               onOpenAdmin();
             }}
-            className="flex flex-col items-center justify-center text-[#43474d] hover:bg-slate-100 px-8 py-3 rounded-2xl transition-all active:scale-95 cursor-pointer font-bold font-sans"
+            className="w-12 h-12 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+            title="Admin"
           >
-            <span className="material-symbols-outlined !text-2xl">admin_panel_settings</span>
-            <span className="text-[12px] uppercase tracking-wider mt-0.5">Admin</span>
+            <span className="material-symbols-outlined !text-xl">admin_panel_settings</span>
           </button>
         )}
       </footer>
