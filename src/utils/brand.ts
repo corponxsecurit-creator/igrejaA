@@ -51,17 +51,17 @@ export const brands: Record<string, BrandConfig> = {
     accentSplashColor: '#f5c31e',
     slides: [
       {
-        bgUrl: 'https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png',
+        bgUrl: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1600&fit=crop&q=80',
         verse: 'Seja forte e corajoso! Não se apavore, nem se desanime.',
         verseRef: 'Josué 1:9'
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1600&fit=crop&q=80',
+        bgUrl: 'https://images.unsplash.com/photo-1548625361-ec4682df6250?w=1600&fit=crop&q=80',
         verse: 'Alegrei-me com os que me disseram: Vamos à casa do Senhor!',
         verseRef: 'Salmos 122:1'
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1600&fit=crop&q=80',
+        bgUrl: 'https://images.unsplash.com/photo-1510590337019-5ef8d3d32116?w=1600&fit=crop&q=80',
         verse: 'Deem graças ao Senhor, porque ele é bom.',
         verseRef: 'Salmos 136:1'
       }
@@ -175,17 +175,17 @@ export const brands: Record<string, BrandConfig> = {
     accentSplashColor: '#d4af37',
     slides: [
       {
-        bgUrl: 'https://static.wixstatic.com/media/6ffcad_074e01478e384e37a4e59dd024c7c5ca~mv2.png/v1/crop/x_0,y_129,w_2048,h_894/fill/w_1966,h_858,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMAGEM%20DE%20ABERTURA%20PARA%20SITE.png',
+        bgUrl: 'https://images.unsplash.com/photo-1510590337019-5ef8d3d32116?w=1600&fit=crop&q=80',
         verse: 'O Senhor é o meu pastor; de nada terei falta.',
         verseRef: 'Salmos 23:1'
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1548625361-ec4682df6250?w=1600&fit=crop&q=80',
+        bgUrl: 'https://images.unsplash.com/photo-1438032005730-c779502fac39?w=1600&fit=crop&q=80',
         verse: 'Onde estiverem dois ou três reunidos em meu nome, aí estou eu.',
         verseRef: 'Mateus 18:20'
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1438032005730-c779502fac39?w=1600&fit=crop&q=80',
+        bgUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1600&fit=crop&q=80',
         verse: 'Ensina-nos a contar os nossos dias para que o nosso coração alcance sabedoria.',
         verseRef: 'Salmos 90:12'
       }
@@ -268,7 +268,7 @@ export const brands: Record<string, BrandConfig> = {
     accentSplashColor: '#d4af37',
     slides: [
       {
-        bgUrl: 'https://static.wixstatic.com/media/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg/v1/fill/w_1600,h_1000,al_c/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg',
+        bgUrl: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1600&fit=crop&q=80',
         verse: 'Grandes coisas fez o Senhor por nós, por isso estamos alegres.',
         verseRef: 'Salmos 126:3'
       },
@@ -366,7 +366,7 @@ export const brands: Record<string, BrandConfig> = {
     accentSplashColor: '#cf2e2e',
     slides: [
       {
-        bgUrl: 'https://www.universal.org/wp-content/uploads/2025/01/24180424/corrente-dos-70-2025.jpg',
+        bgUrl: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1600&fit=crop&q=80',
         verse: 'Tudo posso naquele que me fortalece.',
         verseRef: 'Filipenses 4:13'
       },
@@ -464,7 +464,7 @@ export const brands: Record<string, BrandConfig> = {
     accentSplashColor: '#ffb300',
     slides: [
       {
-        bgUrl: 'https://www.morasha.com.br/wp-content/uploads/2023/06/beityaacov.jpg',
+        bgUrl: 'https://images.unsplash.com/photo-1582234372722-50d7ccc30ebd?w=1600&fit=crop&q=80',
         verse: 'Ouve, Israel, o Senhor nosso Deus é o único Senhor.',
         verseRef: 'Deuteronômio 6:4'
       },
@@ -562,7 +562,7 @@ export const brands: Record<string, BrandConfig> = {
     accentSplashColor: '#ea492e',
     slides: [
       {
-        bgUrl: 'https://static.wixstatic.com/media/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg/v1/fill/w_1600,h_1000,al_c/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg',
+        bgUrl: 'https://images.unsplash.com/photo-1437603562860-1e52f14ea3b1?w=1600&fit=crop&q=80',
         verse: 'Porque dele, e por ele, e para ele são todas as coisas; glória, pois, a ele.',
         verseRef: 'Romanos 11:36'
       },
