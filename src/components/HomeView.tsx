@@ -378,50 +378,7 @@ export default function HomeView({
           </select>
         </div>
 
-        {/* ── Logo placeholder (centre, absolutely positioned) ── */}
-        <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-          {/* Actual brand logo requested by user */}
-          <div
-            className="logo-ring-pulse px-6 py-2.5 rounded-2xl flex items-center justify-center bg-white/5 backdrop-blur-xl"
-            style={{
-              border: `2px solid ${accent}`,
-            }}
-            role="img"
-            aria-label={`${brand.name} — Totem de Atendimento`}
-          >
-            <img
-              src={brand.logoUrl}
-              className={`h-12 object-contain ${brand.id === 'atitude' ? 'logo-white' : ''}`}
-              alt={brand.name}
-              referrerPolicy="no-referrer"
-            />
-          </div>
 
-          {/* Badge pill */}
-          <div
-            className="flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-widest backdrop-blur-xl"
-            style={{
-              background: 'rgba(245,195,30,.18)',
-              border:     '1px solid rgba(245,195,30,.35)',
-              color:      accent,
-            }}
-            role="status"
-            aria-label={brand.badgeLabel}
-          >
-            {/* Pulsing dot */}
-            <span className="relative flex h-2 w-2" aria-hidden="true">
-              <span
-                className="animate-pulse-dot absolute inline-flex h-full w-full rounded-full"
-                style={{ backgroundColor: accent }}
-              />
-              <span
-                className="relative inline-flex h-2 w-2 rounded-full"
-                style={{ backgroundColor: accent }}
-              />
-            </span>
-            <span>{brand.badgeLabel}</span>
-          </div>
-        </div>
 
         {/* Action buttons */}
         <div className="flex items-center gap-2" role="group" aria-label="Ações">
@@ -483,16 +440,17 @@ export default function HomeView({
 
           {/* H1 — 64px / 800 / letter-spacing 4px */}
           <h1
-            className="font-sans text-white font-extrabold uppercase leading-none drop-shadow-2xl slide-reveal"
+            className="drop-shadow-2xl slide-reveal my-6"
             style={{
-              fontSize:      '64px',
-              fontWeight:    800,
-              letterSpacing: '4px',
-              lineHeight:    1,
               animationDelay: '0.08s',
             }}
           >
-            {brand.name}
+            <img
+              src={brand.logoUrl}
+              className={`h-24 md:h-36 object-contain ${['atitude', 'ibmalphaville'].includes(brand.id) ? 'logo-white' : ''}`}
+              alt={brand.name}
+              referrerPolicy="no-referrer"
+            />
           </h1>
 
           {/* Campus subtitle */}

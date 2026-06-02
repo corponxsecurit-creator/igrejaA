@@ -560,28 +560,9 @@ export const brands: Record<string, BrandConfig> = {
 };
 
 export function getStoredBrands(): Record<string, BrandConfig> {
-  if (typeof window === 'undefined') {
-    return brands;
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('santuario_brands', JSON.stringify(brands));
   }
-  const stored = localStorage.getItem('santuario_brands');
-  if (stored) {
-    try {
-      const parsed = JSON.parse(stored);
-      // Mescla com as configurações hardcoded para garantir que novos clientes e dados apareçam
-      const merged = { ...brands, ...parsed };
-      
-      // Força a atualização do ICC se no cache ele estiver sem grupos
-      if (merged.icconselheira && merged.icconselheira.cellGroups && merged.icconselheira.cellGroups.length === 0) {
-        merged.icconselheira = brands.icconselheira;
-      }
-      
-      return merged;
-    } catch (e) {
-      console.error("Failed to parse stored brands", e);
-    }
-  }
-  // Initialize storage if empty
-  localStorage.setItem('santuario_brands', JSON.stringify(brands));
   return brands;
 }
 
