@@ -30,7 +30,16 @@ export default function HomeView({
   onOpenAdmin,
   brand,
 }: HomeViewProps) {
-  const slides = useMemo(() => brand.slides || [], [brand]);
+  const slides = useMemo(() => {
+    if (brand.slides && brand.slides.length > 0) {
+      return brand.slides;
+    }
+    return [{
+      bgUrl: brand.bgUrl,
+      verse: 'Seja forte e corajoso! Não se apavore, nem se desanime, pois o Senhor, o seu Deus, estará com você por onde você andar.',
+      verseRef: 'Josué 1:9'
+    }];
+  }, [brand]);
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [prevSlide,    setPrevSlide]    = useState<number | null>(null);

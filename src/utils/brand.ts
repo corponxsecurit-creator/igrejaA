@@ -49,6 +49,11 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#0a0a0a',
     badgeLabel: 'Igreja Batista Atitude',
     accentSplashColor: '#f5c31e',
+    slides: [{
+      bgUrl: 'https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png',
+      verse: 'Seja forte e corajoso! Não se apavore, nem se desanime, pois o Senhor, o seu Deus, estará com você por onde você andar.',
+      verseRef: 'Josué 1:9'
+    }],
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',
@@ -156,6 +161,11 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#0a0a0a',
     badgeLabel: 'ICC',
     accentSplashColor: '#d4af37',
+    slides: [{
+      bgUrl: 'https://static.wixstatic.com/media/6ffcad_074e01478e384e37a4e59dd024c7c5ca~mv2.png/v1/crop/x_0,y_129,w_2048,h_894/fill/w_1966,h_858,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMAGEM%20DE%20ABERTURA%20PARA%20SITE.png',
+      verse: 'O Senhor é o meu pastor; de nada terei falta.',
+      verseRef: 'Salmos 23:1'
+    }],
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',
@@ -232,6 +242,11 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#0a0a0a',
     badgeLabel: 'Lagoinha Alphaville',
     accentSplashColor: '#d4af37',
+    slides: [{
+      bgUrl: 'https://static.wixstatic.com/media/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg/v1/fill/w_1600,h_1000,al_c/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg',
+      verse: 'Grandes coisas fez o Senhor por nós, por isso estamos alegres.',
+      verseRef: 'Salmos 126:3'
+    }],
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',
@@ -313,6 +328,11 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#ffffff',
     badgeLabel: 'Universal - Templo de Salomão',
     accentSplashColor: '#cf2e2e',
+    slides: [{
+      bgUrl: 'https://www.universal.org/wp-content/uploads/2025/01/24180424/corrente-dos-70-2025.jpg',
+      verse: 'Tudo posso naquele que me fortalece.',
+      verseRef: 'Filipenses 4:13'
+    }],
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Bispos e Pastores',
@@ -394,6 +414,11 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#0a0a0a',
     badgeLabel: 'Sinagoga Beit Yaacov',
     accentSplashColor: '#ffb300',
+    slides: [{
+      bgUrl: 'https://www.morasha.com.br/wp-content/uploads/2023/06/beityaacov.jpg',
+      verse: 'Ouve, Israel, o Senhor nosso Deus é o único Senhor.',
+      verseRef: 'Deuteronômio 6:4'
+    }],
     type: 'synagogue',
     termPastor: 'Rabino',
     termPastors: 'Rabinos',
@@ -475,6 +500,11 @@ export const brands: Record<string, BrandConfig> = {
     badgeTextColor: '#ffffff',
     badgeLabel: 'IBM Alphaville',
     accentSplashColor: '#ea492e',
+    slides: [{
+      bgUrl: 'https://static.wixstatic.com/media/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg/v1/fill/w_1600,h_1000,al_c/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg',
+      verse: 'Porque dele, e por ele, e para ele são todas as coisas; glória, pois, a ele eternamente. Amém!',
+      verseRef: 'Romanos 11:36'
+    }],
     type: 'church',
     termPastor: 'Pastor',
     termPastors: 'Pastores',
