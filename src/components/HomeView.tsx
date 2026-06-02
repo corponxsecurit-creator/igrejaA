@@ -41,7 +41,7 @@ export default function HomeView({
 
   /* ── Slide transition ─────────────────────────────── */
   const goToSlide = useCallback((next: number) => {
-    if (next === currentSlide) return;
+    if (slides.length === 0 || next === currentSlide) return;
     setPrevSlide(currentSlide);
     setIsExiting(true);
     setTimeout(() => {
@@ -49,9 +49,19 @@ export default function HomeView({
       setPrevSlide(null);
       setIsExiting(false);
     }, 700); // crossfade duration
-  }, [currentSlide]);
+  }, [currentSlide, slides.length]);
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const timer = setInterval(() => {
+      setPrevSlide(currentSlide);
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 15000);
+    return () => clearInterval(timer);
+  }, [currentSlide, slides.length]);
 
   const nextSlide = useCallback(() => {
+    if (slides.length === 0) return;
     goToSlide((currentSlide + 1) % slides.length);
   }, [currentSlide, slides.length, goToSlide]);
 

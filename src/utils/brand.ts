@@ -560,8 +560,26 @@ export const brands: Record<string, BrandConfig> = {
 };
 
 export function getStoredBrands(): Record<string, BrandConfig> {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('santuario_brands', JSON.stringify(brands));
+  if (typeof window === 'undefined') return brands;
+  const stored = localStorage.getItem('santuario_brands');
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      const merged: Record<string, BrandConfig> = JSON.parse(JSON.stringify(brands));
+      for (const key of Object.keys(parsed)) {
+        if (merged[key]) {
+          merged[key] = { ...merged[key], ...parsed[key] };
+          if (!parsed[key].slides && brands[key]?.slides) {
+            merged[key].slides = brands[key].slides;
+          }
+        } else {
+          merged[key] = parsed[key];
+        }
+      }
+      return merged;
+    } catch (e) {
+      console.error('Failed to parse stored brands:', e);
+    }
   }
   return brands;
 }
