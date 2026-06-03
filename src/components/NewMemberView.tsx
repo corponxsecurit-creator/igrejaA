@@ -175,7 +175,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
         
         {/* Dynamic client-specific identity background */}
         <div 
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
           style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
         />
         <div 
@@ -229,7 +229,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
         
         {/* Dynamic client-specific identity background */}
         <div 
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
           style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
         />
         <div 
@@ -240,24 +240,15 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
         />
 
         {/* Top Header */}
-        <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
+        <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-6 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
           <div>
             <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">Boas-vindas</span>
             <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">{brand.termMember}</h1>
           </div>
 
           <div className="hidden md:block">
-            <LiveClock />
+            <LiveClock size="large" />
           </div>
-
-          <button
-            type="button"
-            onClick={onBack}
-            className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200 backdrop-blur-sm"
-          >
-            <span className="material-symbols-outlined !text-xl">arrow_back</span>
-            <span>Voltar</span>
-          </button>
         </header>
 
         {/* Main selector body */}
@@ -334,7 +325,27 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
           </div>
         </main>
 
-        <footer className="h-10 w-full" />
+        {/* Footer Navigation */}
+        <footer className="fixed bottom-0 left-0 w-full z-45 h-28 flex justify-between items-center px-6 md:px-20 pb-4 bg-white shadow-lg border-t border-[#c4c6ce]">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex items-center gap-2 text-white bg-slate-750 hover:bg-slate-850 font-black px-10 h-16 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-lg md:text-xl shadow-md border border-slate-700/10"
+            style={{
+              background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+            }}
+          >
+            <span className="material-symbols-outlined !text-2xl font-black">arrow_back</span>
+            <span>Voltar</span>
+          </button>
+
+          <div className="hidden md:flex flex-col items-center text-slate-400">
+            <span className="material-symbols-outlined !text-3xl text-slate-400">touch_app</span>
+            <span className="text-[10px] font-black tracking-widest uppercase mt-1">Toque para selecionar</span>
+          </div>
+
+          <div className="w-10 h-10" />
+        </footer>
       </div>
     );
   }
@@ -345,7 +356,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
         
         {/* Dynamic client-specific identity background */}
         <div 
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
           style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
         />
         <div 
@@ -356,28 +367,15 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
         />
 
         {/* Top Header */}
-        <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
+        <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-6 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
           <div>
             <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">Envio Rápido</span>
             <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Quero ser Membro</h1>
           </div>
 
           <div className="hidden md:block">
-            <LiveClock />
+            <LiveClock size="large" />
           </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              playTapSound();
-              setRegistrationMode(null);
-              setActiveField(null);
-            }}
-            className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200 backdrop-blur-sm"
-          >
-            <span className="material-symbols-outlined !text-xl">arrow_back</span>
-            <span>Voltar</span>
-          </button>
         </header>
 
         {/* Main Canvas input */}
@@ -429,9 +427,12 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
               setRegistrationMode(null);
               setActiveField(null);
             }}
-            className="flex items-center gap-2 text-[#43474d] hover:bg-slate-100 font-bold px-8 py-3.5 rounded-2xl transition-colors cursor-pointer"
+            className="flex items-center gap-2 text-white bg-slate-750 hover:bg-slate-850 font-black px-10 h-16 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-lg md:text-xl shadow-md border border-slate-700/10"
+            style={{
+              background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+            }}
           >
-            <span className="material-symbols-outlined !text-xl">arrow_back</span>
+            <span className="material-symbols-outlined !text-2xl font-black">arrow_back</span>
             <span>Voltar</span>
           </button>
 
@@ -463,7 +464,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
       
       {/* Dynamic client-specific identity background */}
       <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
         style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
       />
       <div 
@@ -482,7 +483,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
           </div>
 
           <div className="hidden md:block">
-            <LiveClock />
+            <LiveClock size="large" />
           </div>
 
           <span className="text-sm font-bold text-slate-500 font-sans" id="step-counter">
@@ -637,9 +638,12 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
         <button
           type="button"
           onClick={handlePrevStep}
-          className="flex items-center gap-2 text-[#43474d] hover:bg-slate-100 font-bold px-8 py-3.5 rounded-2xl transition-colors cursor-pointer"
+          className="flex items-center gap-2 text-white bg-slate-750 hover:bg-slate-850 font-black px-10 h-16 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-lg md:text-xl shadow-md border border-slate-700/10"
+          style={{
+            background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+          }}
         >
-          <span className="material-symbols-outlined !text-xl">arrow_back</span>
+          <span className="material-symbols-outlined !text-2xl font-black">arrow_back</span>
           <span>Voltar</span>
         </button>
 

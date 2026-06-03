@@ -153,11 +153,11 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
   };
 
   return (
-    <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
+    <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans submodule-view">
       
       {/* Dynamic client-specific identity background */}
       <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
         style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
       />
       <div 

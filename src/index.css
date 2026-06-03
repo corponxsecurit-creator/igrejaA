@@ -344,4 +344,44 @@ input, textarea {
   transform: scale(0.95) translateY(0);
 }
 
+/* ==========================================================================
+   SUBMODULES LEGIBILIDADE AUMENTADA (Aumento de fonte de subpáginas)
+   ========================================================================== */
+.submodule-view {
+  font-size: 1.15rem;
+}
+.submodule-view p, 
+.submodule-view span:not(.material-symbols-outlined):not(.material-symbols-fill), 
+.submodule-view label,
+.submodule-view button:not(.home-btn-hover):not(.bg-brand-red), 
+.submodule-view input, 
+.submodule-view select {
+  font-size: 1.15rem !important;
+}
+.submodule-view h1 {
+  font-size: 2.25rem !important;
+}
+.submodule-view h2 {
+  font-size: 1.85rem !important;
+}
+.submodule-view h3 {
+  font-size: 1.55rem !important;
+}
+.submodule-view h4 {
+  font-size: 1.3rem !important;
+}
+.submodule-view .text-xs {
+  font-size: 0.95rem !important;
+}
+.submodule-view .text-sm {
+  font-size: 1.05rem !important;
+}
+.submodule-view .text-\[9px\] {
+  font-size: 0.85rem !important;
+}
+.submodule-view .text-\[10px\] {
+  font-size: 0.9rem !important;
+}
+
+
 
