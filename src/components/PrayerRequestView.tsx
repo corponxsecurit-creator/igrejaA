@@ -292,6 +292,22 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
               >
                 {request.message || <span className="text-slate-400 font-normal">Escreva seu pedido aqui...</span>}
               </div>
+
+              {/* Submit Button Inside Card */}
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="w-full flex items-center justify-center gap-2 bg-brand-red hover:bg-brand-red-hover text-white font-black px-12 h-16 rounded-2xl shadow-lg hover:scale-[1.02] active:scale-[0.96] transition-all cursor-pointer text-lg"
+                  style={{
+                    backgroundColor: brand.primaryColor,
+                    boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
+                  }}
+                >
+                  <span>Enviar Pedido</span>
+                  <span className="material-symbols-outlined !text-xl">send</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -305,33 +321,18 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
         </div>
       )}
 
-      {/* Fixed bottom navigation */}
-      <footer className="fixed bottom-0 left-0 w-full z-45 h-28 flex justify-between items-center px-6 md:px-20 pb-4 bg-white shadow-lg border-t border-[#c4c6ce]">
+      {/* Footer Navigation (Transparent, floating only the Back button) */}
+      <footer className="fixed bottom-8 left-6 md:left-20 z-45">
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-2 text-[#43474d] hover:bg-slate-100 font-bold px-8 py-3.5 rounded-2xl transition-colors cursor-pointer"
-        >
-          <span className="material-symbols-outlined !text-xl">arrow_back</span>
-          <span>Voltar</span>
-        </button>
-
-        <div className="hidden md:flex flex-col items-center text-slate-400">
-          <span className="material-symbols-outlined !text-3xl animate-bounce">keyboard</span>
-          <span className="text-[10px] font-black tracking-widest uppercase">Teclado Virtual Ativo</span>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="flex items-center gap-2 bg-brand-red hover:bg-brand-red-hover text-white font-black px-12 h-16 rounded-2xl shadow-lg hover:scale-[1.02] active:scale-[0.96] transition-all cursor-pointer text-base"
+          className="flex items-center gap-2 text-white bg-slate-750 hover:bg-slate-850 font-black px-10 h-16 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-lg md:text-xl shadow-md border border-slate-700/10"
           style={{
-            backgroundColor: brand.primaryColor,
-            boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
+            background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
           }}
         >
-          <span>Enviar Pedido</span>
-          <span className="material-symbols-outlined !text-xl">send</span>
+          <span className="material-symbols-outlined !text-2xl font-black">arrow_back</span>
+          <span>Voltar</span>
         </button>
       </footer>
 

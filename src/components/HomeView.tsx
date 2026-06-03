@@ -211,20 +211,20 @@ export default function HomeView({
                 loading={i === 0 ? 'eager' : 'lazy'}
                 decoding="async"
                 className={`h-full w-full object-cover ${isActive ? 'ken-burns' : ''}`}
-                style={{ opacity: 0.45, willChange: 'transform' }}
+                style={{ opacity: 0.70, willChange: 'transform' }}
                 referrerPolicy="no-referrer"
               />
             </div>
 
-            {/* Cinematic overlay */}
+            {/* Cinematic overlay with dynamic brand color tint */}
             <div
               className="absolute inset-0"
               style={{
                 background: `linear-gradient(
                   180deg,
-                  rgba(5,15,35,.85)  0%,
-                  rgba(5,15,35,.55)  40%,
-                  rgba(5,15,35,.78)  100%
+                  rgba(var(--color-brand-red-rgb), 0.75) 0%,
+                  rgba(15, 23, 42, 0.40) 50%,
+                  rgba(2, 6, 23, 0.90) 100%
                 )`,
               }}
             />

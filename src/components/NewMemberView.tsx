@@ -404,6 +404,22 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
               <p className="text-sm text-slate-500 font-semibold leading-relaxed">
                 O e-mail indicado será enviado ao nosso grupo de cadastro e integração. Em breve enviaremos um convite completo!
               </p>
+
+              {/* Submit Button Inside Card */}
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={handleQuickSubmit}
+                  className="w-full flex items-center justify-center gap-2 font-black h-16 rounded-2xl shadow-lg hover:opacity-90 active:scale-95 transition-all cursor-pointer bg-brand-red text-white text-lg"
+                  style={{
+                    backgroundColor: brand.primaryColor,
+                    boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
+                  }}
+                >
+                  <span>Enviar para o Grupo de Cadastro</span>
+                  <span className="material-symbols-outlined !text-xl">send</span>
+                </button>
+              </div>
             </div>
           </div>
         </main>
@@ -418,8 +434,8 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
           </div>
         )}
 
-        {/* Footer Navigation */}
-        <footer className="fixed bottom-0 left-0 w-full z-45 h-28 flex justify-between items-center px-6 md:px-20 pb-4 bg-white shadow-lg border-t border-[#c4c6ce]">
+        {/* Footer Navigation (Transparent, floating only the Back button) */}
+        <footer className="fixed bottom-8 left-6 md:left-20 z-45">
           <button
             type="button"
             onClick={() => {
@@ -434,24 +450,6 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
           >
             <span className="material-symbols-outlined !text-2xl font-black">arrow_back</span>
             <span>Voltar</span>
-          </button>
-
-          <div className="hidden md:flex flex-col items-center text-slate-400">
-            <span className="material-symbols-outlined !text-3xl animate-bounce">keyboard</span>
-            <span className="text-[10px] font-black tracking-widest uppercase">Teclado Virtual Ativo</span>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleQuickSubmit}
-            className="flex items-center gap-2 font-black px-10 h-16 rounded-2xl shadow-lg hover:opacity-90 active:scale-95 transition-all cursor-pointer bg-brand-red text-white"
-            style={{
-              backgroundColor: brand.primaryColor,
-              boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
-            }}
-          >
-            <span>Enviar para o Grupo de Cadastro</span>
-            <span className="material-symbols-outlined !text-xl">send</span>
           </button>
         </footer>
       </div>
@@ -613,6 +611,24 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
             )}
 
           </div>
+
+          {/* Continue / Finish Action Button Inside Card */}
+          <div className="pt-4 flex justify-end">
+            <button
+              type="button"
+              onClick={handleNextStep}
+              className="w-full md:w-auto flex items-center justify-center gap-2 font-black px-10 h-16 rounded-2xl shadow-lg hover:opacity-90 active:scale-95 transition-all cursor-pointer bg-brand-red text-white text-lg"
+              style={{
+                backgroundColor: brand.primaryColor,
+                boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
+              }}
+            >
+              <span>{form.step === 3 ? 'Finalizar Cadastro' : 'Continuar'}</span>
+              <span className="material-symbols-outlined !text-xl">
+                {form.step === 3 ? 'check_circle' : 'arrow_forward'}
+              </span>
+            </button>
+          </div>
         </div>
       </main>
 
@@ -632,9 +648,8 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
         </div>
       )}
 
-      {/* Footer Navigation */}
-      <footer className="fixed bottom-0 left-0 w-full z-45 h-28 flex justify-between items-center px-6 md:px-20 pb-4 bg-white shadow-lg border-t border-[#c4c6ce]">
-        {/* Back control */}
+      {/* Footer Navigation (Transparent, floating only the Back button) */}
+      <footer className="fixed bottom-8 left-6 md:left-20 z-45">
         <button
           type="button"
           onClick={handlePrevStep}
@@ -645,29 +660,6 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
         >
           <span className="material-symbols-outlined !text-2xl font-black">arrow_back</span>
           <span>Voltar</span>
-        </button>
-
-        {activeField && (
-          <div className="hidden md:flex flex-col items-center text-slate-400">
-            <span className="material-symbols-outlined !text-3xl animate-bounce">keyboard</span>
-            <span className="text-[10px] font-black tracking-widest uppercase">Teclado Virtual Ativo</span>
-          </div>
-        )}
-
-        {/* Continue Control / Finish */}
-        <button
-          type="button"
-          onClick={handleNextStep}
-          className="flex items-center gap-2 font-black px-10 h-16 rounded-2xl shadow-lg hover:opacity-90 active:scale-95 transition-all cursor-pointer bg-brand-red text-white"
-          style={{
-            backgroundColor: brand.primaryColor,
-            boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
-          }}
-        >
-          <span>{form.step === 3 ? 'Finalizar Cadastro' : 'Continuar'}</span>
-          <span className="material-symbols-outlined !text-xl">
-            {form.step === 3 ? 'check_circle' : 'arrow_forward'}
-          </span>
         </button>
       </footer>
 
