@@ -187,7 +187,7 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
         </div>
 
         {/* Cells Layout list */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {filteredCells.length > 0 ? (
             filteredCells.map((cell) => (
               <div

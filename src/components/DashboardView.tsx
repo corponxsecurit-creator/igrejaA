@@ -114,14 +114,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         </div>
         
         <div className="flex gap-4 text-white">
-          <button 
-            type="button" 
-            className="flex items-center gap-2 text-white/90 hover:bg-white/10 p-3 rounded-lg transition-all active:scale-95 text-sm font-semibold cursor-pointer"
-            onClick={() => handleSelect('pastoral')}
-          >
-            <span className="material-symbols-outlined !text-xl" style={{ color: accent }}>volunteer_activism</span>
-            <span>{brand.termPastoral}</span>
-          </button>
+          {/* Pastoral button moved to bottom dock for accessibility */}
         </div>
       </nav>
 
@@ -270,51 +263,66 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
       </main>
 
       {/* Floating Glass Dock Footer */}
-      <footer className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 p-2 bg-white/10 backdrop-blur-2xl shadow-2xl rounded-[2rem] border border-white/20 max-w-[90vw] md:max-w-max overflow-x-auto scrollbar-none">
+      <footer className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 p-3 bg-white/10 backdrop-blur-2xl shadow-2xl rounded-[2.5rem] border border-white/20 max-w-[95vw] md:max-w-max overflow-x-auto scrollbar-none">
         
         {/* Início */}
         <button
           type="button"
           onClick={handleHomeClick}
-          className="flex items-center justify-center gap-2.5 text-white rounded-full px-8 py-4 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-bold font-sans animate-home-pulse home-btn-hover text-sm md:text-base border border-white/20"
+          className="flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider text-base md:text-lg border border-white/20 animate-home-pulse home-btn-hover"
           style={{
             background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+            boxShadow: `0 10px 25px ${brand.primaryColor}40`
           }}
         >
-          <span className="material-symbols-fill !text-2xl animate-pulse">home</span>
-          <span className="uppercase tracking-wider text-xs md:text-sm">Início</span>
+          <span className="material-symbols-fill !text-3xl animate-pulse">home</span>
+          <span>Início</span>
+        </button>
+
+        {/* Atendimento Pastoral Accessibility Button */}
+        <button
+          type="button"
+          onClick={() => handleSelect('pastoral')}
+          className="flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider text-base md:text-lg border border-white/20 hover:scale-[1.05]"
+          style={{
+            background: `linear-gradient(135deg, ${brand.primaryColorHover} 0%, ${brand.primaryColor} 100%)`,
+            boxShadow: `0 10px 25px ${brand.primaryColor}40`
+          }}
+        >
+          <span className="material-symbols-fill !text-3xl animate-pulse">volunteer_activism</span>
+          <span>{brand.termPastoral}</span>
         </button>
 
         {/* Voltar */}
         <button
           type="button"
           onClick={handleHomeClick}
-          className="w-12 h-12 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+          className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
           title="Voltar"
         >
-          <span className="material-symbols-outlined !text-xl">arrow_back</span>
+          <span className="material-symbols-outlined !text-2xl">arrow_back</span>
         </button>
 
-        <div className="w-px h-8 bg-white/10 mx-1" aria-hidden="true" />
+        <div className="w-px h-12 bg-white/10 mx-1" aria-hidden="true" />
 
         {/* Ajuda */}
         <button
           type="button"
           onClick={handleHelpClick}
-          className="w-12 h-12 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+          className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
           title="Ajuda"
         >
-          <span className="material-symbols-outlined !text-xl">help_outline</span>
+          <span className="material-symbols-outlined !text-2xl">help_outline</span>
         </button>
 
         {/* Acessibilidade */}
         <button
           type="button"
           onClick={handleAccessibilityClick}
-          className="w-12 h-12 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+          className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
           title="Acessibilidade"
         >
-          <span className="material-symbols-outlined !text-xl">settings_accessibility</span>
+          <span className="material-symbols-outlined !text-2xl">settings_accessibility</span>
         </button>
 
         {/* Administração */}
@@ -325,7 +333,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               playTapSound();
               onOpenAdmin();
             }}
-            className="w-12 h-12 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+            className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
             title="Admin"
           >
             <span className="material-symbols-outlined !text-xl">admin_panel_settings</span>

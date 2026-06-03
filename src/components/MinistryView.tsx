@@ -353,9 +353,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
               key={min.id}
               type="button"
               onClick={() => handleMinistrySelect(min)}
-              className={`col-span-12 ${
-                min.wide ? 'md:col-span-6' : 'md:col-span-3'
-              } text-white rounded-3xl p-6 text-left flex flex-col justify-between cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-md border ${min.color} min-h-[230px] relative overflow-hidden group`}
+              className={`col-span-12 md:col-span-6 text-white rounded-3xl p-6 text-left flex flex-col justify-between cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-md border ${min.color} min-h-[230px] relative overflow-hidden group`}
             >
               {/* Background image related to client virtual identity inside button */}
               <div 

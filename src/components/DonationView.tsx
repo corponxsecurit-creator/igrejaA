@@ -355,7 +355,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
               </h2>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
               {/* PIX Method */}
               <button
                 type="button"
@@ -417,7 +417,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                   playSuccessSound();
                   setState(prev => ({ ...prev, step: 'card', paymentMethod: 'debit' }));
                 }}
-                className="relative overflow-hidden bg-white/95 hover:bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col items-center text-center justify-between shadow-sm group hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 min-h-[300px]"
+                className="relative overflow-hidden bg-white/95 hover:bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col items-center text-center justify-between shadow-sm group hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 min-h-[300px] md:col-span-2"
               >
                 <div 
                   className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] pointer-events-none"
