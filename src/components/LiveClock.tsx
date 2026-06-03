@@ -19,18 +19,18 @@ export default function LiveClock({ size = 'normal' }: LiveClockProps) {
   });
 
   const dateString = time.toLocaleDateString('pt-BR', {
-    weekday: 'short',
     day: '2-digit',
-    month: 'short'
+    month: '2-digit',
+    year: 'numeric'
   });
 
   return (
     <div className="flex flex-col items-end justify-center font-sans bg-transparent border-none shadow-none p-0">
       <span className={`font-black tracking-wider font-mono text-current ${
-        size === 'large' ? 'text-3xl md:text-4xl' : 'text-base md:text-lg'
+        size === 'large' ? 'text-5xl md:text-6xl' : 'text-2xl md:text-3xl'
       }`}>{timeString}</span>
-      <span className={`uppercase font-bold tracking-widest mt-0.5 text-current/75 ${
-        size === 'large' ? 'text-xs md:text-sm' : 'text-[10px]'
+      <span className={`font-bold tracking-widest mt-1 text-current/75 ${
+        size === 'large' ? 'text-lg md:text-xl' : 'text-xs md:text-sm'
       }`}>{dateString}</span>
     </div>
   );
