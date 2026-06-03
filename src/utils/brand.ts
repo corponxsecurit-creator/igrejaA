@@ -180,7 +180,7 @@ export const brands: Record<string, BrandConfig> = {
         verseRef: 'Salmos 23:1'
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1438032005730-c779502fac39?w=1600&fit=crop&q=80',
+        bgUrl: 'https://static.wixstatic.com/media/6ffcad_19cb063f32a9490695f16c15daff22caf000.jpg/v1/fill/w_1600,h_900,al_c,q_85/6ffcad_19cb063f32a9490695f16c15daff22caf000.jpg',
         verse: 'Onde estiverem dois ou três reunidos em meu nome, aí estou eu.',
         verseRef: 'Mateus 18:20'
       },
