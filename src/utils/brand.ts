@@ -185,7 +185,7 @@ export const brands: Record<string, BrandConfig> = {
         verseRef: 'Mateus 18:20'
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1600&fit=crop&q=80',
+        bgUrl: 'https://static.wixstatic.com/media/6ffcad_b93a9583303f405b9e70bec3318c0526~mv2.jpg/v1/fill/w_1600,h_900,al_c,q_85/6ffcad_b93a9583303f405b9e70bec3318c0526~mv2.jpg',
         verse: 'Ensina-nos a contar os nossos dias para que o nosso coração alcance sabedoria.',
         verseRef: 'Salmos 90:12'
       }
