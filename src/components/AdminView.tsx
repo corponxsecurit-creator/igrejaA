@@ -131,8 +131,8 @@ export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps
     speakText('Configurações salvas no sistema!');
     
     if (shouldRedirect) {
-      // Refresh current page with the client parameter
-      window.location.search = `?client=${selectedBrandId}`;
+      // Refresh current page with the client parameter and admin flag
+      window.location.search = `?client=${selectedBrandId}&admin=true`;
     } else {
       alert('Configurações salvas com sucesso localmente!');
     }

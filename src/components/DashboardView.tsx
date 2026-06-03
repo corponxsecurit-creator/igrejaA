@@ -47,6 +47,8 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
   };
 
   const accent = '#F5C31E'; // Institutional generic yellow
+  const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  const isAdminMode = params ? params.get('admin') === 'true' : false;
 
   return (
     <div className="relative min-h-screen bg-[#020617] text-white flex flex-col justify-between overflow-x-hidden animate-fade-in font-sans">
@@ -293,51 +295,55 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <span>{brand.termPastoral}</span>
         </button>
 
-        {/* Voltar */}
-        <button
-          type="button"
-          onClick={handleHomeClick}
-          className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
-          title="Voltar"
-        >
-          <span className="material-symbols-outlined !text-2xl">arrow_back</span>
-        </button>
+        {isAdminMode && (
+          <>
+            {/* Voltar */}
+            <button
+              type="button"
+              onClick={handleHomeClick}
+              className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+              title="Voltar"
+            >
+              <span className="material-symbols-outlined !text-2xl">arrow_back</span>
+            </button>
 
-        <div className="w-px h-12 bg-white/10 mx-1" aria-hidden="true" />
+            <div className="w-px h-12 bg-white/10 mx-1" aria-hidden="true" />
 
-        {/* Ajuda */}
-        <button
-          type="button"
-          onClick={handleHelpClick}
-          className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
-          title="Ajuda"
-        >
-          <span className="material-symbols-outlined !text-2xl">help_outline</span>
-        </button>
+            {/* Ajuda */}
+            <button
+              type="button"
+              onClick={handleHelpClick}
+              className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+              title="Ajuda"
+            >
+              <span className="material-symbols-outlined !text-2xl">help_outline</span>
+            </button>
 
-        {/* Acessibilidade */}
-        <button
-          type="button"
-          onClick={handleAccessibilityClick}
-          className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
-          title="Acessibilidade"
-        >
-          <span className="material-symbols-outlined !text-2xl">settings_accessibility</span>
-        </button>
+            {/* Acessibilidade */}
+            <button
+              type="button"
+              onClick={handleAccessibilityClick}
+              className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+              title="Acessibilidade"
+            >
+              <span className="material-symbols-outlined !text-2xl">settings_accessibility</span>
+            </button>
 
-        {/* Administração */}
-        {onOpenAdmin && (
-          <button
-            type="button"
-            onClick={() => {
-              playTapSound();
-              onOpenAdmin();
-            }}
-            className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
-            title="Admin"
-          >
-            <span className="material-symbols-outlined !text-xl">admin_panel_settings</span>
-          </button>
+            {/* Administração */}
+            {onOpenAdmin && (
+              <button
+                type="button"
+                onClick={() => {
+                  playTapSound();
+                  onOpenAdmin();
+                }}
+                className="w-16 h-16 flex items-center justify-center text-white/80 hover:text-white bg-white/5 hover:bg-white/20 rounded-full transition-all duration-200 active:scale-95 cursor-pointer font-bold font-sans border border-transparent hover:border-white/10"
+                title="Admin"
+              >
+                <span className="material-symbols-outlined !text-xl">admin_panel_settings</span>
+              </button>
+            )}
+          </>
         )}
       </footer>
 
