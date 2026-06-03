@@ -180,12 +180,12 @@ export const brands: Record<string, BrandConfig> = {
         verseRef: 'Salmos 23:1'
       },
       {
-        bgUrl: 'https://static.wixstatic.com/media/6ffcad_19cb063f32a9490695f16c15daff22caf000.jpg/v1/fill/w_1600,h_900,al_c,q_85/6ffcad_19cb063f32a9490695f16c15daff22caf000.jpg',
+        bgUrl: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?w=1600&fit=crop&q=80',
         verse: 'Onde estiverem dois ou três reunidos em meu nome, aí estou eu.',
         verseRef: 'Mateus 18:20'
       },
       {
-        bgUrl: 'https://static.wixstatic.com/media/6ffcad_b93a9583303f405b9e70bec3318c0526~mv2.jpg/v1/fill/w_1600,h_900,al_c,q_85/6ffcad_b93a9583303f405b9e70bec3318c0526~mv2.jpg',
+        bgUrl: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?w=1600&fit=crop&q=80',
         verse: 'Ensina-nos a contar os nossos dias para que o nosso coração alcance sabedoria.',
         verseRef: 'Salmos 90:12'
       }
