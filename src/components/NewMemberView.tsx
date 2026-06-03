@@ -22,7 +22,8 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
     ageRange: '',
   });
 
-  const [activeField, setActiveField] = useState<'name' | 'phone' | 'email' | 'city' | null>('name');
+  const [registrationMode, setRegistrationMode] = useState<'standard' | 'quick' | null>(null);
+  const [activeField, setActiveField] = useState<'name' | 'phone' | 'email' | 'city' | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const handleKeyboardPress = (char: string) => {
@@ -50,6 +51,37 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
     if (activeField === 'city' && currentVal.length >= 30) return;
 
     setForm((prev) => ({ ...prev, [activeField]: currentVal + char }));
+  };
+
+  const handleQuickSubmit = () => {
+    playTapSound();
+    if (!form.email.trim() || !form.email.includes('@')) {
+      alert('Por favor, indique um e-mail válido.');
+      return;
+    }
+
+    // Save registration to localStorage
+    const newReg = {
+      id: `quick_member_${Date.now()}`,
+      name: 'Solicitação Rápida',
+      phone: '-',
+      email: form.email,
+      type: `Quero ser Membro (Envio Rápido)`,
+      brandId: brand.id,
+      date: new Date().toISOString()
+    };
+
+    try {
+      const existing = localStorage.getItem('santuario_registrations');
+      const regs = existing ? JSON.parse(existing) : [];
+      regs.push(newReg);
+      localStorage.setItem('santuario_registrations', JSON.stringify(regs));
+    } catch (e) {
+      console.error('Failed to save registration:', e);
+    }
+
+    setIsSuccess(true);
+    playSuccessSound();
   };
 
   const handleNextStep = () => {
@@ -81,6 +113,27 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
         alert('Por favor, selecione sua faixa etária.');
         return;
       }
+
+      // Save registration to localStorage
+      const newReg = {
+        id: `full_member_${Date.now()}`,
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        type: `Cadastro Completo: ${brand.termMember} (${form.city}, ${form.ageRange})`,
+        brandId: brand.id,
+        date: new Date().toISOString()
+      };
+
+      try {
+        const existing = localStorage.getItem('santuario_registrations');
+        const regs = existing ? JSON.parse(existing) : [];
+        regs.push(newReg);
+        localStorage.setItem('santuario_registrations', JSON.stringify(regs));
+      } catch (e) {
+        console.error('Failed to save registration:', e);
+      }
+
       setIsSuccess(true);
       playSuccessSound();
     }
@@ -93,7 +146,8 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
       setForm((prev) => ({ ...prev, step: newStep }));
       setActiveField(newStep === 1 ? 'name' : 'email');
     } else {
-      onBack();
+      setRegistrationMode(null);
+      setActiveField(null);
     }
   };
 
@@ -118,42 +172,309 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
   if (isSuccess) {
     return (
       <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col items-center justify-center p-6 animate-fade-in font-sans">
-        <div className="relative w-full max-w-2xl text-center space-y-6 glass-panel p-12 rounded-3xl shadow-xl border border-white/60 animate-fade-in">
-          <div className="w-24 h-24 bg-brand-red text-white rounded-full flex items-center justify-center mx-auto shadow-md">
-            <span className="material-symbols-fill !text-6xl">celebration</span>
-          </div>
+        
+        {/* Dynamic client-specific identity background */}
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+          style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+        />
+        <div 
+          className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
+          style={{
+            background: `linear-gradient(135deg, rgba(var(--color-brand-red-rgb), 0.08) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(244, 246, 248, 0.95) 100%)`
+          }}
+        />
 
-          <div className="space-y-3">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-brand-dark tracking-tight">
-              {brand.type === 'synagogue' ? 'Registro Concluído!' : 'Cadastro Concluído!'}
-            </h2>
-            <p className="text-lg text-slate-600 max-w-lg mx-auto leading-relaxed">
-              Ficamos muito felizes em ter você conosco na <span className="font-bold text-brand-dark">{brand.name} {brand.campusName}</span>. Em breve nossa equipe entrará em contato!
-            </p>
-          </div>
+        <div className="relative overflow-hidden w-full max-w-4xl text-center p-12 md:p-16 rounded-3xl shadow-xl border border-white/60 animate-fade-in z-10 bg-white/90 backdrop-blur-md">
+          {/* Background image related to client virtual identity inside card */}
+          <div 
+            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.15] pointer-events-none"
+            style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+          />
+          <div className="relative z-10 space-y-6">
+            <div className="w-24 h-24 bg-brand-red text-white rounded-full flex items-center justify-center mx-auto shadow-md">
+              <span className="material-symbols-fill !text-6xl">celebration</span>
+            </div>
 
-          <div className="bg-white/40 border border-slate-200 p-6 rounded-2xl italic text-slate-500 max-w-md mx-auto">
-            "Antes de falar, eu já te conhecia..." Jeremias 1:5
-          </div>
+            <div className="space-y-3">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-brand-dark tracking-tight">
+                {brand.type === 'synagogue' ? 'Registro Concluído!' : 'Cadastro Concluído!'}
+              </h2>
+              <p className="text-lg text-slate-600 max-w-lg mx-auto leading-relaxed">
+                Ficamos muito felizes em ter você conosco na <span className="font-bold text-brand-dark">{brand.name} {brand.campusName}</span>. Em breve nossa equipe entrará em contato!
+              </p>
+            </div>
 
-          <button
-            type="button"
-            onClick={onGoHome}
-            className="h-14 px-12 bg-brand-dark hover:bg-brand-red text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer"
-          >
-            <span>Voltar ao Início</span>
-            <span className="material-symbols-outlined !text-xl">arrow_forward</span>
-          </button>
+            <div className="bg-white/40 border border-slate-200 p-6 rounded-2xl italic text-slate-500 max-w-md mx-auto">
+              "Antes de falar, eu já te conhecia..." Jeremias 1:5
+            </div>
+
+            <button
+              type="button"
+              onClick={onGoHome}
+              className="h-16 px-12 bg-brand-dark hover:bg-brand-red text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer z-10"
+            >
+              <span>Voltar ao Início</span>
+              <span className="material-symbols-outlined !text-xl">arrow_forward</span>
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
+  if (registrationMode === null) {
+    return (
+      <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
+        
+        {/* Dynamic client-specific identity background */}
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+          style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+        />
+        <div 
+          className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
+          style={{
+            background: `linear-gradient(135deg, rgba(var(--color-brand-red-rgb), 0.08) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(244, 246, 248, 0.95) 100%)`
+          }}
+        />
+
+        {/* Top Header */}
+        <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
+          <div>
+            <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">Boas-vindas</span>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">{brand.termMember}</h1>
+          </div>
+
+          <div className="hidden md:block">
+            <LiveClock />
+          </div>
+
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200 backdrop-blur-sm"
+          >
+            <span className="material-symbols-outlined !text-xl">arrow_back</span>
+            <span>Voltar</span>
+          </button>
+        </header>
+
+        {/* Main selector body */}
+        <main className="flex-grow flex flex-col items-center justify-center px-6 md:px-20 pt-28 pb-32 max-w-6xl mx-auto w-full relative z-10 space-y-8">
+          <div className="text-center max-w-xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-black text-brand-dark tracking-tight mb-2">
+              Como você prefere prosseguir?
+            </h2>
+            <p className="text-sm md:text-base text-slate-600 font-semibold leading-relaxed">
+              Você pode preencher o formulário de cadastro completo ou apenas enviar seu e-mail de contato para ser integrado ao grupo de cadastro.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
+            {/* Standard Mode */}
+            <button
+              type="button"
+              onClick={() => {
+                playTapSound();
+                setRegistrationMode('standard');
+                setActiveField('name');
+              }}
+              className="relative overflow-hidden bg-white/90 backdrop-blur-md hover:bg-white rounded-3xl p-10 text-left border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col justify-between items-start group shadow-md hover:scale-[1.05] active:scale-[0.96] min-h-[320px]"
+            >
+              {/* Background image related to client virtual identity inside button */}
+              <div 
+                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.10] pointer-events-none"
+                style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+              />
+              <div className="relative z-10 flex flex-col justify-between h-full w-full items-start">
+                <div className="w-16 h-16 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center font-bold mb-4 shrink-0">
+                  <span className="material-symbols-outlined !text-4xl">assignment_ind</span>
+                </div>
+                <div className="flex-grow">
+                  <h3 className="font-extrabold text-3xl text-brand-dark group-hover:text-brand-red transition-colors">Ficha de Cadastro Completa</h3>
+                  <p className="text-base text-slate-500 font-semibold mt-3 leading-relaxed">Preencha nome, telefone, e-mail e cidade para nossa equipe de novos membros entrar em contato.</p>
+                </div>
+                <div className="mt-6 font-bold text-sm uppercase text-slate-450 group-hover:text-brand-red tracking-wider flex items-center gap-1.5 shrink-0">
+                  <span>Preencher Completo</span>
+                  <span className="material-symbols-outlined !text-base">arrow_forward</span>
+                </div>
+              </div>
+            </button>
+
+            {/* Quick Email link Mode */}
+            <button
+              type="button"
+              onClick={() => {
+                playTapSound();
+                setRegistrationMode('quick');
+                setActiveField('email');
+              }}
+              className="relative overflow-hidden bg-white/90 backdrop-blur-md hover:bg-white rounded-3xl p-10 text-left border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col justify-between items-start group shadow-md hover:scale-[1.05] active:scale-[0.96] min-h-[320px]"
+            >
+              {/* Background image related to client virtual identity inside button */}
+              <div 
+                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.10] pointer-events-none"
+                style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+              />
+              <div className="relative z-10 flex flex-col justify-between h-full w-full items-start">
+                <div className="w-16 h-16 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center font-bold mb-4 shrink-0">
+                  <span className="material-symbols-outlined !text-4xl">alternate_email</span>
+                </div>
+                <div className="flex-grow">
+                  <h3 className="font-extrabold text-3xl text-brand-dark group-hover:text-brand-red transition-colors">Quero ser Membro (Rápido)</h3>
+                  <p className="text-base text-slate-500 font-semibold mt-3 leading-relaxed">Insira apenas seu e-mail para que nosso grupo de cadastro envie seu convite de participação.</p>
+                </div>
+                <div className="mt-6 font-bold text-sm uppercase text-slate-450 group-hover:text-brand-red tracking-wider flex items-center gap-1.5 shrink-0">
+                  <span>Registrar E-mail</span>
+                  <span className="material-symbols-outlined !text-base">arrow_forward</span>
+                </div>
+              </div>
+            </button>
+          </div>
+        </main>
+
+        <footer className="h-10 w-full" />
+      </div>
+    );
+  }
+
+  if (registrationMode === 'quick') {
+    return (
+      <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
+        
+        {/* Dynamic client-specific identity background */}
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+          style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+        />
+        <div 
+          className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
+          style={{
+            background: `linear-gradient(135deg, rgba(var(--color-brand-red-rgb), 0.08) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(244, 246, 248, 0.95) 100%)`
+          }}
+        />
+
+        {/* Top Header */}
+        <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
+          <div>
+            <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">Envio Rápido</span>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Quero ser Membro</h1>
+          </div>
+
+          <div className="hidden md:block">
+            <LiveClock />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              playTapSound();
+              setRegistrationMode(null);
+              setActiveField(null);
+            }}
+            className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200 backdrop-blur-sm"
+          >
+            <span className="material-symbols-outlined !text-xl">arrow_back</span>
+            <span>Voltar</span>
+          </button>
+        </header>
+
+        {/* Main Canvas input */}
+        <main className="flex-grow flex flex-col items-center justify-center px-6 md:px-20 pt-32 pb-72 overflow-y-auto relative z-10">
+          <div className="relative overflow-hidden w-full max-w-3xl space-y-6 bg-white/90 backdrop-blur-md p-10 md:p-12 border border-white/60 shadow-xl rounded-3xl animate-fade-in">
+            {/* Background image related to client virtual identity inside card */}
+            <div 
+              className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12] pointer-events-none"
+              style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+            />
+            <div className="relative z-10 space-y-6">
+              <div className="space-y-2">
+                <label className="block text-sm uppercase tracking-widest font-black text-brand-red ml-2">
+                  Qual seu e-mail para contato?
+                </label>
+                <div
+                  onClick={() => handleFieldFocus('email')}
+                  className={`w-full h-20 px-6 rounded-2xl border-2 bg-slate-50/80 text-xl font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
+                    activeField === 'email' ? 'border-brand-red bg-slate-100/50' : 'border-slate-200'
+                  }`}
+                >
+                  {form.email || <span className="text-slate-400 font-normal">Digite seu e-mail</span>}
+                </div>
+              </div>
+
+              <p className="text-sm text-slate-500 font-semibold leading-relaxed">
+                O e-mail indicado será enviado ao nosso grupo de cadastro e integração. Em breve enviaremos um convite completo!
+              </p>
+            </div>
+          </div>
+        </main>
+
+        {/* Screen Integrated Virtual Keyboard */}
+        {activeField === 'email' && (
+          <div className="fixed bottom-28 left-0 w-full bg-[#eceef1] shadow-[0_-8px_32px_rgba(0,0,0,0.08)] py-4 px-6 z-40 transition-transform duration-300">
+            <VirtualKeyboard 
+              onKeyPress={handleKeyboardPress} 
+              layout="email"
+            />
+          </div>
+        )}
+
+        {/* Footer Navigation */}
+        <footer className="fixed bottom-0 left-0 w-full z-45 h-28 flex justify-between items-center px-6 md:px-20 pb-4 bg-white shadow-lg border-t border-[#c4c6ce]">
+          <button
+            type="button"
+            onClick={() => {
+              playTapSound();
+              setRegistrationMode(null);
+              setActiveField(null);
+            }}
+            className="flex items-center gap-2 text-[#43474d] hover:bg-slate-100 font-bold px-8 py-3.5 rounded-2xl transition-colors cursor-pointer"
+          >
+            <span className="material-symbols-outlined !text-xl">arrow_back</span>
+            <span>Voltar</span>
+          </button>
+
+          <div className="hidden md:flex flex-col items-center text-slate-400">
+            <span className="material-symbols-outlined !text-3xl animate-bounce">keyboard</span>
+            <span className="text-[10px] font-black tracking-widest uppercase">Teclado Virtual Ativo</span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleQuickSubmit}
+            className="flex items-center gap-2 font-black px-10 h-16 rounded-2xl shadow-lg hover:opacity-90 active:scale-95 transition-all cursor-pointer bg-brand-red text-white"
+            style={{
+              backgroundColor: brand.primaryColor,
+              boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
+            }}
+          >
+            <span>Enviar para o Grupo de Cadastro</span>
+            <span className="material-symbols-outlined !text-xl">send</span>
+          </button>
+        </footer>
+      </div>
+    );
+  }
+
+  // Standard multi-step mode
   return (
     <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
       
+      {/* Dynamic client-specific identity background */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+      />
+      <div 
+        className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
+        style={{
+          background: `linear-gradient(135deg, rgba(var(--color-brand-red-rgb), 0.08) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(244, 246, 248, 0.95) 100%)`
+        }}
+      />
+
       {/* Kiosk Step Progress Header */}
-      <header className="fixed top-0 left-0 w-full z-45 bg-white p-6 md:px-20 pt-8 flex flex-col gap-4 border-b border-[#eceef1] shadow-sm">
+      <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md p-6 md:px-20 pt-8 flex flex-col gap-4 border-b border-[#eceef1] shadow-sm relative z-10">
         <div className="flex justify-between items-end">
           <div>
             <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">Boas-vindas</span>
@@ -177,109 +498,120 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
       </header>
 
       {/* Inputs canvas */}
-      <main className="flex-grow flex flex-col items-center justify-center px-6 md:px-20 pt-40 pb-72 overflow-y-auto">
-        <div className="w-full max-w-4xl space-y-6">
-          
-          {/* STEP 1: Personal Data */}
-          {form.step === 1 && (
-            <div className="space-y-6 animate-fade-in">
-              <div className="space-y-2">
-                <label className="block text-xs uppercase tracking-widest font-black text-brand-red ml-2">
-                  Qual seu nome completo?
-                </label>
-                <div
-                  onClick={() => handleFieldFocus('name')}
-                  className={`w-full h-16 px-6 rounded-2xl border-2 bg-white text-lg font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
-                    activeField === 'name' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
-                  }`}
-                >
-                  {form.name || <span className="text-slate-400 font-normal">Digite seu nome</span>}
+      <main className="flex-grow flex flex-col items-center justify-center px-6 md:px-20 pt-40 pb-72 overflow-y-auto relative z-10">
+        <div className="relative overflow-hidden w-full max-w-4xl space-y-6 bg-white/90 backdrop-blur-md p-10 md:p-12 border border-white/60 shadow-xl rounded-3xl animate-fade-in">
+          {/* Background image related to client virtual identity inside card */}
+          <div 
+            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12] pointer-events-none"
+            style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+          />
+          <div className="relative z-10 space-y-6">
+            
+            {/* STEP 1: Personal Data */}
+            {form.step === 1 && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="space-y-2">
+                  <label className="block text-sm uppercase tracking-widest font-black text-brand-red ml-2">
+                    Qual seu nome completo?
+                  </label>
+                  <div
+                    onClick={() => handleFieldFocus('name')}
+                    className={`w-full h-20 px-6 rounded-2xl border-2 bg-white text-xl font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
+                      activeField === 'name' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
+                    }`}
+                  >
+                    {form.name || <span className="text-slate-400 font-normal">Digite seu nome</span>}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm uppercase tracking-widest font-black text-brand-red ml-2">
+                    Telefone / WhatsApp
+                  </label>
+                  <div
+                    onClick={() => handleFieldFocus('phone')}
+                    className={`w-full h-20 px-6 rounded-2xl border-2 bg-white text-xl font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
+                      activeField === 'phone' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
+                    }`}
+                  >
+                    {formatPhone(form.phone) || <span className="text-slate-400 font-normal">Digite seu celular</span>}
+                  </div>
                 </div>
               </div>
+            )}
 
-              <div className="space-y-2">
-                <label className="block text-xs uppercase tracking-widest font-black text-brand-red ml-2">
-                  Telefone / WhatsApp
-                </label>
-                <div
-                  onClick={() => handleFieldFocus('phone')}
-                  className={`w-full h-16 px-6 rounded-2xl border-2 bg-white text-lg font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
-                    activeField === 'phone' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
-                  }`}
-                >
-                  {formatPhone(form.phone) || <span className="text-slate-400 font-normal">Digite seu celular</span>}
+            {/* STEP 2: Email & Town */}
+            {form.step === 2 && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="space-y-2">
+                  <label className="block text-sm uppercase tracking-widest font-black text-brand-red ml-2">
+                    Qual seu melhor E-mail?
+                  </label>
+                  <div
+                    onClick={() => handleFieldFocus('email')}
+                    className={`w-full h-20 px-6 rounded-2xl border-2 bg-white text-xl font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
+                      activeField === 'email' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
+                    }`}
+                  >
+                    {form.email || <span className="text-slate-400 font-normal">Digite seu email</span>}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm uppercase tracking-widest font-black text-brand-red ml-2">
+                    Em qual cidade você mora?
+                  </label>
+                  <div
+                    onClick={() => handleFieldFocus('city')}
+                    className={`w-full h-20 px-6 rounded-2xl border-2 bg-white text-xl font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
+                      activeField === 'city' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
+                    }`}
+                  >
+                    {form.city || <span className="text-slate-400 font-normal">Ex: Barueri</span>}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* STEP 2: Email & Town */}
-          {form.step === 2 && (
-            <div className="space-y-6 animate-fade-in">
-              <div className="space-y-2">
-                <label className="block text-xs uppercase tracking-widest font-black text-brand-red ml-2">
-                  Qual seu melhor E-mail?
+            {/* STEP 3: Age Demographics */}
+            {form.step === 3 && (
+              <div className="space-y-6 animate-fade-in">
+                <label className="block text-md uppercase tracking-widest font-black text-brand-red ml-2 text-center">
+                  Qual sua faixa etária?
                 </label>
-                <div
-                  onClick={() => handleFieldFocus('email')}
-                  className={`w-full h-16 px-6 rounded-2xl border-2 bg-white text-lg font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
-                    activeField === 'email' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
-                  }`}
-                >
-                  {form.email || <span className="text-slate-400 font-normal">Digite seu email</span>}
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto pt-2">
+                  {[
+                    'Menos de 18 anos',
+                    '18 a 30 anos',
+                    '31 a 50 anos',
+                    'Mais de 50 anos'
+                  ].map((range) => {
+                    const isSelected = form.ageRange === range;
+                    return (
+                      <button
+                        key={range}
+                        type="button"
+                        onClick={() => selectAgeRange(range)}
+                        className={`h-24 rounded-2xl border-2 text-xl font-black text-left px-8 cursor-pointer transition-all ${
+                          isSelected 
+                            ? 'bg-brand-red border-brand-red-hover text-white shadow-md'
+                            : 'bg-white border-slate-200 text-slate-800 hover:bg-slate-50'
+                        }`}
+                        style={{
+                          backgroundColor: isSelected ? brand.primaryColor : undefined,
+                          borderColor: isSelected ? brand.primaryColorHover : undefined,
+                        }}
+                      >
+                        {range}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
+            )}
 
-              <div className="space-y-2">
-                <label className="block text-xs uppercase tracking-widest font-black text-brand-red ml-2">
-                  Em qual cidade você mora?
-                </label>
-                <div
-                  onClick={() => handleFieldFocus('city')}
-                  className={`w-full h-16 px-6 rounded-2xl border-2 bg-white text-lg font-bold text-slate-800 flex items-center shadow-inner cursor-pointer transition-all ${
-                    activeField === 'city' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200'
-                  }`}
-                >
-                  {form.city || <span className="text-slate-400 font-normal">Ex: Barueri</span>}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 3: Age Demographics */}
-          {form.step === 3 && (
-            <div className="space-y-6 animate-fade-in">
-              <label className="block text-sm uppercase tracking-widest font-black text-brand-red ml-2 text-center">
-                Qual sua faixa etária?
-              </label>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto pt-2">
-                {[
-                  'Menos de 18 anos',
-                  '18 a 30 anos',
-                  '31 a 50 anos',
-                  'Mais de 50 anos'
-                ].map((range) => {
-                  const isSelected = form.ageRange === range;
-                  return (
-                    <button
-                      key={range}
-                      type="button"
-                      onClick={() => selectAgeRange(range)}
-                      className={`h-20 rounded-2xl border-2 text-lg font-black text-left px-8 cursor-pointer transition-all ${
-                        isSelected 
-                          ? 'bg-brand-red border-brand-red-hover text-white shadow-md'
-                          : 'bg-white border-slate-200 text-slate-800 hover:bg-slate-50'
-                      }`}
-                    >
-                      {range}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
+          </div>
         </div>
       </main>
 
@@ -322,7 +654,11 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
         <button
           type="button"
           onClick={handleNextStep}
-          className="flex items-center gap-2 font-bold px-10 py-3.5 rounded-2xl shadow-lg hover:opacity-90 active:scale-95 transition-all cursor-pointer bg-brand-red text-white"
+          className="flex items-center gap-2 font-black px-10 h-16 rounded-2xl shadow-lg hover:opacity-90 active:scale-95 transition-all cursor-pointer bg-brand-red text-white"
+          style={{
+            backgroundColor: brand.primaryColor,
+            boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
+          }}
         >
           <span>{form.step === 3 ? 'Finalizar Cadastro' : 'Continuar'}</span>
           <span className="material-symbols-outlined !text-xl">

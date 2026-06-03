@@ -324,3 +324,24 @@ input, textarea {
   user-select: text;
 }
 
+/* Enhanced interactive Home button animation and styling */
+@keyframes homePulse {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), 0 0 0 0 rgba(var(--color-brand-red-rgb), 0.4);
+  }
+  50% {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 0 12px rgba(var(--color-brand-red-rgb), 0);
+  }
+}
+.animate-home-pulse {
+  animation: homePulse 2s infinite ease-in-out;
+}
+.home-btn-hover:hover {
+  transform: scale(1.08) translateY(-2px);
+  filter: brightness(1.1);
+}
+.home-btn-hover:active {
+  transform: scale(0.95) translateY(0);
+}
+
+

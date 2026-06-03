@@ -120,6 +120,26 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
   };
 
   const handleCompletePayment = () => {
+    // Save registration to localStorage
+    const newReg = {
+      id: `donation_${Date.now()}`,
+      name: `Contribuição no Valor de R$ ${state.value.toFixed(2)}`,
+      phone: '-',
+      email: '-',
+      type: `${brand.termDonation}: ${state.category} (${state.paymentMethod === 'pix' ? 'PIX' : 'Cartão'})`,
+      brandId: brand.id,
+      date: new Date().toISOString()
+    };
+
+    try {
+      const existing = localStorage.getItem('santuario_registrations');
+      const regs = existing ? JSON.parse(existing) : [];
+      regs.push(newReg);
+      localStorage.setItem('santuario_registrations', JSON.stringify(regs));
+    } catch (e) {
+      console.error('Failed to save registration:', e);
+    }
+
     playSuccessSound();
     setState((prev) => ({ ...prev, step: 'success' }));
   };
@@ -135,8 +155,20 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
   return (
     <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
       
+      {/* Dynamic client-specific identity background */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+      />
+      <div 
+        className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
+        style={{
+          background: `linear-gradient(135deg, rgba(var(--color-brand-red-rgb), 0.08) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(244, 246, 248, 0.95) 100%)`
+        }}
+      />
+
       {/* Header bar */}
-      <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
+      <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
         <div>
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">{brand.termDonations}</span>
           <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Contribuições {brand.name}</h1>
@@ -149,7 +181,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-2 text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
+          className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200 backdrop-blur-sm"
         >
           <span className="material-symbols-outlined !text-xl">arrow_back</span>
           <span>Voltar</span>
@@ -157,7 +189,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
       </header>
 
       {/* Main interactive area */}
-      <main className="flex-grow pt-28 pb-32 px-6 md:px-20 max-w-7xl mx-auto w-full flex flex-col justify-center">
+      <main className="flex-grow pt-28 pb-32 px-6 md:px-20 max-w-[1550px] mx-auto w-full flex flex-col justify-center relative z-10">
         
         {/* STEP 1: CATEGORY SELECTION */}
         {state.step === 'category' && (
@@ -172,8 +204,12 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
             </header>
 
             {/* COMPONENTE DE SUGESTÃO E META MOTIVACIONAL COM TOTAL DE ONTEM */}
-            <div className="max-w-4xl mx-auto bg-gradient-to-r from-red-50/50 to-rose-50/50 border border-brand-red/30 rounded-3xl p-5 md:p-6 text-left shadow-sm flex flex-col md:flex-row gap-5 justify-between items-center animate-fade-in">
-              <div className="flex gap-4 items-start w-full md:w-3/4">
+            <div className="relative overflow-hidden max-w-4xl mx-auto bg-gradient-to-r from-red-50/50 to-rose-50/50 border border-brand-red/30 rounded-3xl p-5 md:p-6 text-left shadow-sm flex flex-col md:flex-row gap-5 justify-between items-center animate-fade-in">
+              <div 
+                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.06] pointer-events-none"
+                style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+              />
+              <div className="relative z-10 flex gap-4 items-start w-full md:w-3/4">
                 <div className="p-3 bg-brand-red text-white rounded-2xl flex items-center justify-center shrink-0 shadow-sm">
                   <span className="material-symbols-outlined !text-3xl font-black">emoji_events</span>
                 </div>
@@ -186,14 +222,14 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                   </h3>
                   <p className="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
                     {brand.type === 'synagogue'
-                      ? `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 em tsedakás! Nossa meta hoje é alcançar esse valor para apoiar a manutenção da sinagoga e auxílio social.`
+                      ? `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 in tsedakás! Nossa meta hoje é alcançar esse valor para apoiar a manutenção da sinagoga e auxílio social.`
                       : `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 em dízimos e ofertas voluntárias! Nossa meta hoje é igualar ou ultrapassar essa bênção para apoiar as ações sociais.`}
                   </p>
                 </div>
               </div>
               
               {/* Progresso visual da Meta */}
-              <div className="w-full md:w-1/4 bg-white border border-red-100 p-4 rounded-2xl flex flex-col justify-between shrink-0 shadow-inner">
+              <div className="relative z-10 w-full md:w-1/4 bg-white/80 backdrop-blur-sm border border-red-100 p-4 rounded-2xl flex flex-col justify-between shrink-0 shadow-inner">
                 <div className="flex justify-between text-xs font-black text-slate-600 mb-2 uppercase tracking-wider text-[10px]">
                   <span>Progresso da Meta</span>
                   <span className="text-emerald-600 font-extrabold">82%</span>
@@ -209,20 +245,24 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto pt-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto pt-2">
               {categories.map((cat) => (
                 <button
                   key={cat.title}
                   type="button"
                   onClick={() => handleSelectCategory(cat.title)}
-                  className="bg-white hover:bg-slate-50 rounded-2xl p-6 text-left border-2 border-slate-200 cursor-pointer hover:border-brand-red transition-colors flex gap-5 items-center group shadow-sm active:scale-98 duration-100"
+                  className="relative overflow-hidden bg-white/95 hover:bg-white rounded-2xl p-8 text-left border-2 border-slate-200 cursor-pointer hover:border-brand-red transition-all flex gap-5 items-center group shadow-sm hover:scale-[1.05] active:scale-[0.96] duration-300 min-h-[130px]"
                 >
-                  <div className="w-14 h-14 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center font-bold">
+                  <div 
+                    className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] pointer-events-none"
+                    style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+                  />
+                  <div className="relative z-10 w-14 h-14 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center font-bold shrink-0">
                     <span className="material-symbols-outlined !text-3xl">{cat.icon}</span>
                   </div>
-                  <div>
-                    <h3 className="font-extrabold text-lg text-brand-dark group-hover:text-brand-red transition-colors">{cat.title}</h3>
-                    <p className="text-xs text-slate-500 font-semibold">{cat.desc}</p>
+                  <div className="relative z-10">
+                    <h3 className="font-extrabold text-xl text-brand-dark group-hover:text-brand-red transition-colors">{cat.title}</h3>
+                    <p className="text-sm text-slate-500 font-semibold mt-1 leading-relaxed">{cat.desc}</p>
                   </div>
                 </button>
               ))}
@@ -235,7 +275,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
         {state.step === 'value' && (
           <div className="space-y-6 animate-fade-in justify-center">
             <header className="text-center max-w-xl mx-auto">
-              <span className="bg-brand-red/10 text-brand-red text-[10px] font-black tracking-widest px-3 py-1 rounded-full uppercase border border-brand-red/20">
+              <span className="bg-brand-red/10 text-brand-red text-sm font-black tracking-widest px-3 py-1.5 rounded-full uppercase border border-brand-red/20">
                 {state.category}
               </span>
               <h2 className="text-2xl md:text-3xl font-black text-brand-dark mt-3">
@@ -243,7 +283,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
               </h2>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
               
               {/* Presets col */}
               <div className="space-y-3 flex flex-col justify-center">
@@ -251,34 +291,42 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                   Valores Prontos
                 </span>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4">
                   {presetValues.map((v) => (
                     <button
                       key={v}
                       type="button"
                       onClick={() => handleSelectPreset(v)}
-                      className="key-tap h-20 bg-white hover:bg-red-50 text-brand-dark hover:text-brand-red border-2 border-slate-200 hover:border-brand-red rounded-2xl text-2xl font-black flex items-center justify-center shadow-sm cursor-pointer"
+                      className="key-tap relative overflow-hidden h-24 bg-white/95 hover:bg-white text-brand-dark hover:text-brand-red border-2 border-slate-200 hover:border-brand-red rounded-2xl text-2xl font-black flex items-center justify-center shadow-sm cursor-pointer transition-all hover:scale-[1.05] active:scale-[0.95] duration-200"
                     >
-                      R$ {v}
+                      <div 
+                        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] pointer-events-none"
+                        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+                      />
+                      <span className="relative z-10">R$ {v}</span>
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* Custom input with virtual keyboard */}
-              <div className="bg-slate-100 rounded-3xl p-6 border border-slate-200 flex flex-col justify-between space-y-4">
-                <div className="text-center">
+              <div className="relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl p-8 border border-slate-200 flex flex-col justify-between space-y-4 shadow-sm">
+                <div 
+                  className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12] pointer-events-none"
+                  style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+                />
+                <div className="relative z-10 text-center">
                   <span className="text-xs uppercase tracking-widest font-black text-slate-500 block mb-1">
                     Valor Personalizado
                   </span>
                   
-                  <div className="bg-white rounded-xl py-2 px-4 text-xl md:text-2xl font-black border border-slate-300 text-slate-800 tracking-tight flex items-center justify-center min-h-[52px]">
+                  <div className="bg-white rounded-xl py-3 px-4 text-2xl font-black border border-slate-350 text-slate-800 tracking-tight flex items-center justify-center min-h-[58px] shadow-inner">
                     R$ {state.customValue || '0'}
                   </div>
                 </div>
 
                 {/* Reusable Keypad integration */}
-                <div className="w-full">
+                <div className="relative z-10 w-full">
                   <NumericKeypad 
                     onKeyPress={handleCustomValueKeyPress} 
                     onConfirm={handleCustomValueConfirm} 
@@ -286,7 +334,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                   />
                 </div>
 
-                <p className="text-[10px] text-center text-slate-500 font-semibold">
+                <p className="relative z-10 text-[10px] text-center text-slate-550 font-black">
                   Digite somente números sem pontos ou vírgulas
                 </p>
               </div>
@@ -297,12 +345,12 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
 
         {/* STEP 2.5: SELECT PAYMENT METHOD */}
         {state.step === 'method' && (
-          <div className="space-y-6 animate-fade-in text-center max-w-4xl mx-auto">
+          <div className="space-y-6 animate-fade-in text-center max-w-5xl mx-auto">
             <header className="max-w-xl mx-auto">
-              <span className="bg-brand-red/10 text-brand-red text-[10px] font-black tracking-widest px-3 py-1 rounded-full uppercase border border-brand-red/20">
+              <span className="bg-brand-red/10 text-brand-red text-sm font-black tracking-widest px-3 py-1.5 rounded-full uppercase border border-brand-red/20">
                 R$ {state.value.toFixed(2)} - {state.category}
               </span>
-              <h2 className="text-2xl md:text-3xl font-black text-brand-dark mt-3">
+              <h2 className="text-3xl font-black text-brand-dark mt-3">
                 Selecione a forma de pagamento
               </h2>
             </header>
@@ -315,18 +363,22 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                   playSuccessSound();
                   setState(prev => ({ ...prev, step: 'pix', paymentMethod: 'pix' }));
                 }}
-                className="bg-white hover:bg-slate-50 rounded-2xl p-8 border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col items-center text-center justify-between shadow-sm group active:scale-98"
+                className="relative overflow-hidden bg-white/95 hover:bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col items-center text-center justify-between shadow-sm group hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 min-h-[300px]"
               >
-                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4">
+                <div 
+                  className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] pointer-events-none"
+                  style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+                />
+                <div className="relative z-10 w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4 shrink-0">
                   <span className="material-symbols-outlined !text-4xl font-black">qr_code_2</span>
                 </div>
-                <div>
-                  <h3 className="font-extrabold text-xl text-brand-dark mb-2 group-hover:text-brand-red transition-colors">PIX</h3>
-                  <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+                <div className="relative z-10 flex-grow">
+                  <h3 className="font-extrabold text-2xl text-brand-dark mb-2 group-hover:text-brand-red transition-colors">PIX</h3>
+                  <p className="text-sm text-slate-500 font-semibold leading-relaxed">
                     Pagamento instantâneo com QR Code ou Chave Copia e Cola.
                   </p>
                 </div>
-                <div className="mt-6 font-bold text-xs uppercase text-slate-400 group-hover:text-brand-red tracking-wider">
+                <div className="relative z-10 mt-6 font-black text-sm uppercase text-slate-450 group-hover:text-brand-red tracking-wider shrink-0">
                   Selecionar PIX →
                 </div>
               </button>
@@ -338,18 +390,22 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                   playSuccessSound();
                   setState(prev => ({ ...prev, step: 'card', paymentMethod: 'credit' }));
                 }}
-                className="bg-white hover:bg-slate-50 rounded-2xl p-8 border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col items-center text-center justify-between shadow-sm group active:scale-98"
+                className="relative overflow-hidden bg-white/95 hover:bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col items-center text-center justify-between shadow-sm group hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 min-h-[300px]"
               >
-                <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mb-4">
+                <div 
+                  className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] pointer-events-none"
+                  style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+                />
+                <div className="relative z-10 w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mb-4 shrink-0">
                   <span className="material-symbols-outlined !text-4xl font-black">credit_card</span>
                 </div>
-                <div>
-                  <h3 className="font-extrabold text-xl text-brand-dark mb-2 group-hover:text-brand-red transition-colors">Crédito</h3>
-                  <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+                <div className="relative z-10 flex-grow">
+                  <h3 className="font-extrabold text-2xl text-brand-dark mb-2 group-hover:text-brand-red transition-colors">Crédito</h3>
+                  <p className="text-sm text-slate-500 font-semibold leading-relaxed">
                     Pague com seu cartão de crédito aproximando ou inserindo na maquininha.
                   </p>
                 </div>
-                <div className="mt-6 font-bold text-xs uppercase text-slate-400 group-hover:text-brand-red tracking-wider">
+                <div className="relative z-10 mt-6 font-black text-sm uppercase text-slate-450 group-hover:text-brand-red tracking-wider shrink-0">
                   Pagar no Crédito →
                 </div>
               </button>
@@ -361,18 +417,22 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                   playSuccessSound();
                   setState(prev => ({ ...prev, step: 'card', paymentMethod: 'debit' }));
                 }}
-                className="bg-white hover:bg-slate-50 rounded-2xl p-8 border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col items-center text-center justify-between shadow-sm group active:scale-98"
+                className="relative overflow-hidden bg-white/95 hover:bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col items-center text-center justify-between shadow-sm group hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 min-h-[300px]"
               >
-                <div className="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mb-4">
+                <div 
+                  className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] pointer-events-none"
+                  style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+                />
+                <div className="relative z-10 w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mb-4 shrink-0">
                   <span className="material-symbols-outlined !text-4xl font-black">contactless</span>
                 </div>
-                <div>
-                  <h3 className="font-extrabold text-xl text-brand-dark mb-2 group-hover:text-brand-red transition-colors">Débito</h3>
-                  <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+                <div className="relative z-10 flex-grow">
+                  <h3 className="font-extrabold text-2xl text-brand-dark mb-2 group-hover:text-brand-red transition-colors">Débito</h3>
+                  <p className="text-sm text-slate-500 font-semibold leading-relaxed">
                     Pagamento imediato em débito. Aproxime ou insira o seu cartão.
                   </p>
                 </div>
-                <div className="mt-6 font-bold text-xs uppercase text-slate-400 group-hover:text-brand-red tracking-wider">
+                <div className="relative z-10 mt-6 font-black text-sm uppercase text-slate-450 group-hover:text-brand-red tracking-wider shrink-0">
                   Pagar no Débito →
                 </div>
               </button>
@@ -382,7 +442,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
 
         {/* STEP 3: PIX QR CODE DISPLAY AND SIMULATE */}
         {state.step === 'pix' && (
-          <div className="space-y-6 animate-fade-in text-center max-w-xl mx-auto">
+          <div className="space-y-6 animate-fade-in text-center max-w-3xl mx-auto">
             <header className="space-y-2">
               <span className="text-xs uppercase tracking-widest font-black text-slate-500 block">PIX Facilitado</span>
               <h2 className="text-2xl font-black text-brand-dark">Aproxime o Celular</h2>
@@ -392,46 +452,52 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
             </header>
 
             {/* Simulated PIX QR display */}
-            <div className="bg-white rounded-3xl p-6 border-2 border-slate-200 shadow-lg flex flex-col items-center relative overflow-hidden">
-              <div className="relative w-56 h-56 group border-2 border-brand-red/20 rounded-2xl overflow-hidden p-1 shadow-inner bg-slate-50">
-                <img
-                  className="w-full h-full object-contain rounded-xl pointer-events-none opacity-90"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_ptHuYhlDFyDexHL0MXiDWIWBLQywj4JYFKg9lNzTjM1PVcSDD5P9AkpH48mcS9VAxPD0SCLRkTk86Jc0fItS7fLrskbB0D-CE20Mpp83ZXA6R_Hh5hMcdgSSw5OQV6gkjjzmuI2XP6r3pjC5vurY4SgT1g__rD4uRh6b6NVv4x6_TJtVdDwrgfH6FuHvLgiEJFbqa5zc-GQ4YvskFfGOalToE-66bFI3wVUaNPmvV_C8jyNy9FjlE4QSUlPLEoc58jSKl4bAhegS"
-                  alt="PIX QR Code"
-                  referrerPolicy="no-referrer"
-                />
-                {/* Scan line overlay */}
-                <div className="absolute left-0 w-full h-1 bg-brand-red scan-line rounded-full opacity-80" />
-              </div>
+            <div className="relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl p-6 border-2 border-slate-200 shadow-lg flex flex-col items-center">
+              <div 
+                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12] pointer-events-none"
+                style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+              />
+              <div className="relative z-10 flex flex-col items-center w-full">
+                <div className="relative w-56 h-56 group border-2 border-brand-red/20 rounded-2xl overflow-hidden p-1 shadow-inner bg-slate-50">
+                  <img
+                    className="w-full h-full object-contain rounded-xl pointer-events-none opacity-90"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_ptHuYhlDFyDexHL0MXiDWIWBLQywj4JYFKg9lNzTjM1PVcSDD5P9AkpH48mcS9VAxPD0SCLRkTk86Jc0fItS7fLrskbB0D-CE20Mpp83ZXA6R_Hh5hMcdgSSw5OQV6gkjjzmuI2XP6r3pjC5vurY4SgT1g__rD4uRh6b6NVv4x6_TJtVdDwrgfH6FuHvLgiEJFbqa5zc-GQ4YvskFfGOalToE-66bFI3wVUaNPmvV_C8jyNy9FjlE4QSUlPLEoc58jSKl4bAhegS"
+                    alt="PIX QR Code"
+                    referrerPolicy="no-referrer"
+                  />
+                  {/* Scan line overlay */}
+                  <div className="absolute left-0 w-full h-1 bg-brand-red scan-line rounded-full opacity-80" />
+                </div>
 
-              {/* Countdown timer display */}
-              <div className="mt-4 flex items-center justify-center gap-2 text-slate-700 bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl">
-                <span className="material-symbols-outlined text-brand-red !text-lg animate-spin">autorenew</span>
-                <span className="text-xs font-black uppercase tracking-wider">O código expira em:</span>
-                <span className="text-sm font-extrabold text-brand-red font-mono">{formatTimer(pixTimer)}</span>
-              </div>
+                {/* Countdown timer display */}
+                <div className="mt-4 flex items-center justify-center gap-2 text-slate-700 bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl">
+                  <span className="material-symbols-outlined text-brand-red !text-lg animate-spin">autorenew</span>
+                  <span className="text-xs font-black uppercase tracking-wider">O código expira em:</span>
+                  <span className="text-sm font-extrabold text-brand-red font-mono">{formatTimer(pixTimer)}</span>
+                </div>
 
-              {/* Copy paste button */}
-              <div className="mt-4 w-full">
-                <button
-                  type="button"
-                  onClick={handleCopyKey}
-                  className="w-full h-12 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors active:scale-95 text-xs uppercase tracking-wider"
-                >
-                  <span className="material-symbols-outlined !text-base">content_copy</span>
-                  <span>{copied ? 'Chave Copiada!' : 'Copiar Chave PIX Copia e Cola'}</span>
-                </button>
-              </div>
+                {/* Copy paste button */}
+                <div className="mt-4 w-full">
+                  <button
+                    type="button"
+                    onClick={handleCopyKey}
+                    className="w-full h-12 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors active:scale-95 text-xs uppercase tracking-wider"
+                  >
+                    <span className="material-symbols-outlined !text-base">content_copy</span>
+                    <span>{copied ? 'Chave Copiada!' : 'Copiar Chave PIX Copia e Cola'}</span>
+                  </button>
+                </div>
 
-              <p className="text-xs text-slate-500 font-semibold mt-4 leading-relaxed">
-                Abra o aplicativo do seu banco, selecione a opção "Pagar com PIX/QR Code" e aponte para o código acima para concluir.
-              </p>
+                <p className="text-xs text-slate-500 font-semibold mt-4 leading-relaxed">
+                  Abra o aplicativo do seu banco, selecione a opção "Pagar com PIX/QR Code" e aponte para o código acima para concluir.
+                </p>
+              </div>
             </div>
 
             <button
               type="button"
               onClick={handleCompletePayment}
-              className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-md active:scale-98 transition-transform"
+              className="w-full h-16 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-md active:scale-[0.98] transition-transform text-lg"
             >
               <span className="material-symbols-outlined !text-2xl">check_circle</span>
               <span>Simular Pagamento Confirmado</span>
@@ -441,7 +507,7 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
 
         {/* STEP 3.5: CARD PAYMENT INTERACTION */}
         {state.step === 'card' && (
-          <div className="space-y-6 animate-fade-in text-center max-w-xl mx-auto">
+          <div className="space-y-6 animate-fade-in text-center max-w-3xl mx-auto">
             <header className="space-y-2">
               <span className="text-xs uppercase tracking-widest font-black text-slate-500 block">
                 Pagamento em Cartão de {state.paymentMethod === 'credit' ? 'Crédito' : 'Débito'}
@@ -453,54 +519,60 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
             </header>
 
             {/* Card Machine visual */}
-            <div className="bg-white rounded-3xl p-8 border-2 border-slate-200 shadow-lg flex flex-col items-center relative overflow-hidden space-y-6">
-              <div className="relative w-48 h-48 flex items-center justify-center">
-                {/* Simulated payment machine or terminal icon */}
-                <div className="absolute inset-0 bg-brand-red/5 rounded-full animate-ping opacity-30 animate-duration-3000" />
-                <div className="relative w-36 h-36 bg-slate-800 text-white rounded-2xl p-4 shadow-xl border border-slate-700 flex flex-col justify-between">
-                  {/* Terminal Screen */}
-                  <div className="bg-emerald-950 text-emerald-400 font-mono text-[10px] p-2 rounded border border-emerald-900 text-left space-y-1 shadow-inner min-h-[50px]">
-                    <div className="flex justify-between">
-                      <span>VALOR:</span>
-                      <span>R$ {state.value.toFixed(2)}</span>
+            <div className="relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl p-8 border-2 border-slate-200 shadow-lg flex flex-col items-center space-y-6">
+              <div 
+                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12] pointer-events-none"
+                style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+              />
+              <div className="relative z-10 flex flex-col items-center w-full space-y-6">
+                <div className="relative w-48 h-48 flex items-center justify-center">
+                  {/* Simulated payment machine or terminal icon */}
+                  <div className="absolute inset-0 bg-brand-red/5 rounded-full animate-ping opacity-30 animate-duration-3000" />
+                  <div className="relative w-36 h-36 bg-slate-800 text-white rounded-2xl p-4 shadow-xl border border-slate-700 flex flex-col justify-between">
+                    {/* Terminal Screen */}
+                    <div className="bg-emerald-950 text-emerald-400 font-mono text-[10px] p-2 rounded border border-emerald-900 text-left space-y-1 shadow-inner min-h-[50px]">
+                      <div className="flex justify-between">
+                        <span>VALOR:</span>
+                        <span>R$ {state.value.toFixed(2)}</span>
+                      </div>
+                      <div className="animate-pulse flex items-center gap-1 mt-1 text-[9px] text-emerald-300">
+                        <span className="material-symbols-outlined !text-[10px]">contactless</span>
+                        <span>APROXIME OU INSIRA</span>
+                      </div>
                     </div>
-                    <div className="animate-pulse flex items-center gap-1 mt-1 text-[9px] text-emerald-300">
-                      <span className="material-symbols-outlined !text-[10px]">contactless</span>
-                      <span>APROXIME OU INSIRA</span>
+                    {/* Keyboard Area */}
+                    <div className="grid grid-cols-3 gap-1 pt-2">
+                      {[1,2,3,4,5,6,7,8,9].map(n => (
+                        <div key={n} className="w-full h-1.5 bg-slate-700 rounded-[2px]" />
+                      ))}
+                      <div className="h-1.5 bg-red-600 rounded-[2px]" />
+                      <div className="h-1.5 bg-amber-500 rounded-[2px]" />
+                      <div className="h-1.5 bg-emerald-600 rounded-[2px]" />
                     </div>
                   </div>
-                  {/* Keyboard Area */}
-                  <div className="grid grid-cols-3 gap-1 pt-2">
-                    {[1,2,3,4,5,6,7,8,9].map(n => (
-                      <div key={n} className="w-full h-1.5 bg-slate-700 rounded-[2px]" />
-                    ))}
-                    <div className="h-1.5 bg-red-600 rounded-[2px]" />
-                    <div className="h-1.5 bg-amber-500 rounded-[2px]" />
-                    <div className="h-1.5 bg-emerald-600 rounded-[2px]" />
+
+                  {/* Hand contactless animation */}
+                  <div className="absolute -bottom-2 -right-2 bg-brand-red text-white p-3 rounded-full shadow-lg border-2 border-white animate-bounce">
+                    <span className="material-symbols-outlined !text-2xl">contactless</span>
                   </div>
                 </div>
 
-                {/* Hand contactless animation */}
-                <div className="absolute -bottom-2 -right-2 bg-brand-red text-white p-3 rounded-full shadow-lg border-2 border-white animate-bounce">
-                  <span className="material-symbols-outlined !text-2xl">contactless</span>
+                {/* Waiting status */}
+                <div className="flex items-center justify-center gap-2 text-slate-700 bg-slate-100 border border-slate-200 px-5 py-3 rounded-2xl w-full">
+                  <span className="material-symbols-outlined text-brand-red !text-xl animate-pulse">sync_saved_locally</span>
+                  <span className="text-xs font-black uppercase tracking-wider">Aguardando maquininha...</span>
                 </div>
-              </div>
 
-              {/* Waiting status */}
-              <div className="flex items-center justify-center gap-2 text-slate-700 bg-slate-100 border border-slate-200 px-5 py-3 rounded-2xl w-full">
-                <span className="material-symbols-outlined text-brand-red !text-xl animate-pulse">sync_saved_locally</span>
-                <span className="text-xs font-black uppercase tracking-wider">Aguardando maquininha...</span>
+                <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+                  Utilize o leitor de cartões integrado na lateral do totem. Caso o pagamento não seja processado automaticamente, você pode simular a aprovação abaixo.
+                </p>
               </div>
-
-              <p className="text-xs text-slate-500 font-semibold leading-relaxed">
-                Utilize o leitor de cartões integrado na lateral do totem. Caso o pagamento não seja processado automaticamente, você pode simular a aprovação abaixo.
-              </p>
             </div>
 
             <button
               type="button"
               onClick={handleCompletePayment}
-              className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-md active:scale-98 transition-transform"
+              className="w-full h-16 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-md active:scale-[0.98] transition-transform text-lg"
             >
               <span className="material-symbols-outlined !text-2xl">check_circle</span>
               <span>Simular Cartão Aprovado</span>
@@ -510,46 +582,53 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
 
         {/* STEP 4: SUCCESS CONGRATS BIBLICAL QUOTE */}
         {state.step === 'success' && (
-          <div className="space-y-6 text-center animate-fade-in max-w-xl mx-auto py-8">
-            <div className="w-24 h-24 bg-brand-red rounded-full flex items-center justify-center mx-auto text-white shadow-md">
-              <span className="material-symbols-outlined !text-5xl font-black animate-pulse">favorite</span>
-            </div>
-
-            <div className="space-y-2">
-              <h2 className="text-3xl font-black text-brand-dark tracking-tight">Muito Obrigado!</h2>
-              <p className="text-base text-slate-600 font-semibold">
-                {brand.type === 'synagogue'
-                  ? 'Sua tsedaká apoia os estudos da Torá, os serviços diários e as ações de auxílio social da nossa comunidade.'
-                  : `Sua generosidade faz a igreja de Cristo crescer e transbordar amor e bênçãos em nossa região de ${brand.campusName}.`}
-              </p>
-            </div>
-
-            {/* Biblical snippet graphic style card */}
-            {brand.type === 'synagogue' ? (
-              <div className="bg-white rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm">
-                <span className="absolute -top-3 left-6 px-3 py-0.5 bg-brand-red text-white font-black text-[10px] uppercase rounded-full tracking-widest block">
-                  Palavra da Torá
-                </span>
-                "Abra a sua mão para o seu irmão, para o seu pobre e para o seu necessitado na sua terra."
-                <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">Deuteronômio 15:11</p>
+          <div className="relative overflow-hidden space-y-6 text-center animate-fade-in max-w-3xl mx-auto p-10 md:p-12 rounded-3xl bg-white/90 backdrop-blur-md shadow-xl border border-white/60">
+            {/* Background image related to client virtual identity inside card */}
+            <div 
+              className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.15] pointer-events-none"
+              style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+            />
+            <div className="relative z-10 space-y-6 flex flex-col items-center w-full">
+              <div className="w-24 h-24 bg-brand-red rounded-full flex items-center justify-center mx-auto text-white shadow-md">
+                <span className="material-symbols-outlined !text-5xl font-black animate-pulse">favorite</span>
               </div>
-            ) : (
-              <div className="bg-white rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm">
-                <span className="absolute -top-3 left-6 px-3 py-0.5 bg-brand-red text-white font-black text-[10px] uppercase rounded-full tracking-widest block">
-                  Palavra do Altar
-                </span>
-                "Cada um dê conforme determinou em seu coração, não com pesar ou por obrigação, pois Deus ama a quem dá com alegria."
-                <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">2 Coríntios 9:7</p>
-              </div>
-            )}
 
-            <button
-              type="button"
-              onClick={onGoHome}
-              className="h-14 px-12 bg-brand-dark hover:bg-brand-red text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer"
-            >
-              Voltar ao Início
-            </button>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-black text-brand-dark tracking-tight">Muito Obrigado!</h2>
+                <p className="text-base text-slate-600 font-semibold">
+                  {brand.type === 'synagogue'
+                    ? 'Sua tsedaká apoia os estudos da Torá, os serviços diários e as ações de auxílio social da nossa comunidade.'
+                    : `Sua generosidade faz a igreja de Cristo crescer e transbordar amor e bênçãos em nossa região de ${brand.campusName}.`}
+                </p>
+              </div>
+
+              {/* Biblical snippet graphic style card */}
+              {brand.type === 'synagogue' ? (
+                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full">
+                  <span className="absolute -top-3 left-6 px-3 py-0.5 bg-brand-red text-white font-black text-[10px] uppercase rounded-full tracking-widest block">
+                    Palavra da Torá
+                  </span>
+                  "Abra a sua mão para o seu irmão, para o seu pobre e para o seu necessitado na sua terra."
+                  <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">Deuteronômio 15:11</p>
+                </div>
+              ) : (
+                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full">
+                  <span className="absolute -top-3 left-6 px-3 py-0.5 bg-brand-red text-white font-black text-[10px] uppercase rounded-full tracking-widest block">
+                    Palavra do Altar
+                  </span>
+                  "Cada um dê conforme determinou em seu coração, não com pesar ou por obrigação, pois Deus ama a quem dá com alegria."
+                  <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">2 Coríntios 9:7</p>
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={onGoHome}
+                className="h-16 px-12 bg-brand-dark hover:bg-brand-red text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer text-base uppercase tracking-wider shrink-0"
+              >
+                Voltar ao Início
+              </button>
+            </div>
           </div>
         )}
 

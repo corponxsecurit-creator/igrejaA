@@ -71,6 +71,27 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
       alert('Por favor, informe um número de celular com WhatsApp válido (DDD + Número).');
       return;
     }
+
+    // Save registration to localStorage
+    const newReg = {
+      id: `cell_${Date.now()}`,
+      name: `Visita ao grupo ${activeCellModal?.name || ''}`,
+      phone: phoneNumber,
+      email: '-',
+      type: `${brand.termConnect}: Solicitação de Localização`,
+      brandId: brand.id,
+      date: new Date().toISOString()
+    };
+
+    try {
+      const existing = localStorage.getItem('santuario_registrations');
+      const regs = existing ? JSON.parse(existing) : [];
+      regs.push(newReg);
+      localStorage.setItem('santuario_registrations', JSON.stringify(regs));
+    } catch (e) {
+      console.error('Failed to save registration:', e);
+    }
+
     setIsJoined(true);
     playSuccessSound();
   };
@@ -83,8 +104,20 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
   return (
     <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
       
+      {/* Dynamic client-specific identity background */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+      />
+      <div 
+        className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
+        style={{
+          background: `linear-gradient(135deg, rgba(var(--color-brand-red-rgb), 0.08) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(244, 246, 248, 0.95) 100%)`
+        }}
+      />
+
       {/* Top Header */}
-      <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
+      <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
         <div>
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">{brand.termConnects}</span>
           <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Encontre seu {brand.termConnect}</h1>
@@ -97,7 +130,7 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-2 text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
+          className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200 backdrop-blur-sm"
         >
           <span className="material-symbols-outlined !text-xl">arrow_back</span>
           <span>Voltar</span>
@@ -105,7 +138,7 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
       </header>
 
       {/* Main Content frame */}
-      <main className="flex-grow pt-28 pb-32 px-6 md:px-20 max-w-7xl mx-auto w-full flex flex-col justify-center">
+      <main className="flex-grow pt-28 pb-32 px-6 md:px-20 max-w-[1550px] mx-auto w-full flex flex-col justify-center relative z-10">
         
         {/* Neighborhood selectors line */}
         <div className="flex bg-slate-100 p-1.5 rounded-2xl gap-2 mb-6 overflow-x-auto border border-slate-200 scrollbar-none">
@@ -116,7 +149,7 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
                 key={n}
                 type="button"
                 onClick={() => handleNeighborhoodSelect(n)}
-                className={`py-3 px-6 rounded-xl font-black text-xs md:text-sm tracking-wider uppercase transition-all duration-150 whitespace-nowrap cursor-pointer flex-grow text-center ${
+                className={`py-3 px-6 rounded-xl font-black text-xs md:text-sm tracking-wider uppercase transition-all duration-150 whitespace-nowrap cursor-pointer flex-grow text-center active:scale-[0.96] ${
                   isSelected 
                     ? 'bg-brand-dark text-white shadow-md' 
                     : 'text-slate-600 hover:bg-slate-200/50'
@@ -159,42 +192,53 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
             filteredCells.map((cell) => (
               <div
                 key={cell.id}
-                className="bg-white rounded-3xl p-6 border-2 border-slate-200 shadow-sm flex flex-col justify-between items-stretch hover:border-brand-red transition-colors duration-200"
+                className="relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl p-8 border-2 border-slate-200 shadow-sm flex flex-col justify-between items-stretch hover:border-brand-red hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 min-h-[300px]"
                 id={`cell-${cell.id}`}
               >
-                <div>
-                  <div className="flex justify-between items-start mb-3">
-                    <span className="bg-red-50 text-brand-red text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md block border border-red-100">
-                      {cell.neighborhood}
-                    </span>
-                    <span className="material-symbols-fill text-brand-red !text-2xl">hub</span>
-                  </div>
-
-                  <h3 className="text-xl font-extrabold text-brand-dark tracking-tight leading-tight uppercase">
-                    {cell.name}
-                  </h3>
-                  
-                  <div className="mt-4 space-y-2.5">
-                    <div className="flex items-center gap-2.5 text-slate-600 font-medium text-sm">
-                      <span className="material-symbols-outlined !text-lg text-slate-400">person</span>
-                      <span>Responsável: <strong className="text-brand-dark">{cell.leader}</strong></span>
+                {/* Background image related to client virtual identity inside button */}
+                <div 
+                  className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.10] pointer-events-none"
+                  style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+                />
+                <div className="relative z-10 flex flex-col justify-between h-full flex-grow">
+                  <div>
+                    <div className="flex justify-between items-start mb-3">
+                      <span className="bg-red-50 text-brand-red text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md block border border-red-100">
+                        {cell.neighborhood}
+                      </span>
+                      <span className="material-symbols-fill text-brand-red !text-2xl">hub</span>
                     </div>
 
-                    <div className="flex items-center gap-2.5 text-slate-600 font-medium text-sm">
-                      <span className="material-symbols-outlined !text-lg text-slate-400">schedule</span>
-                      <span>{cell.day} às {cell.hour}</span>
+                    <h3 className="text-2xl font-black text-brand-dark tracking-tight leading-tight uppercase">
+                      {cell.name}
+                    </h3>
+                    
+                    <div className="mt-4 space-y-2.5">
+                      <div className="flex items-center gap-2.5 text-slate-600 font-medium text-sm">
+                        <span className="material-symbols-outlined !text-lg text-slate-400">person</span>
+                        <span>Responsável: <strong className="text-brand-dark">{cell.leader}</strong></span>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 text-slate-600 font-medium text-sm">
+                        <span className="material-symbols-outlined !text-lg text-slate-400">schedule</span>
+                        <span>{cell.day} às {cell.hour}</span>
+                      </div>
                     </div>
                   </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleCellModalOpen(cell)}
+                    className="w-full h-16 text-white font-black text-xs uppercase tracking-wider rounded-xl mt-6 transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5 shadow-md border-transparent hover:opacity-90"
+                    style={{
+                      backgroundColor: brand.primaryColor,
+                      boxShadow: `0 4px 12px ${brand.primaryColor}30`
+                    }}
+                  >
+                    <span>{brand.type === 'synagogue' ? 'Quero Participar' : 'Quero Visitar'}</span>
+                    <span className="material-symbols-outlined !text-base">arrow_forward</span>
+                  </button>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleCellModalOpen(cell)}
-                  className="w-full h-12 bg-slate-50 hover:bg-red-50 text-brand-dark hover:text-brand-red font-black text-xs uppercase tracking-wider rounded-xl mt-6 transition-colors cursor-pointer border border-slate-200 flex items-center justify-center gap-1"
-                >
-                  <span>{brand.type === 'synagogue' ? 'Quero Participar' : 'Quero Visitar'}</span>
-                  <span className="material-symbols-outlined !text-base">arrow_forward</span>
-                </button>
               </div>
             ))
           ) : (
@@ -210,10 +254,15 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
       {/* Address pop-up request modal */}
       {activeCellModal && (
         <div className="fixed inset-0 bg-[#0a0a0a]/90 backdrop-blur-md z-50 flex items-center justify-center p-6 animate-fade-in select-none">
-          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden border border-slate-200">
+          <div className="relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl w-full max-w-2xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col">
+            {/* Background image related to client virtual identity inside modal */}
+            <div 
+              className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12] pointer-events-none"
+              style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+            />
             
             {/* Header */}
-            <div className="p-6 bg-brand-dark text-white border-b flex justify-between items-center">
+            <div className="relative z-10 p-6 bg-brand-dark text-white border-b flex justify-between items-center shrink-0">
               <div>
                 <span className="text-[10px] uppercase font-black tracking-widest bg-brand-red px-2.5 py-1 rounded-md mb-1 block w-fit">
                   {brand.type === 'synagogue' ? 'Participar do Grupo' : 'Visitar Grupo'}
@@ -223,14 +272,14 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-colors"
+                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-all active:scale-90"
               >
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 md:p-8">
+            <div className="relative z-10 p-6 md:p-8 overflow-y-auto flex-grow">
               {isJoined ? (
                 <div className="text-center space-y-4 py-4 animate-fade-in">
                   <div className="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-sm">
@@ -243,14 +292,18 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
                   <button
                     type="button"
                     onClick={handleCloseModal}
-                    className="h-12 w-full bg-brand-dark hover:bg-brand-red text-white font-bold rounded-xl mt-4 transition-colors cursor-pointer text-sm"
+                    className="h-16 w-full text-white font-black rounded-xl mt-4 cursor-pointer text-base hover:scale-[1.02] active:scale-[0.96] transition-all shadow-md uppercase tracking-wider"
+                    style={{
+                      backgroundColor: brand.primaryColor,
+                      boxShadow: `0 4px 12px ${brand.primaryColor}40`
+                    }}
                   >
                     Fechar Janela
                   </button>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <p className="text-xs text-slate-500 font-semibold mb-4 bg-red-50 rounded-xl p-3 border border-red-100">
+                  <p className="text-xs text-slate-500 font-semibold mb-4 bg-red-50/60 rounded-xl p-3 border border-red-100">
                     {brand.type === 'synagogue'
                       ? 'Por segurança de nossos membros, enviamos o local das preces e shiurim exclusivamente por WhatsApp.'
                       : 'Por segurança de nossos pequenos grupos, enviamos o endereço completo exclusivamente por WhatsApp.'}

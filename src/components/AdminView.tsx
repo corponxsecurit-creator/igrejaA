@@ -9,12 +9,20 @@ interface AdminViewProps {
   brand: BrandConfig;
 }
 
-type ActiveTab = 'general' | 'visual' | 'vocabulary' | 'pastors' | 'cells' | 'slides';
+type ActiveTab = 'general' | 'visual' | 'vocabulary' | 'pastors' | 'cells' | 'slides' | 'registrations';
 
 export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps) {
   const [allBrands, setAllBrands] = useState<Record<string, BrandConfig>>(() => getStoredBrands());
   const [selectedBrandId, setSelectedBrandId] = useState<string>(activeBrand.id);
   const [activeTab, setActiveTab] = useState<ActiveTab>('general');
+  const [registrations, setRegistrations] = useState<any[]>(() => {
+    try {
+      const stored = localStorage.getItem('santuario_registrations');
+      return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      return [];
+    }
+  });
 
   // Selected brand state
   const currentEditingBrand = allBrands[selectedBrandId] || allBrands.atitude;
@@ -320,6 +328,7 @@ export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps
               { id: 'pastors', label: 'Pastores/Líderes', icon: 'groups' },
               { id: 'cells', label: 'Células/GCs', icon: 'hub' },
               { id: 'slides', label: 'Avisos/Carrossel', icon: 'view_carousel' },
+              { id: 'registrations', label: 'Cadastros & Solicitações', icon: 'list_alt' },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -989,6 +998,95 @@ export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps
                     </div>
                   )}
                 </div>
+              </div>
+            )}
+
+            {/* TAB 7: REGISTRATIONS */}
+            {activeTab === 'registrations' && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="flex justify-between items-center border-b pb-2 border-slate-100">
+                  <h3 className="text-lg font-black text-slate-800 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-slate-500">list_alt</span>
+                    <span>Registros e Solicitações Recebidas</span>
+                  </h3>
+                  {registrations.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (confirm('Deseja realmente limpar todos os registros do sistema?')) {
+                          playTapSound();
+                          localStorage.removeItem('santuario_registrations');
+                          setRegistrations([]);
+                          speakText('Registros apagados.');
+                        }
+                      }}
+                      className="flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold px-4 py-2 rounded-xl transition-all cursor-pointer text-xs border border-red-200 active:scale-95"
+                    >
+                      <span className="material-symbols-outlined !text-base font-black">delete_sweep</span>
+                      <span>Limpar Todos</span>
+                    </button>
+                  )}
+                </div>
+
+                {registrations.length === 0 ? (
+                  <div className="text-center py-16 border-2 border-dashed border-slate-200 rounded-3xl text-slate-405 font-bold text-xs space-y-2">
+                    <span className="material-symbols-outlined !text-4xl text-slate-350">inbox</span>
+                    <p>Nenhuma solicitação ou cadastro recebido no totem ainda.</p>
+                  </div>
+                ) : (
+                  <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm bg-white">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse">
+                        <thead>
+                          <tr className="bg-slate-50 border-b border-slate-200 text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                            <th className="p-4">Data</th>
+                            <th className="p-4">Unidade / Marca</th>
+                            <th className="p-4">Nome / Contato</th>
+                            <th className="p-4">WhatsApp</th>
+                            <th className="p-4">E-mail</th>
+                            <th className="p-4">Tipo / Módulo</th>
+                            <th className="p-4 text-center">Ações</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-150 text-xs font-semibold text-slate-700">
+                          {registrations.map((reg) => {
+                            const dateFormatted = new Date(reg.date).toLocaleString('pt-BR');
+                            const brandName = allBrands[reg.brandId]?.name || reg.brandId;
+                            return (
+                              <tr key={reg.id} className="hover:bg-slate-50/50 transition-colors">
+                                <td className="p-4 whitespace-nowrap text-slate-450">{dateFormatted}</td>
+                                <td className="p-4 font-bold text-slate-800">{brandName}</td>
+                                <td className="p-4 font-bold text-slate-800">{reg.name}</td>
+                                <td className="p-4 font-mono">{reg.phone}</td>
+                                <td className="p-4 font-mono">{reg.email}</td>
+                                <td className="p-4">
+                                  <span className="bg-slate-100 text-slate-800 text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border border-slate-200 inline-block">
+                                    {reg.type}
+                                  </span>
+                                </td>
+                                <td className="p-4 text-center">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      playTapSound();
+                                      const updated = registrations.filter(r => r.id !== reg.id);
+                                      setRegistrations(updated);
+                                      localStorage.setItem('santuario_registrations', JSON.stringify(updated));
+                                    }}
+                                    className="w-8 h-8 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors cursor-pointer mx-auto"
+                                    title="Remover Registro"
+                                  >
+                                    <span className="material-symbols-outlined !text-lg">delete</span>
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

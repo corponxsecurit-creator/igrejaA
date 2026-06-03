@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pastor } from '../types';
+import { Pastor, ViewState } from '../types';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
 import LiveClock from './LiveClock';
@@ -8,10 +8,11 @@ import { BrandConfig } from '../utils/brand';
 interface PastoralViewProps {
   onBack: () => void;
   onGoHome: () => void;
+  onSelectView?: (view: ViewState) => void;
   brand: BrandConfig;
 }
 
-export default function PastoralView({ onBack, onGoHome, brand }: PastoralViewProps) {
+export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: PastoralViewProps) {
   const [selectedPastor, setSelectedPastor] = useState<Pastor | null>(null);
   const [userPhone, setUserPhone] = useState('');
   const [isScheduled, setIsScheduled] = useState(false);
@@ -52,13 +53,32 @@ export default function PastoralView({ onBack, onGoHome, brand }: PastoralViewPr
     if (clean.length <= 2) return `(${clean}`;
     if (clean.length <= 7) return `(${clean.slice(0, 2)}) ${clean.slice(2)}`;
     return `(${clean.slice(0, 2)}) ${clean.slice(2, 7)}-${clean.slice(7, 11)}`;
-  };
-
-  const handleScheduleSubmit = () => {
+  };  const handleScheduleSubmit = () => {
     if (!userPhone.trim() || userPhone.length < 10) {
       alert('Por favor, indique um número de WhatsApp válido (DDD + Número).');
       return;
     }
+
+    // Save registration to localStorage
+    const newReg = {
+      id: `pastoral_${Date.now()}`,
+      name: `Atendimento com ${selectedPastor?.name || brand.termPastor}`,
+      phone: userPhone,
+      email: '-',
+      type: brand.type === 'synagogue' ? 'Aconselhamento Rabínico' : 'Aconselhamento Pastoral',
+      brandId: brand.id,
+      date: new Date().toISOString()
+    };
+
+    try {
+      const existing = localStorage.getItem('santuario_registrations');
+      const regs = existing ? JSON.parse(existing) : [];
+      regs.push(newReg);
+      localStorage.setItem('santuario_registrations', JSON.stringify(regs));
+    } catch (e) {
+      console.error('Failed to save registration:', e);
+    }
+
     setIsScheduled(true);
     playSuccessSound();
   };
@@ -75,11 +95,47 @@ export default function PastoralView({ onBack, onGoHome, brand }: PastoralViewPr
     onBack();
   };
 
+  const handleNavClick = (targetView: ViewState) => {
+    playTapSound();
+    if (targetView === 'pastoral') {
+      setSelectedPastor(null);
+      setUserPhone('');
+      setIsScheduled(false);
+      return;
+    }
+    if (onSelectView) {
+      onSelectView(targetView);
+    }
+  };
+
+  const navItems = [
+    { view: 'dashboard' as ViewState, label: 'Painel Principal', icon: 'dashboard' },
+    { view: 'new_member' as ViewState, label: brand.termMember, icon: 'person_add' },
+    { view: 'donations' as ViewState, label: brand.termDonations, icon: 'payments' },
+    { view: 'ministries' as ViewState, label: brand.type === 'synagogue' ? 'Mitzvot' : 'Participar', icon: 'groups' },
+    { view: 'checkin' as ViewState, label: brand.termCults, icon: 'calendar_month' },
+    { view: 'my_cell' as ViewState, label: brand.termConnects, icon: 'diversity_3' },
+    { view: 'prayer' as ViewState, label: brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração', icon: 'volunteer_activism' },
+    { view: 'pastoral' as ViewState, label: brand.termPastoral, icon: 'chat' },
+  ];
+
   return (
-    <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
+    <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col overflow-x-hidden font-sans">
       
+      {/* Dynamic client-specific identity background */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+      />
+      <div 
+        className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
+        style={{
+          background: `linear-gradient(135deg, rgba(var(--color-brand-red-rgb), 0.08) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(244, 246, 248, 0.95) 100%)`
+        }}
+      />
+
       {/* Top Header */}
-      <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
+      <header className="sticky top-0 left-0 w-full z-45 bg-white/80 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
         <div>
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">
             {brand.type === 'synagogue' ? 'Orientação Espiritual' : 'Cuidado e Aconselhamento'}
@@ -94,95 +150,194 @@ export default function PastoralView({ onBack, onGoHome, brand }: PastoralViewPr
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-2 text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
+          className="flex items-center gap-2 text-slate-600 hover:bg-slate-100/80 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200 backdrop-blur-sm active:scale-95 shadow-sm"
         >
           <span className="material-symbols-outlined !text-xl">arrow_back</span>
           <span>Voltar</span>
         </button>
       </header>
 
-      {/* Main Container */}
-      <main className="flex-grow pt-28 pb-32 px-6 md:px-20 max-w-7xl mx-auto w-full flex flex-col justify-center animate-fade-in">
+      {/* Main Layout Area */}
+      <div className="max-w-[1600px] mx-auto w-full flex-grow flex flex-col lg:flex-row relative z-10">
         
-        <header className="mb-8 text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl font-extrabold text-brand-dark tracking-tight mb-2">
-            {brand.type === 'synagogue'
-              ? 'Precisa de orientação espiritual ou auxílio do Rabinato?'
-              : 'Precisa conversar ou receber uma oração presencial?'}
-          </h2>
-          <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">
-            {brand.type === 'synagogue'
-              ? `Nossa equipe de ${brand.termPastors.toLowerCase()} está pronta para ouvir você, oferecer conselhos baseados na Torá e prestar apoio espiritual. Escolha um ${brand.termPastor.toLowerCase()} abaixo para agendar um encontro hoje.`
-              : `Nossa equipe de ${brand.termPastors.toLowerCase()} de plantão está pronta para ouvir você, oferecer conselhos bíblicos e orar pelas suas necessidades. Escolha um ${brand.termPastor.toLowerCase()} abaixo para agendar um encontro reservado hoje mesmo.`}
-          </p>
-        </header>
-
-        {/* Pastors Grid list */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-          {brand.pastors.map((p) => (
-            <div
-              key={p.id}
-              className="bg-white rounded-3xl overflow-hidden border-2 border-slate-200 shadow-sm flex flex-col justify-between items-stretch hover:border-brand-red transition-colors duration-200"
-            >
-              {/* Pastor Portrait cover */}
-              <div className="relative h-44 w-full bg-slate-100">
-                <img
-                  className="w-full h-full object-cover select-none"
-                  src={p.photoUrl}
-                  alt={p.name}
-                />
-                <div className="absolute top-3 right-3">
-                  {p.available ? (
-                    <span className="bg-emerald-100 text-emerald-800 text-[9px] font-black tracking-widest uppercase px-2.5 py-1 rounded-md border border-emerald-300 inline-flex items-center gap-1 shadow-sm">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                      Disponível
+        {/* Left Sidebar (Desktop) */}
+        <aside className="relative overflow-hidden hidden lg:flex w-96 shrink-0 border-r border-[#eceef1]/60 bg-white/45 backdrop-blur-xl p-8 flex-col gap-5 sticky top-[73px] h-[calc(100vh-73px)]">
+          {/* Background image related to client virtual identity inside sidebar */}
+          <div 
+            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] pointer-events-none"
+            style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+          />
+          <div className="relative z-10 flex flex-col gap-4 w-full h-full overflow-y-auto">
+            <div className="mb-2">
+              <span className="text-xs uppercase tracking-widest text-slate-400 font-bold block mb-1">Módulos do Totem</span>
+              <div className="h-0.5 w-8 bg-brand-red rounded-full" />
+            </div>
+            <div className="flex flex-col gap-2">
+              {navItems.map((item) => {
+                const isActive = item.view === 'pastoral';
+                return (
+                  <button
+                    key={item.view}
+                    onClick={() => handleNavClick(item.view)}
+                    className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all text-base text-left active:scale-[0.98] cursor-pointer group ${
+                      isActive 
+                        ? 'shadow-lg text-white hover:opacity-90' 
+                        : 'text-slate-700 hover:bg-white/70 hover:shadow-sm'
+                    }`}
+                    style={{
+                      backgroundColor: isActive ? brand.primaryColor : undefined,
+                      color: isActive ? '#fff' : undefined,
+                      boxShadow: isActive ? `0 10px 15px -3px ${brand.primaryColor}33, 0 4px 6px -4px ${brand.primaryColor}33` : undefined,
+                      ['--hover-color' as any]: brand.primaryColor,
+                    }}
+                  >
+                    <span 
+                      className={`material-symbols-outlined !text-2xl transition-colors ${
+                        isActive ? 'text-white' : 'text-slate-400 group-hover:text-[var(--hover-color)]'
+                      }`}
+                    >
+                      {item.icon}
                     </span>
-                  ) : (
-                    <span className="bg-slate-100 text-slate-600 text-[9px] font-black tracking-widest uppercase px-2.5 py-1 rounded-md border border-slate-200 inline-block shadow-sm">
-                      Ocupado
+                    <span className="truncate group-hover:text-[var(--hover-color)] transition-colors">
+                      {item.label}
                     </span>
-                  )}
-                </div>
-              </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </aside>
 
-              {/* Pastor bio text definitions */}
-              <div className="p-5 flex-grow flex flex-col justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-black text-brand-dark tracking-tight leading-tight uppercase">
-                    {p.name}
-                  </h3>
-                  <p className="text-xs text-brand-red font-black tracking-wider uppercase mt-1">
-                    {p.role}
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => handlePastorSelect(p)}
-                  className={`w-full h-11 font-black text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1 border-2 ${
-                    p.available 
-                      ? 'bg-slate-50 border-slate-200 hover:bg-red-50 hover:border-brand-red text-brand-dark hover:text-brand-red' 
-                      : 'bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed'
+        {/* Top Scrolling Bar (Mobile/Tablet) */}
+        <nav className="flex lg:hidden w-full overflow-x-auto whitespace-nowrap gap-3 p-5 border-b border-[#eceef1]/60 bg-white/40 backdrop-blur-xl sticky top-[73px] z-20 scrollbar-none">
+          {navItems.map((item) => {
+            const isActive = item.view === 'pastoral';
+            return (
+              <button
+                key={item.view}
+                onClick={() => handleNavClick(item.view)}
+                className={`inline-flex items-center gap-3 px-5 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.98] shadow-sm shrink-0 border group cursor-pointer ${
+                  isActive 
+                    ? 'text-white border-transparent' 
+                    : 'text-slate-750 bg-white/60 border-slate-200/60 hover:shadow-md'
+                }`}
+                style={{
+                  backgroundColor: isActive ? brand.primaryColor : undefined,
+                  ['--hover-color' as any]: brand.primaryColor,
+                }}
+              >
+                <span 
+                  className={`material-symbols-outlined !text-lg transition-colors ${
+                    isActive ? 'text-white' : 'text-slate-400 group-hover:text-[var(--hover-color)]'
                   }`}
                 >
-                  <span>Chamar {brand.termPastor}</span>
-                  <span className="material-symbols-outlined !text-base">chat_bubble</span>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+                  {item.icon}
+                </span>
+                <span className={isActive ? 'text-white' : 'group-hover:text-[var(--hover-color)] transition-colors'}>
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
+        </nav>
 
-      </main>
+        {/* Content Container */}
+        <main className="flex-grow py-8 px-6 md:px-12 w-full flex flex-col justify-start relative z-10 animate-fade-in max-w-7xl">
+          
+          <header className="mb-8 text-center lg:text-left max-w-2xl pt-2">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-brand-dark tracking-tight mb-2">
+              {brand.type === 'synagogue'
+                ? 'Precisa de orientação espiritual ou auxílio do Rabinato?'
+                : 'Precisa conversar ou receber uma oração presencial?'}
+            </h2>
+            <p className="text-sm md:text-base text-slate-600 font-semibold leading-relaxed">
+              {brand.type === 'synagogue'
+                ? `Nossa equipe de ${brand.termPastors.toLowerCase()} está pronta para ouvir você, oferecer conselhos baseados na Torá e prestar apoio espiritual. Escolha um ${brand.termPastor.toLowerCase()} abaixo para agendar um encontro hoje.`
+                : `Nossa equipe de ${brand.termPastors.toLowerCase()} de plantão está pronta para ouvir você, oferecer conselhos bíblicos e orar pelas suas necessidades. Escolha um ${brand.termPastor.toLowerCase()} abaixo para agendar um encontro reservado hoje mesmo.`}
+            </p>
+          </header>
+
+          {/* Pastors Grid list */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
+
+            {brand.pastors.map((p) => (
+              <div
+                key={p.id}
+                className="relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl border border-white/60 shadow-lg flex flex-col justify-between items-stretch hover:border-brand-red hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 min-h-[360px]"
+              >
+                {/* Background image related to client virtual identity inside card */}
+                <div 
+                  className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.10] pointer-events-none"
+                  style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+                />
+                
+                {/* Pastor Portrait cover */}
+                <div className="relative h-64 w-full bg-slate-100 shrink-0">
+                  <img
+                    className="w-full h-full object-cover select-none"
+                    src={p.photoUrl}
+                    alt={p.name}
+                  />
+                  <div className="absolute top-3 right-3">
+                    {p.available ? (
+                      <span className="bg-emerald-50 text-emerald-800 text-[10px] font-black tracking-widest uppercase px-3 py-1.5 rounded-full border border-emerald-200 inline-flex items-center gap-1.5 shadow-md">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                        Disponível
+                      </span>
+                    ) : (
+                      <span className="bg-slate-100/90 text-slate-600 text-[10px] font-black tracking-widest uppercase px-3 py-1.5 rounded-full border border-slate-200 inline-block shadow-md">
+                        Ocupado
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Pastor bio text definitions */}
+                <div className="relative z-10 p-6 flex-grow flex flex-col justify-between gap-5">
+                  <div>
+                    <h3 className="text-2xl font-black text-brand-dark tracking-tight leading-tight uppercase">
+                      {p.name}
+                    </h3>
+                    <p className="text-sm text-brand-red font-black tracking-wider uppercase mt-1">
+                      {p.role}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handlePastorSelect(p)}
+                    className={`w-full h-16 font-black text-sm uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 border-2 shadow-sm ${
+                      p.available 
+                        ? 'bg-slate-50 border-slate-200 hover:bg-brand-red hover:border-brand-red text-brand-dark hover:text-white' 
+                        : 'bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed'
+                    }`}
+                    style={{
+                      '--hover-bg': brand.primaryColor
+                    } as React.CSSProperties}
+                  >
+                    <span>Chamar {brand.termPastor}</span>
+                    <span className="material-symbols-outlined !text-lg">chat_bubble</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </main>
+      </div>
 
       {/* Counseling solicitation popup layout */}
       {selectedPastor && (
         <div className="fixed inset-0 bg-[#0a0a0a]/90 backdrop-blur-md z-50 flex items-center justify-center p-6 animate-fade-in select-none">
-          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden border border-slate-200">
+          <div className="relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl w-full max-w-2xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col">
+            {/* Background image related to client virtual identity inside modal */}
+            <div 
+              className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12] pointer-events-none"
+              style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+            />
             
             {/* Header */}
-            <div className="p-6 bg-brand-dark text-white border-b flex justify-between items-center">
+            <div className="relative z-10 p-6 bg-brand-dark text-white border-b flex justify-between items-center shrink-0">
               <div>
                 <span className="text-[10px] uppercase font-black tracking-widest bg-brand-red px-2.5 py-1 rounded-md mb-1 block w-fit">
                   {brand.type === 'synagogue' ? 'Orientação Espiritual' : 'Conselho Reservado'}
@@ -192,14 +347,14 @@ export default function PastoralView({ onBack, onGoHome, brand }: PastoralViewPr
               <button
                 type="button"
                 onClick={handleClose}
-                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-colors"
+                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-all active:scale-90"
               >
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 md:p-8">
+            <div className="relative z-10 p-6 md:p-8 overflow-y-auto flex-grow">
               {isScheduled ? (
                 <div className="text-center space-y-4 py-4 animate-fade-in">
                   <div className="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-sm">
@@ -214,14 +369,18 @@ export default function PastoralView({ onBack, onGoHome, brand }: PastoralViewPr
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="h-12 w-full bg-brand-dark hover:bg-brand-red text-white font-bold rounded-xl mt-4 transition-colors cursor-pointer text-sm"
+                    className="h-16 w-full text-white font-black rounded-xl mt-4 transition-colors cursor-pointer text-base uppercase tracking-wider shadow-md"
+                    style={{
+                      backgroundColor: brand.primaryColor,
+                      boxShadow: `0 4px 12px ${brand.primaryColor}40`
+                    }}
                   >
                     Fechar e Concluir
                   </button>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <p className="text-xs text-slate-500 font-semibold mb-4 bg-slate-50 rounded-xl p-3 border border-slate-200">
+                  <p className="text-xs text-slate-500 font-semibold mb-4 bg-slate-50/60 rounded-xl p-3 border border-slate-200">
                     {brand.type === 'synagogue'
                       ? 'Ao confirmar a solicitação, o rabino de plantão se organizará para recebê-lo de forma individual em nossa sala reservada de estudos e orientação.'
                       : 'Ao confirmar o atendimento, o pastor de plantão se organizará para recebê-lo de forma individual em nossa sala reservada de aconselhamento.'}

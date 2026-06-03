@@ -265,6 +265,27 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
       alert('Por favor, informe seu celular com WhatsApp válido.');
       return;
     }
+
+    // Save registration to localStorage
+    const newReg = {
+      id: `ministry_${Date.now()}`,
+      name: name,
+      phone: phone,
+      email: '-',
+      type: `${brand.type === 'synagogue' ? 'Atividade' : 'Voluntariado'}: ${selectedMinistry?.name || ''}`,
+      brandId: brand.id,
+      date: new Date().toISOString()
+    };
+
+    try {
+      const existing = localStorage.getItem('santuario_registrations');
+      const regs = existing ? JSON.parse(existing) : [];
+      regs.push(newReg);
+      localStorage.setItem('santuario_registrations', JSON.stringify(regs));
+    } catch (e) {
+      console.error('Failed to save registration:', e);
+    }
+
     setIsSuccess(true);
     playSuccessSound();
   };
@@ -277,8 +298,20 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
   return (
     <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
       
+      {/* Dynamic client-specific identity background */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+      />
+      <div 
+        className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
+        style={{
+          background: `linear-gradient(135deg, rgba(var(--color-brand-red-rgb), 0.08) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(244, 246, 248, 0.95) 100%)`
+        }}
+      />
+
       {/* Top Navigation */}
-      <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
+      <header className="fixed top-0 left-0 w-full z-45 bg-white/80 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
         <div>
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">
             {brand.type === 'synagogue' ? 'Atividades Comunitárias' : 'Serviço Voluntário'}
@@ -293,7 +326,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
+          className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200 backdrop-blur-sm"
         >
           <span className="material-symbols-outlined !text-xl">arrow_back</span>
           <span>Voltar</span>
@@ -301,7 +334,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
       </header>
 
       {/* Main Grid View */}
-      <main className="flex-grow pt-28 pb-32 px-6 md:px-20 max-w-7xl mx-auto w-full flex flex-col justify-center">
+      <main className="flex-grow pt-24 pb-32 px-6 md:px-20 max-w-[1550px] mx-auto w-full flex flex-col justify-center relative z-10">
         <header className="mb-8 text-center max-w-3xl mx-auto">
           <h2 className="text-3xl font-extrabold text-brand-dark tracking-tight mb-2">
             {brand.type === 'synagogue' ? 'Escolha onde você deseja atuar' : 'Escolha onde você deseja servir'}
@@ -322,10 +355,15 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
               onClick={() => handleMinistrySelect(min)}
               className={`col-span-12 ${
                 min.wide ? 'md:col-span-6' : 'md:col-span-3'
-              } text-white rounded-3xl p-6 text-left flex flex-col justify-between cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-md border ${min.color} min-h-[160px] relative overflow-hidden group`}
+              } text-white rounded-3xl p-6 text-left flex flex-col justify-between cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-md border ${min.color} min-h-[230px] relative overflow-hidden group`}
             >
-              <div className="flex justify-between items-start">
-                <span className="material-symbols-outlined !text-4xl text-brand-red group-hover:scale-115 transition-transform">
+              {/* Background image related to client virtual identity inside button */}
+              <div 
+                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.10] pointer-events-none"
+                style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+              />
+              <div className="relative z-10 flex justify-between items-start w-full">
+                <span className="material-symbols-outlined !text-5xl text-brand-red group-hover:scale-115 transition-transform">
                   {min.icon}
                 </span>
                 <span className="bg-white/10 text-[10px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-full inline-block">
@@ -333,9 +371,9 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                 </span>
               </div>
               
-              <div className="mt-4">
-                <h3 className="text-xl font-bold uppercase tracking-wide">{min.name}</h3>
-                <p className="text-xs text-white/70 line-clamp-2 mt-1 font-medium">{min.desc}</p>
+              <div className="relative z-10 mt-4">
+                <h3 className="text-2xl font-black uppercase tracking-wide leading-tight">{min.name}</h3>
+                <p className="text-sm text-white/80 line-clamp-2 mt-1 font-semibold">{min.desc}</p>
               </div>
 
               <div className="absolute right-4 bottom-4 opacity-10">
@@ -349,10 +387,15 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
       {/* Application overlay modal */}
       {selectedMinistry && (
         <div className="fixed inset-0 bg-[#0a0a0a]/90 backdrop-blur-md z-50 flex items-center justify-center p-4 select-none animate-fade-in">
-          <div className="bg-white rounded-3xl w-full max-w-2xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col max-h-[90vh]">
+          <div className="relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl w-full max-w-5xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col max-h-[90vh]">
+            {/* Background image related to client virtual identity inside modal */}
+            <div 
+              className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12] pointer-events-none"
+              style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+            />
             
             {/* Modal Heading header with ministry colored top */}
-            <div className={`p-6 text-white ${selectedMinistry.color} border-b flex justify-between items-center relative shrink-0`}>
+            <div className={`relative z-10 p-6 text-white ${selectedMinistry.color} border-b flex justify-between items-center relative shrink-0`}>
               <div>
                 <span className="text-[10px] uppercase font-black tracking-widest bg-white/20 px-2.5 py-1 rounded-md block w-fit mb-1">
                   {brand.type === 'synagogue' ? 'Inscrição em Atividade' : 'Inscrição Voluntária'}
@@ -362,14 +405,14 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
               <button
                 type="button"
                 onClick={handleClose}
-                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-colors"
+                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-all active:scale-90"
               >
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
 
             {/* Modal Body form view */}
-            <div className="p-6 md:p-8 overflow-y-auto flex-grow">
+            <div className="relative z-10 p-6 md:p-8 overflow-y-auto flex-grow">
               {isSuccess ? (
                 <div className="text-center space-y-4 py-6 animate-fade-in">
                   <div className="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-md">
@@ -384,14 +427,18 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="h-12 w-full bg-brand-dark hover:bg-brand-red text-white font-bold rounded-xl mt-4 transition-colors cursor-pointer text-sm"
+                    className="h-16 w-full text-white font-black rounded-xl mt-4 cursor-pointer text-base hover:scale-[1.02] active:scale-[0.96] transition-all shadow-md uppercase tracking-wider"
+                    style={{
+                      backgroundColor: brand.primaryColor,
+                      boxShadow: `0 4px 12px ${brand.primaryColor}40`
+                    }}
                   >
                     {brand.type === 'synagogue' ? 'Voltar às Atividades' : 'Voltar aos Ministérios'}
                   </button>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <p className="text-xs text-slate-500 font-semibold mb-4 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <p className="text-xs text-slate-500 font-semibold mb-4 bg-slate-50/60 p-3 rounded-xl border border-slate-200">
                     {brand.type === 'synagogue'
                       ? 'Inscreva-se abaixo. Seus dados serão encaminhados diretamente para os responsáveis pela coordenação.'
                       : 'Inscreva-se abaixo. Seus dados serão encaminhados diretamente para o líder responsável pelo preenchimento de vagas.'}
@@ -452,14 +499,18 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                       <button
                         type="button"
                         onClick={handleClose}
-                        className="flex-1 h-12 border border-slate-300 text-slate-600 rounded-xl font-bold hover:bg-slate-50 cursor-pointer text-sm"
+                        className="flex-1 h-16 border border-slate-300 text-slate-600 rounded-xl font-bold hover:bg-slate-50 cursor-pointer text-sm"
                       >
                         Cancelar
                       </button>
                       <button
                         type="button"
                         onClick={() => { playTapSound(); setActiveField('phone'); }}
-                        className="flex-1 h-12 bg-brand-dark text-white rounded-xl font-bold hover:bg-brand-red cursor-pointer text-sm flex items-center justify-center gap-1"
+                        className="flex-1 h-16 text-white rounded-xl font-black cursor-pointer text-base flex items-center justify-center gap-1.5 hover:opacity-90 active:scale-[0.98] transition-all shadow-md"
+                        style={{
+                          backgroundColor: brand.primaryColor,
+                          boxShadow: `0 4px 12px ${brand.primaryColor}40`
+                        }}
                       >
                         <span>Próximo</span>
                         <span className="material-symbols-outlined !text-base">arrow_forward</span>

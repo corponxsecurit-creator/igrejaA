@@ -64,7 +64,10 @@ export default function NumericKeypad({ onKeyPress, onConfirm, confirmLabel = 'O
         <button
           type="button"
           onClick={handleConfirm}
-          className="w-full h-14 mt-2 bg-brand-red hover:bg-brand-red-hover text-white text-base font-extrabold uppercase tracking-widest rounded-2xl shadow-md cursor-pointer transition-colors flex items-center justify-center gap-2 active:scale-98 duration-100"
+          className="w-full h-14 mt-2 bg-brand-red hover:bg-brand-red-hover text-white text-base font-extrabold uppercase tracking-widest rounded-2xl shadow-lg cursor-pointer transition-all flex items-center justify-center gap-2 active:scale-[0.97]"
+          style={{
+            boxShadow: '0 8px 20px -6px var(--color-brand-red)'
+          }}
         >
           <span>{confirmLabel}</span>
           <span className="material-symbols-outlined !text-xl">check_circle</span>

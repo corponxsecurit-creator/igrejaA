@@ -73,6 +73,17 @@ export default function App() {
     setView('checkin_success');
   };
 
+  const handleSelectView = (v: ViewState) => {
+    setView(v);
+    if (v === 'new_member') speakText(`Iniciando formulário de ${brand.termMember.toLowerCase()}.`);
+    else if (v === 'prayer') speakText(`Abri a tela para enviar pedidos de ${brand.type === 'synagogue' ? 'orações' : 'oração'}.`);
+    else if (v === 'checkin') speakText(`Acessando check-in de ${brand.termCults.toLowerCase()} e encontros.`);
+    else if (v === 'donations') speakText(`Acessando altar de generosidade para ${brand.termDonations.toLowerCase()}.`);
+    else if (v === 'ministries') speakText('Abrindo painel de voluntariado e atividades.');
+    else if (v === 'my_cell') speakText(`Abri a busca de ${brand.termConnects.toLowerCase()}.`);
+    else if (v === 'pastoral') speakText(`Exibindo ${brand.termPastors.toLowerCase()} de plantão.`);
+  };
+
   return (
     <InactivityTimer currentView={view} onReset={handleGoHome}>
       <div 
@@ -94,17 +105,7 @@ export default function App() {
 
         {view === 'dashboard' && (
           <DashboardView 
-            onSelectView={(v) => {
-              setView(v);
-              // Provide vocal guidance on view change
-              if (v === 'new_member') speakText(`Iniciando formulário de ${brand.termMember.toLowerCase()}.`);
-              else if (v === 'prayer') speakText(`Abri a tela para enviar pedidos de ${brand.type === 'synagogue' ? 'orações' : 'oração'}.`);
-              else if (v === 'checkin') speakText(`Acessando check-in de ${brand.termCults.toLowerCase()} e encontros.`);
-              else if (v === 'donations') speakText(`Acessando altar de generosidade para ${brand.termDonations.toLowerCase()}.`);
-              else if (v === 'ministries') speakText('Abrindo painel de voluntariado e atividades.');
-              else if (v === 'my_cell') speakText(`Abri a busca de ${brand.termConnects.toLowerCase()}.`);
-              else if (v === 'pastoral') speakText(`Exibindo ${brand.termPastors.toLowerCase()} de plantão.`);
-            }} 
+            onSelectView={handleSelectView} 
             onGoHome={handleGoHome} 
             onOpenAccessibility={() => setShowAccessModal(true)}
             onOpenAdmin={() => {
@@ -174,6 +175,7 @@ export default function App() {
           <PastoralView 
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
+            onSelectView={handleSelectView}
             brand={brand}
           />
         )}

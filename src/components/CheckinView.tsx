@@ -83,6 +83,26 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
       return;
     }
 
+    // Save registration to localStorage
+    const newReg = {
+      id: `checkin_${Date.now()}`,
+      name: method === 'name' ? selectedMember : (method === 'phone' ? `Telefone: ${phoneNumber}` : 'Checkin QR Code'),
+      phone: method === 'phone' ? phoneNumber : '-',
+      email: '-',
+      type: `${brand.termCult}: Entrada Confirmada`,
+      brandId: brand.id,
+      date: new Date().toISOString()
+    };
+
+    try {
+      const existing = localStorage.getItem('santuario_registrations');
+      const regs = existing ? JSON.parse(existing) : [];
+      regs.push(newReg);
+      localStorage.setItem('santuario_registrations', JSON.stringify(regs));
+    } catch (e) {
+      console.error('Failed to save registration:', e);
+    }
+
     playSuccessSound();
     setIsProcessing(true);
     setTimeout(() => {
@@ -99,8 +119,20 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
   return (
     <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
       
+      {/* Dynamic client-specific identity background */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.20] pointer-events-none transition-all duration-500"
+        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+      />
+      <div 
+        className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
+        style={{
+          background: `linear-gradient(135deg, rgba(var(--color-brand-red-rgb), 0.08) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(244, 246, 248, 0.95) 100%)`
+        }}
+      />
+
       {/* Top Header */}
-      <header className="fixed top-0 left-0 w-full z-45 bg-white px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
+      <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
         <div>
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">
             {brand.type === 'synagogue' ? 'Totem de Entrada' : 'Totem de Acesso'}
@@ -115,7 +147,7 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-2 text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200"
+          className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200 backdrop-blur-sm"
         >
           <span className="material-symbols-outlined !text-xl">arrow_back</span>
           <span>Voltar</span>
@@ -123,7 +155,7 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
       </header>
 
       {/* Main Layout */}
-      <main className="flex-grow pt-28 pb-32 px-6 md:px-20 max-w-7xl mx-auto w-full flex flex-col justify-center">
+      <main className="flex-grow pt-28 pb-32 px-6 md:px-20 max-w-[1550px] mx-auto w-full flex flex-col justify-center relative z-10">
         
         {isProcessing ? (
           <div className="flex flex-col items-center justify-center space-y-4 py-12">
@@ -135,215 +167,237 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
           <div className="grid grid-cols-12 gap-6 items-stretch">
             
             {/* LEFT SIDEBAR PANEL: Event presentation box */}
-            <div className="col-span-12 md:col-span-4 bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 flex flex-col justify-between relative min-h-[380px]">
-              {/* Event Cover Image */}
-              <div className="relative h-48 w-full">
-                <img
-                  className="h-full w-full object-cover"
-                  src={brand.bgUrl}
-                  alt={brand.termCult}
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-                <div className="absolute bottom-4 left-6">
-                  <span className="bg-brand-red text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md block w-fit mb-1 border border-brand-red-hover">
-                    {brand.type === 'synagogue' ? 'Comunidade & Shabat' : 'Células & Celebração'}
-                  </span>
-                  <h2 className="text-xl md:text-2xl font-black text-white leading-tight">
-                    {brand.type === 'synagogue' ? 'Serviços do Shabat' : `Celebração Especial ${brand.name}`}
-                  </h2>
-                </div>
-              </div>
-
-              {/* Event Meta specifics */}
-              <div className="p-6 md:p-8 flex-grow flex flex-col justify-between gap-6">
-                <div className="space-y-4">
-                  <div className="flex gap-3 text-slate-700">
-                    <span className="material-symbols-outlined text-brand-red !text-2xl">schedule</span>
-                    <div>
-                      <p className="font-bold text-sm text-brand-dark">Horário de entrada</p>
-                      <p className="text-xs text-slate-500">Acesso liberado 30 min antes do início</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3 text-slate-700">
-                    <span className="material-symbols-outlined text-brand-red !text-2xl">pin_drop</span>
-                    <div>
-                      <p className="font-bold text-sm text-brand-dark">Localização</p>
-                      <p className="text-xs text-slate-500">{brand.location}</p>
-                    </div>
+            <div className="relative overflow-hidden col-span-12 lg:col-span-4 bg-white/90 backdrop-blur-md rounded-3xl shadow-sm border border-slate-200 flex flex-col justify-between min-h-[380px] p-2">
+              {/* Background image related to client virtual identity inside panel */}
+              <div 
+                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12] pointer-events-none"
+                style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+              />
+              <div className="relative z-10 flex flex-col h-full justify-between flex-grow">
+                {/* Event Cover Image */}
+                <div className="relative h-56 w-full shrink-0">
+                  <img
+                    className="h-full w-full object-cover"
+                    src={brand.bgUrl}
+                    alt={brand.termCult}
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                  <div className="absolute bottom-4 left-6">
+                    <span className="bg-brand-red text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md block w-fit mb-1 border border-brand-red-hover">
+                      {brand.type === 'synagogue' ? 'Comunidade & Shabat' : 'Células & Celebração'}
+                    </span>
+                    <h2 className="text-xl md:text-2xl font-black text-white leading-tight">
+                      {brand.type === 'synagogue' ? 'Serviços do Shabat' : `Celebração Especial ${brand.name}`}
+                    </h2>
                   </div>
                 </div>
 
-                <div className="bg-red-50/50 rounded-2xl p-4 border border-dashed border-brand-red/20 text-xs text-slate-500 font-medium">
-                  <p className="font-bold text-slate-700 mb-1">Problemas no check-in?</p>
-                  Por favor, solicite suporte a um de nossos voluntários e recepcionistas no saguão para auxílio imediato.
+                {/* Event Meta specifics */}
+                <div className="p-6 md:p-8 flex-grow flex flex-col justify-between gap-6">
+                  <div className="space-y-4">
+                    <div className="flex gap-3 text-slate-700">
+                      <span className="material-symbols-outlined text-brand-red !text-2xl">schedule</span>
+                      <div>
+                        <p className="font-bold text-sm text-brand-dark">Horário de entrada</p>
+                        <p className="text-xs text-slate-500">Acesso liberado 30 min antes do início</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3 text-slate-700">
+                      <span className="material-symbols-outlined text-brand-red !text-2xl">pin_drop</span>
+                      <div>
+                        <p className="font-bold text-sm text-brand-dark">Localização</p>
+                        <p className="text-xs text-slate-500">{brand.location}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-red-50/50 rounded-2xl p-4 border border-dashed border-brand-red/20 text-xs text-slate-500 font-medium bg-white/60">
+                    <p className="font-bold text-slate-700 mb-1">Problemas no check-in?</p>
+                    Por favor, solicite suporte a um de nossos voluntários e recepcionistas no saguão para auxílio imediato.
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* RIGHT MAIN PANEL: Active checking selector and methods tabs */}
-            <div className="col-span-12 md:col-span-8 bg-white rounded-3xl shadow-sm border border-slate-200 flex flex-col justify-between p-6 md:p-8">
-              
-              {/* Selector Custom Navigation Tabs */}
-              <div className="flex bg-slate-100 rounded-2xl p-1.5 justify-between w-full border border-slate-200 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => handleMethodSelect('qr')}
-                  className={`flex-1 py-3 text-center rounded-xl font-black text-xs md:text-sm tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
-                    method === 'qr' ? 'bg-brand-dark text-white shadow-md' : 'text-slate-600 hover:bg-slate-200/50'
-                  }`}
-                >
-                  <span className="material-symbols-outlined !text-xl">qr_code_scanner</span>
-                  <span>QR Ticket</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleMethodSelect('phone')}
-                  className={`flex-1 py-3 text-center rounded-xl font-black text-xs md:text-sm tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
-                    method === 'phone' ? 'bg-brand-dark text-white shadow-md' : 'text-slate-600 hover:bg-slate-200/50'
-                  }`}
-                >
-                  <span className="material-symbols-outlined !text-xl">phone_iphone</span>
-                  <span>Celular</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleMethodSelect('name')}
-                  className={`flex-1 py-3 text-center rounded-xl font-black text-xs md:text-sm tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
-                    method === 'name' ? 'bg-brand-dark text-white shadow-md' : 'text-slate-600 hover:bg-slate-200/50'
-                  }`}
-                >
-                  <span className="material-symbols-outlined !text-xl">badge</span>
-                  <span>Pelo Nome</span>
-                </button>
-              </div>
-
-              {/* Dynamic TAB contents */}
-              <div className="flex-grow py-6 flex flex-col justify-center">
+            <div className="relative overflow-hidden col-span-12 lg:col-span-8 bg-white/90 backdrop-blur-md rounded-3xl shadow-sm border border-slate-200 flex flex-col justify-between p-8 md:p-10">
+              {/* Background image related to client virtual identity inside panel */}
+              <div 
+                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12] pointer-events-none"
+                style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
+              />
+              <div className="relative z-10 flex flex-col h-full justify-between flex-grow w-full">
                 
-                {/* METHOD 1: QR Code Ticket Scanner simulator */}
-                {method === 'qr' && (
-                  <div className="space-y-6 text-center animate-fade-in flex flex-col items-center">
-                    <p className="text-sm font-black text-slate-600 uppercase tracking-widest">
-                      Aproxime seu celular com o QR Code
-                    </p>
+                {/* Selector Custom Navigation Tabs */}
+                <div className="flex bg-slate-100 rounded-2xl p-1.5 justify-between w-full border border-slate-200 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => handleMethodSelect('qr')}
+                    className={`flex-1 py-5 text-center rounded-xl font-black text-sm md:text-base tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-[0.96] ${
+                      method === 'qr' ? 'bg-brand-dark text-white shadow-md' : 'text-slate-600 hover:bg-slate-200/50'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined !text-xl">qr_code_scanner</span>
+                    <span>QR Ticket</span>
+                  </button>
 
-                    {/* Viewfinder simulated layout */}
-                    <div 
-                      onClick={handleConfirmCheckin}
-                      className="relative w-60 h-60 border-4 border-brand-red rounded-3xl overflow-hidden bg-black/5 cursor-pointer group shadow-inner"
-                      title="Clique para simular um escaneamento bem-sucedido!"
-                    >
-                      {/* Animated scan bar */}
-                      <div className="absolute left-0 w-full h-1 bg-brand-red scan-line rounded-full opacity-80" />
-                      
-                      {/* Target lines around */}
-                      <div className="absolute inset-8 border border-dashed border-slate-300 rounded-2xl flex items-center justify-center flex-col opacity-60">
-                        <span className="material-symbols-outlined !text-6xl text-slate-400 group-hover:scale-110 transition-transform">
-                          qr_code_scanner
-                        </span>
-                        <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider mt-2 group-hover:text-brand-red duration-205">
-                          Toque para scannear
-                        </span>
+                  <button
+                    type="button"
+                    onClick={() => handleMethodSelect('phone')}
+                    className={`flex-1 py-5 text-center rounded-xl font-black text-sm md:text-base tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-[0.96] ${
+                      method === 'phone' ? 'bg-brand-dark text-white shadow-md' : 'text-slate-600 hover:bg-slate-200/50'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined !text-xl">phone_iphone</span>
+                    <span>Celular</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleMethodSelect('name')}
+                    className={`flex-1 py-5 text-center rounded-xl font-black text-sm md:text-base tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-[0.96] ${
+                      method === 'name' ? 'bg-brand-dark text-white shadow-md' : 'text-slate-600 hover:bg-slate-200/50'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined !text-xl">badge</span>
+                    <span>Pelo Nome</span>
+                  </button>
+                </div>
+
+                {/* Dynamic TAB contents */}
+                <div className="flex-grow py-6 flex flex-col justify-center">
+                  
+                  {/* METHOD 1: QR Code Ticket Scanner simulator */}
+                  {method === 'qr' && (
+                    <div className="space-y-6 text-center animate-fade-in flex flex-col items-center">
+                      <p className="text-sm font-black text-slate-600 uppercase tracking-widest">
+                        Aproxime seu celular com o QR Code
+                      </p>
+
+                      {/* Viewfinder simulated layout */}
+                      <div 
+                        onClick={handleConfirmCheckin}
+                        className="relative w-64 h-64 border-4 border-brand-red rounded-3xl overflow-hidden bg-black/5 cursor-pointer group shadow-inner transition-all hover:scale-[1.05] active:scale-[0.95]"
+                        title="Clique para simular um escaneamento bem-sucedido!"
+                      >
+                        {/* Animated scan bar */}
+                        <div className="absolute left-0 w-full h-1 bg-brand-red scan-line rounded-full opacity-80" />
+                        
+                        {/* Target lines around */}
+                        <div className="absolute inset-8 border border-dashed border-slate-300 rounded-2xl flex items-center justify-center flex-col opacity-60">
+                          <span className="material-symbols-outlined !text-6xl text-slate-400 group-hover:scale-110 transition-transform">
+                            qr_code_scanner
+                          </span>
+                          <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider mt-2 group-hover:text-brand-red duration-205">
+                            Toque para scannear
+                          </span>
+                        </div>
                       </div>
+
+                      <p className="text-xs text-slate-500 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
+                        Simule o escaneamento tocando no leitor acima
+                      </p>
                     </div>
+                  )}
 
-                    <p className="text-xs text-slate-500 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
-                      Simule o escaneamento tocando no leitor acima
-                    </p>
-                  </div>
-                )}
+                  {/* METHOD 2: Phone Input Numeric Keypad approach */}
+                  {method === 'phone' && (
+                    <div className="space-y-4 text-center animate-fade-in w-full max-w-sm mx-auto">
+                      <div className="bg-slate-100 rounded-2xl py-3 px-6 text-2xl font-black text-brand-dark border-2 border-slate-200 tracking-widest min-h-[56px] flex items-center justify-center shadow-inner">
+                        {formatPhone(phoneNumber) || 'Digite seu telefone'}
+                      </div>
 
-                {/* METHOD 2: Phone Input Numeric Keypad approach */}
-                {method === 'phone' && (
-                  <div className="space-y-4 text-center animate-fade-in w-full max-w-sm mx-auto">
-                    <div className="bg-slate-100 rounded-2xl py-3 px-6 text-2xl font-black text-brand-dark border-2 border-slate-200 tracking-widest min-h-[56px] flex items-center justify-center shadow-inner">
-                      {formatPhone(phoneNumber) || 'Digite seu telefone'}
+                      <NumericKeypad 
+                        onKeyPress={handlePhoneKeyPress} 
+                        onConfirm={handleConfirmCheckin} 
+                        confirmLabel="Realizar Check-in"
+                      />
                     </div>
+                  )}
 
-                    <NumericKeypad 
-                      onKeyPress={handlePhoneKeyPress} 
-                      onConfirm={handleConfirmCheckin} 
-                      confirmLabel="Realizar Check-in"
-                    />
-                  </div>
-                )}
+                  {/* METHOD 3: Search name database check-in */}
+                  {method === 'name' && (
+                    <div className="space-y-4 animate-fade-in text-left flex flex-col justify-between">
+                      <div className="space-y-1.5 shrink-0">
+                        <span className="text-xs font-black uppercase tracking-wider text-brand-red ml-1">
+                          Consulte seu Nome
+                        </span>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            readOnly
+                            value={nameSearch}
+                            placeholder="Busque por letras abaixo..."
+                            className="w-full h-12 px-4 bg-slate-100 rounded-xl border border-slate-300 font-bold text-slate-800 pointer-events-none"
+                          />
+                          {nameSearch && (
+                            <button
+                              type="button"
+                              onClick={() => { playTapSound(); setNameSearch(''); setSelectedMember(null); }}
+                              className="absolute right-3 top-2.5 hover:bg-slate-200 rounded-full w-7 h-7 flex items-center justify-center font-bold text-slate-500 cursor-pointer text-xs"
+                              title="Limpar busca"
+                            >
+                              X
+                            </button>
+                          )}
+                        </div>
+                      </div>
 
-                {/* METHOD 3: Search name database check-in */}
-                {method === 'name' && (
-                  <div className="space-y-4 animate-fade-in text-left flex flex-col justify-between">
-                    <div className="space-y-1.5 shrink-0">
-                      <span className="text-xs font-black uppercase tracking-wider text-brand-red ml-1">
-                        Consulte seu Nome
-                      </span>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          readOnly
-                          value={nameSearch}
-                          placeholder="Busque por letras abaixo..."
-                          className="w-full h-12 px-4 bg-slate-100 rounded-xl border border-slate-300 font-bold text-slate-800 pointer-events-none"
-                        />
-                        {nameSearch && (
-                          <button
-                            type="button"
-                            onClick={() => { playTapSound(); setNameSearch(''); setSelectedMember(null); }}
-                            className="absolute right-3 top-2.5 hover:bg-slate-200 rounded-full w-7 h-7 flex items-center justify-center font-bold text-slate-500 cursor-pointer text-xs"
-                          >
-                            X
-                          </button>
+                      {/* Filter result members */}
+                      <div className="bg-slate-50 p-2.5 rounded-2xl border border-slate-200 min-h-[120px] max-h-[140px] overflow-y-auto space-y-1 shrink-0">
+                        {filteredMembers.length > 0 ? (
+                          filteredMembers.map((m) => {
+                            const isSelected = selectedMember === m;
+                            return (
+                              <button
+                                key={m}
+                                type="button"
+                                onClick={() => { playTapSound(); setSelectedMember(m); }}
+                                className={`w-full text-left font-semibold text-sm px-4 py-2.5 rounded-xl cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.97] ${
+                                  isSelected 
+                                    ? 'bg-brand-red text-white font-black shadow-sm' 
+                                    : 'hover:bg-slate-100 text-slate-700'
+                                }`}
+                                style={{
+                                  backgroundColor: isSelected ? brand.primaryColor : undefined,
+                                }}
+                              >
+                                {m}
+                              </button>
+                            );
+                          })
+                        ) : (
+                          <p className="text-center text-xs text-slate-400 py-6">Nenhum membro encontrado com as iniciais atuais.</p>
                         )}
                       </div>
-                    </div>
 
-                    {/* Filter result members */}
-                    <div className="bg-slate-50 p-2.5 rounded-2xl border border-slate-200 min-h-[120px] max-h-[140px] overflow-y-auto space-y-1 shrink-0">
-                      {filteredMembers.length > 0 ? (
-                        filteredMembers.map((m) => {
-                          const isSelected = selectedMember === m;
-                          return (
-                            <button
-                              key={m}
-                              type="button"
-                              onClick={() => { playTapSound(); setSelectedMember(m); }}
-                              className={`w-full text-left font-semibold text-sm px-4 py-2 rounded-xl cursor-pointer ${
-                                isSelected 
-                                  ? 'bg-brand-red text-white font-black shadow-sm' 
-                                  : 'hover:bg-slate-100 text-slate-700'
-                              }`}
-                            >
-                              {m}
-                            </button>
-                          );
-                        })
-                      ) : (
-                        <p className="text-center text-xs text-slate-400 py-6">Nenhum membro encontrado com as iniciais atuais.</p>
-                      )}
+                      {/* Integrated On screen keyboard for name query */}
+                      <div className="w-full pt-1.5 border-t border-slate-100 shrink-0">
+                        <VirtualKeyboard onKeyPress={handleNameKeyPress} />
+                      </div>
                     </div>
+                  )}
 
-                    {/* Integrated On screen keyboard for name query */}
-                    <div className="w-full pt-1.5 border-t border-slate-100 shrink-0">
-                      <VirtualKeyboard onKeyPress={handleNameKeyPress} />
-                    </div>
-                  </div>
+                </div>
+
+                {/* Central Bottom Action triggered inside right panel */}
+                {method === 'name' && (
+                  <button
+                    type="button"
+                    onClick={handleConfirmCheckin}
+                    className="w-full h-16 text-white font-black text-lg flex items-center justify-center rounded-2xl shadow-lg cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.96] shrink-0 hover:opacity-90 animate-fade-in"
+                    style={{
+                      backgroundColor: brand.primaryColor,
+                      boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
+                    }}
+                  >
+                    Confirmar Presença
+                  </button>
                 )}
 
               </div>
-
-              {/* Central Bottom Action triggered inside right panel */}
-              {method === 'name' && (
-                <button
-                  type="button"
-                  onClick={handleConfirmCheckin}
-                  className="w-full h-14 bg-brand-dark hover:bg-brand-red text-white font-black text-lg flex items-center justify-center rounded-2xl shadow-md cursor-pointer transition-colors shrink-0"
-                >
-                  Confirmar Presença
-                </button>
-              )}
-
             </div>
 
           </div>
