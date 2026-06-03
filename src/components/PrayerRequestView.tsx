@@ -321,17 +321,17 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
         </div>
       )}
 
-      {/* Footer Navigation (Transparent, floating only the Back button) */}
-      <footer className="fixed bottom-8 left-6 md:left-20 z-45">
+      {/* Footer Navigation (Transparent, floating only the Back button on bottom right) */}
+      <footer className="fixed bottom-8 right-6 md:right-20 z-45">
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-2 text-white bg-slate-750 hover:bg-slate-850 font-black px-10 h-16 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-lg md:text-xl shadow-md border border-slate-700/10"
+          className="flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
           style={{
             background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
           }}
         >
-          <span className="material-symbols-outlined !text-2xl font-black">arrow_back</span>
+          <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>
           <span>Voltar</span>
         </button>
       </footer>

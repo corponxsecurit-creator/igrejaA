@@ -325,27 +325,21 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
           </div>
         </main>
 
-        {/* Footer Navigation */}
-        <footer className="fixed bottom-0 left-0 w-full z-45 h-28 flex justify-between items-center px-6 md:px-20 pb-4 bg-white shadow-lg border-t border-[#c4c6ce]">
-          <button
-            type="button"
-            onClick={onBack}
-            className="flex items-center gap-2 text-white bg-slate-750 hover:bg-slate-850 font-black px-10 h-16 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-lg md:text-xl shadow-md border border-slate-700/10"
-            style={{
-              background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
-            }}
-          >
-            <span className="material-symbols-outlined !text-2xl font-black">arrow_back</span>
-            <span>Voltar</span>
-          </button>
+        {/* Floating Back Button (Bottom Right) */}
+        <button
+          type="button"
+          onClick={onBack}
+          className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
+          style={{
+            background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+          }}
+        >
+          <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>
+          <span>Voltar</span>
+        </button>
 
-          <div className="hidden md:flex flex-col items-center text-slate-400">
-            <span className="material-symbols-outlined !text-3xl text-slate-400">touch_app</span>
-            <span className="text-[10px] font-black tracking-widest uppercase mt-1">Toque para selecionar</span>
-          </div>
-
-          <div className="w-10 h-10" />
-        </footer>
+        {/* Footer empty layout for spacing */}
+        <footer className="h-28 w-full" />
       </div>
     );
   }
@@ -434,8 +428,8 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
           </div>
         )}
 
-        {/* Footer Navigation (Transparent, floating only the Back button) */}
-        <footer className="fixed bottom-8 left-6 md:left-20 z-45">
+        {/* Footer Navigation (Transparent, floating only the Back button on bottom right) */}
+        <footer className="fixed bottom-8 right-6 md:right-20 z-45">
           <button
             type="button"
             onClick={() => {
@@ -443,12 +437,12 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
               setRegistrationMode(null);
               setActiveField(null);
             }}
-            className="flex items-center gap-2 text-white bg-slate-750 hover:bg-slate-850 font-black px-10 h-16 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-lg md:text-xl shadow-md border border-slate-700/10"
+            className="flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
             style={{
               background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
             }}
           >
-            <span className="material-symbols-outlined !text-2xl font-black">arrow_back</span>
+            <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>
             <span>Voltar</span>
           </button>
         </footer>
@@ -648,17 +642,17 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
         </div>
       )}
 
-      {/* Footer Navigation (Transparent, floating only the Back button) */}
-      <footer className="fixed bottom-8 left-6 md:left-20 z-45">
+      {/* Footer Navigation (Transparent, floating only the Back button on bottom right) */}
+      <footer className="fixed bottom-8 right-6 md:right-20 z-45">
         <button
           type="button"
           onClick={handlePrevStep}
-          className="flex items-center gap-2 text-white bg-slate-750 hover:bg-slate-850 font-black px-10 h-16 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-lg md:text-xl shadow-md border border-slate-700/10"
+          className="flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
           style={{
             background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
           }}
         >
-          <span className="material-symbols-outlined !text-2xl font-black">arrow_back</span>
+          <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>
           <span>Voltar</span>
         </button>
       </footer>

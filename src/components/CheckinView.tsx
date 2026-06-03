@@ -144,14 +144,7 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
           <LiveClock />
         </div>
 
-        <button
-          type="button"
-          onClick={handleGoBack}
-          className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200 backdrop-blur-sm"
-        >
-          <span className="material-symbols-outlined !text-xl">arrow_back</span>
-          <span>Voltar</span>
-        </button>
+        <div className="w-28" /> {/* Placeholder to balance header spacing */}
       </header>
 
       {/* Main Layout */}
@@ -412,8 +405,21 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
 
       </main>
 
+      {/* Floating Back Button (Bottom Right) */}
+      <button
+        type="button"
+        onClick={handleGoBack}
+        className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
+        style={{
+          background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+        }}
+      >
+        <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>
+        <span>Voltar</span>
+      </button>
+
       {/* Footer empty layout for alignment spacing */}
-      <footer className="h-10 w-full" />
+      <footer className="h-28 w-full" />
 
     </div>
   );

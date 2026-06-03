@@ -310,7 +310,6 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
         }}
       />
 
-      {/* Top Navigation */}
       <header className="fixed top-0 left-0 w-full z-45 bg-white/80 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
         <div>
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">
@@ -323,14 +322,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
           <LiveClock />
         </div>
 
-        <button
-          type="button"
-          onClick={handleGoBack}
-          className="flex items-center gap-2 text-slate-650 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all cursor-pointer font-bold border border-slate-200 backdrop-blur-sm"
-        >
-          <span className="material-symbols-outlined !text-xl">arrow_back</span>
-          <span>Voltar</span>
-        </button>
+        <div className="w-28" /> {/* Placeholder to balance header spacing */}
       </header>
 
       {/* Main Grid View */}
@@ -523,8 +515,21 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
         </div>
       )}
 
+      {/* Floating Back Button (Bottom Right) */}
+      <button
+        type="button"
+        onClick={handleGoBack}
+        className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
+        style={{
+          background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+        }}
+      >
+        <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>
+        <span>Voltar</span>
+      </button>
+
       {/* Empty block footer layout spacing */}
-      <footer className="h-10 w-full" />
+      <footer className="h-28 w-full" />
 
     </div>
   );
