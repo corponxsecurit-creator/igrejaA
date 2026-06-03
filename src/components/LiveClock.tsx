@@ -25,12 +25,15 @@ export default function LiveClock({ size = 'normal' }: LiveClockProps) {
   });
 
   return (
-    <div className="flex flex-col items-end justify-center font-sans bg-transparent border-none shadow-none p-0">
+    <div className="flex flex-row items-center justify-end gap-3 md:gap-5 font-sans bg-transparent border-none shadow-none p-0">
       <span className={`font-black tracking-wider font-mono text-current ${
-        size === 'large' ? 'text-5xl md:text-6xl' : 'text-2xl md:text-3xl'
+        size === 'large' ? 'text-6xl md:text-7xl' : 'text-3xl md:text-4xl'
       }`}>{timeString}</span>
-      <span className={`font-bold tracking-widest mt-1 text-current/75 ${
-        size === 'large' ? 'text-lg md:text-xl' : 'text-xs md:text-sm'
+      <span className={`text-current/30 font-light ${
+        size === 'large' ? 'text-4xl' : 'text-2xl'
+      }`}>|</span>
+      <span className={`font-black tracking-wider text-current/75 ${
+        size === 'large' ? 'text-3xl md:text-4xl' : 'text-lg md:text-xl'
       }`}>{dateString}</span>
     </div>
   );
