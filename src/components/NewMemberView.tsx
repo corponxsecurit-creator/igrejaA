@@ -509,7 +509,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
             
             {/* STEP 1: Personal Data */}
             {form.step === 1 && (
-              <div className="space-y-6 animate-fade-in">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
                 <div className="space-y-2">
                   <label className="block text-sm uppercase tracking-widest font-black text-brand-red ml-2">
                     Qual seu nome completo?
@@ -542,7 +542,7 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
 
             {/* STEP 2: Email & Town */}
             {form.step === 2 && (
-              <div className="space-y-6 animate-fade-in">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
                 <div className="space-y-2">
                   <label className="block text-sm uppercase tracking-widest font-black text-brand-red ml-2">
                     Qual seu melhor E-mail?

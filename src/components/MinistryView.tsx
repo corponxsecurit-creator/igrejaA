@@ -437,19 +437,19 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                   </button>
                 </div>
               ) : (
-                <div className="space-y-4">
-                  <p className="text-xs text-slate-500 font-semibold mb-4 bg-slate-50/60 p-3 rounded-xl border border-slate-200">
-                    {brand.type === 'synagogue'
-                      ? 'Inscreva-se abaixo. Seus dados serão encaminhados diretamente para os responsáveis pela coordenação.'
-                      : 'Inscreva-se abaixo. Seus dados serão encaminhados diretamente para o líder responsável pelo preenchimento de vagas.'}
-                  </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                  {/* Left Column: Form Details & Inputs */}
+                  <div className="space-y-4 flex flex-col justify-start">
+                    <p className="text-xs text-slate-500 font-semibold mb-2 bg-slate-50/60 p-3 rounded-xl border border-slate-200">
+                      {brand.type === 'synagogue'
+                        ? 'Inscreva-se abaixo. Seus dados serão encaminhados diretamente para os responsáveis pela coordenação.'
+                        : 'Inscreva-se abaixo. Seus dados serão encaminhados diretamente para o líder responsável pelo preenchimento de vagas.'}
+                    </p>
 
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Name Input Box */}
                     <div 
                       onClick={() => { playTapSound(); setActiveField('name'); }}
-                      className={`space-y-1.5 text-left p-3 rounded-2xl border-2 transition-all cursor-pointer ${
+                      className={`space-y-1.5 text-left p-4 rounded-2xl border-2 transition-all cursor-pointer ${
                         activeField === 'name' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200 bg-white'
                       }`}
                     >
@@ -464,7 +464,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                     {/* Phone Input Box */}
                     <div 
                       onClick={() => { playTapSound(); setActiveField('phone'); }}
-                      className={`space-y-1.5 text-left p-3 rounded-2xl border-2 transition-all cursor-pointer ${
+                      className={`space-y-1.5 text-left p-4 rounded-2xl border-2 transition-all cursor-pointer ${
                         activeField === 'phone' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200 bg-white'
                       }`}
                     >
@@ -475,10 +475,35 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                         {formatPhone(phone) || <span className="text-slate-400 font-normal">Toque para digitar seu celular</span>}
                       </div>
                     </div>
+
+                    {/* Action buttons */}
+                    {activeField === 'name' && (
+                      <div className="flex gap-4 pt-2">
+                        <button
+                          type="button"
+                          onClick={handleClose}
+                          className="flex-1 h-16 border border-slate-300 text-slate-650 rounded-xl font-bold hover:bg-slate-50 cursor-pointer text-sm"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => { playTapSound(); setActiveField('phone'); }}
+                          className="flex-1 h-16 text-white rounded-xl font-black cursor-pointer text-base flex items-center justify-center gap-1.5 hover:scale-[1.02] active:scale-[0.96] transition-all shadow-md"
+                          style={{
+                            backgroundColor: brand.primaryColor,
+                            boxShadow: `0 4px 12px ${brand.primaryColor}40`
+                          }}
+                        >
+                          <span>Próximo</span>
+                          <span className="material-symbols-outlined !text-base">arrow_forward</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Input Virtual Keyboards */}
-                  <div className="pt-2 border-t border-slate-100 flex justify-center min-h-[300px]">
+                  {/* Right Column: Keyboard */}
+                  <div className="border-t md:border-t-0 md:border-l border-slate-150 pt-4 md:pt-0 md:pl-6 flex items-center justify-center min-h-[300px]">
                     {activeField === 'name' && (
                       <VirtualKeyboard onKeyPress={handleKeyboardPress} />
                     )}
@@ -492,31 +517,6 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                       </div>
                     )}
                   </div>
-
-                  {/* Action buttons (only show cancel/confirm inline if on text input layout, or confirm at the bottom) */}
-                  {activeField === 'name' && (
-                    <div className="flex gap-4 pt-2">
-                      <button
-                        type="button"
-                        onClick={handleClose}
-                        className="flex-1 h-16 border border-slate-300 text-slate-600 rounded-xl font-bold hover:bg-slate-50 cursor-pointer text-sm"
-                      >
-                        Cancelar
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => { playTapSound(); setActiveField('phone'); }}
-                        className="flex-1 h-16 text-white rounded-xl font-black cursor-pointer text-base flex items-center justify-center gap-1.5 hover:opacity-90 active:scale-[0.98] transition-all shadow-md"
-                        style={{
-                          backgroundColor: brand.primaryColor,
-                          boxShadow: `0 4px 12px ${brand.primaryColor}40`
-                        }}
-                      >
-                        <span>Próximo</span>
-                        <span className="material-symbols-outlined !text-base">arrow_forward</span>
-                      </button>
-                    </div>
-                  )}
                 </div>
               )}
             </div>

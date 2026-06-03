@@ -329,7 +329,7 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: 
       {/* Counseling solicitation popup layout */}
       {selectedPastor && (
         <div className="fixed inset-0 bg-[#0a0a0a]/90 backdrop-blur-md z-50 flex items-center justify-center p-6 animate-fade-in select-none">
-          <div className="relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl w-full max-w-2xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col">
+          <div className="relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl w-full max-w-4xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col">
             {/* Background image related to client virtual identity inside modal */}
             <div 
               className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.12] pointer-events-none"
@@ -379,23 +379,27 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: 
                   </button>
                 </div>
               ) : (
-                <div className="space-y-4">
-                  <p className="text-xs text-slate-500 font-semibold mb-4 bg-slate-50/60 rounded-xl p-3 border border-slate-200">
-                    {brand.type === 'synagogue'
-                      ? 'Ao confirmar a solicitação, o rabino de plantão se organizará para recebê-lo de forma individual em nossa sala reservada de estudos e orientação.'
-                      : 'Ao confirmar o atendimento, o pastor de plantão se organizará para recebê-lo de forma individual em nossa sala reservada de aconselhamento.'}
-                  </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                  {/* Left Column: Description & WhatsApp Input */}
+                  <div className="space-y-6 flex flex-col justify-center">
+                    <p className="text-sm text-slate-650 font-semibold bg-slate-50/60 rounded-2xl p-4 border border-slate-200 leading-relaxed">
+                      {brand.type === 'synagogue'
+                        ? 'Ao confirmar a solicitação, o rabino de plantão se organizará para recebê-lo de forma individual em nossa sala reservada de estudos e orientação.'
+                        : 'Ao confirmar o atendimento, o pastor de plantão se organizará para recebê-lo de forma individual em nossa sala reservada de aconselhamento.'}
+                    </p>
 
-                  <div className="space-y-1.5 text-left">
-                    <label className="block text-xs uppercase tracking-widest font-black text-brand-red ml-1">
-                      Seu WhatsApp para Contato
-                    </label>
-                    <div className="w-full h-12 px-4 rounded-xl border border-slate-300 bg-slate-50 font-bold text-slate-800 flex items-center text-lg shadow-inner">
-                      {formatPhone(userPhone) || <span className="text-slate-400 font-normal">Digite seu celular</span>}
+                    <div className="space-y-2 text-left">
+                      <label className="block text-sm uppercase tracking-widest font-black text-brand-red ml-1">
+                        Seu WhatsApp para Contato
+                      </label>
+                      <div className="w-full h-16 px-5 rounded-2xl border-2 border-slate-300 bg-slate-50 font-bold text-slate-800 flex items-center text-xl shadow-inner">
+                        {formatPhone(userPhone) || <span className="text-slate-400 font-normal">Digite seu celular</span>}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="py-2 border-t border-slate-100">
+                  {/* Right Column: Keypad */}
+                  <div className="border-t md:border-t-0 md:border-l border-slate-150 pt-4 md:pt-0 md:pl-6">
                     <NumericKeypad 
                       onKeyPress={handleKeypadPress} 
                       onConfirm={handleScheduleSubmit} 

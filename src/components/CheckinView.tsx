@@ -319,64 +319,71 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
 
                   {/* METHOD 3: Search name database check-in */}
                   {method === 'name' && (
-                    <div className="space-y-4 animate-fade-in text-left flex flex-col justify-between">
-                      <div className="space-y-1.5 shrink-0">
-                        <span className="text-xs font-black uppercase tracking-wider text-brand-red ml-1">
-                          Consulte seu Nome
-                        </span>
-                        <div className="relative">
-                          <input
-                            type="text"
-                            readOnly
-                            value={nameSearch}
-                            placeholder="Busque por letras abaixo..."
-                            className="w-full h-12 px-4 bg-slate-100 rounded-xl border border-slate-300 font-bold text-slate-800 pointer-events-none"
-                          />
-                          {nameSearch && (
-                            <button
-                              type="button"
-                              onClick={() => { playTapSound(); setNameSearch(''); setSelectedMember(null); }}
-                              className="absolute right-3 top-2.5 hover:bg-slate-200 rounded-full w-7 h-7 flex items-center justify-center font-bold text-slate-500 cursor-pointer text-xs"
-                              title="Limpar busca"
-                            >
-                              X
-                            </button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in text-left items-stretch">
+                      
+                      {/* Left Column: Search Input & Results List */}
+                      <div className="flex flex-col justify-between space-y-4">
+                        <div className="space-y-1.5">
+                          <span className="text-xs font-black uppercase tracking-wider text-brand-red ml-1">
+                            Consulte seu Nome
+                          </span>
+                          <div className="relative">
+                            <input
+                              type="text"
+                              readOnly
+                              value={nameSearch}
+                              placeholder="Busque por letras..."
+                              className="w-full h-12 px-4 bg-slate-100 rounded-xl border border-slate-300 font-bold text-slate-800 pointer-events-none"
+                            />
+                            {nameSearch && (
+                              <button
+                                type="button"
+                                onClick={() => { playTapSound(); setNameSearch(''); setSelectedMember(null); }}
+                                className="absolute right-3 top-2.5 hover:bg-slate-200 rounded-full w-7 h-7 flex items-center justify-center font-bold text-slate-500 cursor-pointer text-xs"
+                                title="Limpar busca"
+                              >
+                                X
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Filter result members */}
+                        <div className="bg-slate-50 p-2.5 rounded-2xl border border-slate-200 flex-grow min-h-[160px] max-h-[220px] overflow-y-auto space-y-1">
+                          {filteredMembers.length > 0 ? (
+                            filteredMembers.map((m) => {
+                              const isSelected = selectedMember === m;
+                              return (
+                                <button
+                                  key={m}
+                                  type="button"
+                                  onClick={() => { playTapSound(); setSelectedMember(m); }}
+                                  className={`w-full text-left font-semibold text-sm px-4 py-2.5 rounded-xl cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.97] ${
+                                    isSelected 
+                                      ? 'bg-brand-red text-white font-black shadow-sm' 
+                                      : 'hover:bg-slate-100 text-slate-700'
+                                  }`}
+                                  style={{
+                                    backgroundColor: isSelected ? brand.primaryColor : undefined,
+                                  }}
+                                >
+                                  {m}
+                                </button>
+                              );
+                            })
+                          ) : (
+                            <p className="text-center text-xs text-slate-400 py-10">Nenhum membro encontrado com as iniciais atuais.</p>
                           )}
                         </div>
                       </div>
 
-                      {/* Filter result members */}
-                      <div className="bg-slate-50 p-2.5 rounded-2xl border border-slate-200 min-h-[120px] max-h-[140px] overflow-y-auto space-y-1 shrink-0">
-                        {filteredMembers.length > 0 ? (
-                          filteredMembers.map((m) => {
-                            const isSelected = selectedMember === m;
-                            return (
-                              <button
-                                key={m}
-                                type="button"
-                                onClick={() => { playTapSound(); setSelectedMember(m); }}
-                                className={`w-full text-left font-semibold text-sm px-4 py-2.5 rounded-xl cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.97] ${
-                                  isSelected 
-                                    ? 'bg-brand-red text-white font-black shadow-sm' 
-                                    : 'hover:bg-slate-100 text-slate-700'
-                                }`}
-                                style={{
-                                  backgroundColor: isSelected ? brand.primaryColor : undefined,
-                                }}
-                              >
-                                {m}
-                              </button>
-                            );
-                          })
-                        ) : (
-                          <p className="text-center text-xs text-slate-400 py-6">Nenhum membro encontrado com as iniciais atuais.</p>
-                        )}
+                      {/* Right Column: Virtual Keyboard */}
+                      <div className="flex items-center justify-center pt-4 md:pt-0">
+                        <div className="w-full border-t md:border-t-0 md:border-l border-slate-150 pt-4 md:pt-0 md:pl-6">
+                          <VirtualKeyboard onKeyPress={handleNameKeyPress} />
+                        </div>
                       </div>
 
-                      {/* Integrated On screen keyboard for name query */}
-                      <div className="w-full pt-1.5 border-t border-slate-100 shrink-0">
-                        <VirtualKeyboard onKeyPress={handleNameKeyPress} />
-                      </div>
                     </div>
                   )}
 
