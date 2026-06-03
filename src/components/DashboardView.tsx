@@ -271,13 +271,12 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         <button
           type="button"
           onClick={handleHomeClick}
-          className="flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider text-base md:text-lg border border-white/20 animate-home-pulse home-btn-hover"
+          className="flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider text-xl md:text-2xl border border-white/20 animate-home-pulse home-btn-hover"
           style={{
             background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
             boxShadow: `0 10px 25px ${brand.primaryColor}40`
           }}
         >
-          <span className="material-symbols-fill !text-3xl animate-pulse">home</span>
           <span>Início</span>
         </button>
 
@@ -285,13 +284,12 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         <button
           type="button"
           onClick={() => handleSelect('pastoral')}
-          className="flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider text-base md:text-lg border border-white/20 hover:scale-[1.05]"
+          className="flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider text-xl md:text-2xl border border-white/20 hover:scale-[1.05]"
           style={{
             background: `linear-gradient(135deg, ${brand.primaryColorHover} 0%, ${brand.primaryColor} 100%)`,
             boxShadow: `0 10px 25px ${brand.primaryColor}40`
           }}
         >
-          <span className="material-symbols-fill !text-3xl animate-pulse">volunteer_activism</span>
           <span>{brand.termPastoral}</span>
         </button>
 
