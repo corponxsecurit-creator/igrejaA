@@ -2,6 +2,33 @@
 <html lang="pt-BR" class="light">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      try {
+        var stored = localStorage.getItem('santuario_brands');
+        if (stored && stored.includes('igrejaatitude.com.br') && !stored.includes('i0.wp.com')) {
+          var parsed = JSON.parse(stored);
+          if (parsed.atitude) {
+            if (parsed.atitude.logoUrl === 'https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png' || (parsed.atitude.logoUrl && !parsed.atitude.logoUrl.includes('i0.wp.com'))) {
+              parsed.atitude.logoUrl = 'https://i0.wp.com/igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png';
+            }
+            if (parsed.atitude.bgUrl === 'https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png' || (parsed.atitude.bgUrl && !parsed.atitude.bgUrl.includes('i0.wp.com'))) {
+              parsed.atitude.bgUrl = 'https://i0.wp.com/igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png';
+            }
+            if (parsed.atitude.slides) {
+              parsed.atitude.slides = parsed.atitude.slides.map(function(s) {
+                if (s.bgUrl && s.bgUrl.includes('igrejaatitude.com.br') && !s.bgUrl.includes('i0.wp.com')) {
+                  s.bgUrl = s.bgUrl.replace('https://igrejaatitude.com.br', 'https://i0.wp.com/igrejaatitude.com.br');
+                }
+                return s;
+              });
+            }
+            localStorage.setItem('santuario_brands', JSON.stringify(parsed));
+          }
+        }
+      } catch (e) {
+        console.error('LocalStorage cleanup error:', e);
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Santuário Digital - Atitude Alphaville</title>
     <!-- Google Fonts: Inter & Montserrat -->

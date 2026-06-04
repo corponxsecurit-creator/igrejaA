@@ -39,8 +39,8 @@ export const brands: Record<string, BrandConfig> = {
     id: 'atitude',
     name: 'Atitude',
     campusName: 'Alphaville',
-    logoUrl: 'https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png',
-    bgUrl: 'https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png',
+    logoUrl: 'https://i0.wp.com/igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png',
+    bgUrl: 'https://i0.wp.com/igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png',
     primaryColor: '#e30613',
     primaryColorHover: '#c61118',
     accentColor: '#e30613',
@@ -659,6 +659,113 @@ export const brands: Record<string, BrandConfig> = {
         phone: '(11) 99988-7788',
       }
     ]
+  },
+  ymcactx: {
+    id: 'ymcactx',
+    name: 'YMCA CTX',
+    campusName: 'Academy Sports',
+    logoUrl: 'https://ymcactx.org/wp-content/uploads/2023/10/logo-y-164.png',
+    bgUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1600&fit=crop&q=80',
+    primaryColor: '#00a4ec',
+    primaryColorHover: '#007ec8',
+    accentColor: '#fcaf17',
+    glowColor: 'rgba(252, 175, 23, 0.25)',
+    badgeBgColor: '#fcaf17',
+    badgeTextColor: '#0a0a0a',
+    badgeLabel: 'YMCA Academy Sports',
+    accentSplashColor: '#fcaf17',
+    slides: [
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1600&fit=crop&q=80',
+        verse: 'Construindo pessoas fortes, famílias fortes e comunidades fortes.',
+        verseRef: 'YMCA Missão'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1600&fit=crop&q=80',
+        verse: 'Desenvolvendo caráter, liderança e espírito de equipe através do esporte.',
+        verseRef: 'YMCA Academy'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1519766304817-4f37bda74a27?w=1600&fit=crop&q=80',
+        verse: 'O esporte tem o poder de transformar vidas e unir comunidades.',
+        verseRef: 'Valores YMCA'
+      }
+    ],
+    type: 'church',
+    termPastor: 'Treinador',
+    termPastors: 'Treinadores',
+    termPastoral: 'Falar com o Treinador',
+    termCult: 'Treino',
+    termCults: 'Treinos & Atividades',
+    termDonation: 'Mensalidade',
+    termDonations: 'Mensalidades & Contribuições',
+    termConnect: 'Time',
+    termConnects: 'Nossos Times',
+    termMember: 'Ficha do Atleta',
+    location: '100 N 3rd St, Temple, TX 76501, EUA',
+    wifi: 'YMCA_Academy_Guest',
+    pixKey: 'financeiro@ymcactx.org',
+    pastors: [
+      {
+        id: '1',
+        name: 'Coach Marcos Silva',
+        role: 'Coordenador de Basquete',
+        available: true,
+        photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&fit=crop&q=80',
+      },
+      {
+        id: '2',
+        name: 'Coach Ana Souza',
+        role: 'Treinadora Sub-15 / Sub-17',
+        available: true,
+        photoUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&fit=crop&q=80',
+      },
+      {
+        id: '3',
+        name: 'Coach Felipe Costa',
+        role: 'Iniciação Esportiva',
+        available: true,
+        photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&fit=crop&q=80',
+      }
+    ],
+    cellGroups: [
+      {
+        id: '1',
+        name: 'Time Sub-13 Basquete',
+        neighborhood: 'Ginásio Central',
+        day: 'Terça e Quinta',
+        hour: '14:00',
+        leader: 'Coach Marcos',
+        phone: '(11) 98765-4321',
+      },
+      {
+        id: '2',
+        name: 'Time Sub-15 Basquete',
+        neighborhood: 'Ginásio Central',
+        day: 'Terça e Quinta',
+        hour: '15:30',
+        leader: 'Coach Ana',
+        phone: '(11) 98765-4321',
+      },
+      {
+        id: '3',
+        name: 'Time Sub-17 Basquete',
+        neighborhood: 'Quadra Anexa',
+        day: 'Quarta e Sexta',
+        hour: '16:00',
+        leader: 'Coach Marcos',
+        phone: '(11) 98765-4321',
+      },
+      {
+        id: '4',
+        name: 'Iniciação Esportiva (Sub-9/Sub-11)',
+        neighborhood: 'Ginásio Central',
+        day: 'Sábado',
+        hour: '09:00',
+        leader: 'Coach Felipe',
+        phone: '(11) 98765-4321',
+      }
+    ]
   }
 };
 
@@ -668,9 +775,20 @@ export function getStoredBrands(): Record<string, BrandConfig> {
   if (stored) {
     try {
       const parsed = JSON.parse(stored);
+      let needsSave = false;
       const merged: Record<string, BrandConfig> = JSON.parse(JSON.stringify(brands));
       for (const key of Object.keys(parsed)) {
         if (merged[key]) {
+          if (key === 'atitude') {
+            if (parsed[key].logoUrl === 'https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png' || (parsed[key].logoUrl && !parsed[key].logoUrl.includes('i0.wp.com'))) {
+              parsed[key].logoUrl = brands.atitude.logoUrl;
+              needsSave = true;
+            }
+            if (parsed[key].bgUrl === 'https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png' || (parsed[key].bgUrl && !parsed[key].bgUrl.includes('i0.wp.com'))) {
+              parsed[key].bgUrl = brands.atitude.bgUrl;
+              needsSave = true;
+            }
+          }
           merged[key] = { ...merged[key], ...parsed[key] };
           if (!parsed[key].slides && brands[key]?.slides) {
             merged[key].slides = brands[key].slides;
@@ -678,6 +796,9 @@ export function getStoredBrands(): Record<string, BrandConfig> {
         } else {
           merged[key] = parsed[key];
         }
+      }
+      if (needsSave) {
+        localStorage.setItem('santuario_brands', JSON.stringify(parsed));
       }
       return merged;
     } catch (e) {
@@ -711,6 +832,8 @@ export function getCurrentBrand(): BrandConfig {
     client = 'beityaacov';
   } else if (client === 'icc' || client === 'icconselheira') {
     client = 'icconselheira';
+  } else if (client === 'ymcactx' || client === 'ymca' || client === 'ymca-academy' || client === 'ymca-sports') {
+    client = 'ymcactx';
   }
   
   const dynamicBrands = getStoredBrands();

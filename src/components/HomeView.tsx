@@ -3,6 +3,7 @@ import { playTapSound } from '../utils/audio';
 import { speakText } from '../utils/tts';
 import { BrandConfig } from '../utils/brand';
 import { Slide } from '../types';
+import { t, Lang } from '../utils/i18n';
 
 /* ─── Particle data ─────────── */
 const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
@@ -21,6 +22,8 @@ interface HomeViewProps {
   onOpenAccessibility: () => void;
   onOpenAdmin?: () => void;
   brand: BrandConfig;
+  lang: Lang;
+  onLanguageChange: (lang: Lang) => void;
 }
 
 /* ─── HomeView ──────────────────────────────────────── */
@@ -29,6 +32,8 @@ export default function HomeView({
   onOpenAccessibility,
   onOpenAdmin,
   brand,
+  lang,
+  onLanguageChange,
 }: HomeViewProps) {
   const slides = useMemo(() => {
     if (brand.slides && brand.slides.length > 0) {
@@ -49,13 +54,13 @@ export default function HomeView({
 
   /* Voice greeting */
   useEffect(() => {
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       speakText(
-        `Bem-vindo. Toque na tela para iniciar o atendimento.`
+        t('welcomeVoice', lang)
       );
     }, 800);
-    return () => clearTimeout(t);
-  }, [brand]);
+    return () => clearTimeout(timer);
+  }, [brand, lang]);
 
   /* ── Slide transition ─────────────────────────────── */
   const goToSlide = useCallback((next: number) => {
@@ -114,8 +119,8 @@ export default function HomeView({
   const handleStart = () => { playTapSound(); onStart(); };
   const handleLang  = () => {
     playTapSound();
-    speakText('Idioma selecionado: Português do Brasil.');
-    alert('Idioma: Português (Brasil)');
+    const nextLang = lang === 'pt' ? 'en' : lang === 'en' ? 'es' : lang === 'es' ? 'de' : 'pt';
+    onLanguageChange(nextLang);
   };
   const handleAccessibility = () => { playTapSound(); onOpenAccessibility(); };
 
@@ -266,6 +271,7 @@ export default function HomeView({
             <option value="beityaacov"   className="bg-slate-900">Beit Yaacov</option>
             <option value="ibmalphaville" className="bg-slate-900">IBM Alphaville</option>
             <option value="icconselheira" className="bg-slate-900">ICC</option>
+            <option value="ymcactx"      className="bg-slate-900">YMCA Academy Sports</option>
           </select>
         </div>
 
@@ -287,11 +293,12 @@ export default function HomeView({
           <button
             type="button"
             onClick={handleLang}
-            className="w-11 h-11 rounded-full bg-white/8 hover:bg-white/18 border border-white/12 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer backdrop-blur-xl"
+            className="w-16 h-11 rounded-full bg-white/8 hover:bg-white/18 border border-white/12 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer backdrop-blur-xl gap-1 text-xs font-black uppercase tracking-wider text-white"
             aria-label="Mudar idioma"
             title="Idioma"
           >
-            <span className="material-symbols-outlined font-light !text-xl" aria-hidden="true">language</span>
+            <span className="material-symbols-outlined font-light !text-base" aria-hidden="true">language</span>
+            <span>{lang}</span>
           </button>
           <button
             type="button"
@@ -326,7 +333,7 @@ export default function HomeView({
             className="uppercase tracking-[0.4em] font-black mb-4 slide-reveal"
             style={{ color: accent, fontSize: '24px', fontWeight: 600 }}
           >
-            Bem-vindo
+            {t('welcome', lang)}
           </span>
 
           {/* H1 — 64px / 800 / letter-spacing 4px */}
@@ -338,7 +345,7 @@ export default function HomeView({
           >
             <img
               src={brand.logoUrl}
-              className={`h-24 md:h-36 object-contain ${['atitude', 'ibmalphaville'].includes(brand.id) ? 'logo-white' : ''}`}
+              className={`h-24 md:h-36 object-contain ${['atitude', 'ibmalphaville', 'lagoinha'].includes(brand.id) ? 'logo-white' : ''}`}
               alt={brand.name}
               referrerPolicy="no-referrer"
             />
@@ -406,14 +413,14 @@ export default function HomeView({
             >
               touch_app
             </span>
-            Como podemos ajudar você?
+            {t('ctaQuestion', lang)}
           </button>
 
           {/* Tap prompt */}
           <div className="mt-5 flex items-center gap-3" aria-hidden="true">
             <span className="w-8 h-px bg-white/20" />
             <span className="text-white/45 text-xs uppercase tracking-[0.3em] font-semibold animate-pulse">
-              Toque para iniciar
+              {t('tapToStart', lang)}
             </span>
             <span className="w-8 h-px bg-white/20" />
           </div>
@@ -476,7 +483,7 @@ export default function HomeView({
             <div className="flex items-center gap-1.5">
               <span className="material-symbols-outlined !text-sm" style={{ color: accent }} aria-hidden="true">location_on</span>
               <span>
-                {brand.type === 'synagogue' ? 'Salão de Orações' : 'Auditório Principal'}
+                {brand.id === 'ymcactx' ? t('locationGym', lang) : brand.type === 'synagogue' ? t('locationSynagogue', lang) : t('locationHall', lang)}
               </span>
             </div>
           </div>

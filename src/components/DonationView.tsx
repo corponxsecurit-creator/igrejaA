@@ -69,7 +69,12 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
     setTimeout(() => setCopied(false), 3000);
   };
 
-  const categories = brand.type === 'synagogue' ? [
+  const categories = brand.id === 'ymcactx' ? [
+    { title: 'Mensalidade Geral', icon: 'payments', desc: 'Mensalidade padrão de treinamento e uso da quadra.' },
+    { title: 'Inscrição em Torneio', icon: 'emoji_events', desc: 'Taxa de inscrição para copas locais, uniformes e taxas de arbitragem.' },
+    { title: 'Bolsas Esportivas', icon: 'volunteer_activism', desc: 'Fundo para subsidiar mensalidades e uniformes de atletas carentes.' },
+    { title: 'Manutenção de Quadra', icon: 'construction', desc: 'Apoio para melhoria de cestas, bolas e infraestrutura do ginásio.' }
+  ] : brand.type === 'synagogue' ? [
     { title: 'Tsedaká Geral', icon: 'payments', desc: 'Contribuição regular para os custos e preces da sinagoga.' },
     { title: 'Estudos e Shabat', icon: 'volunteer_activism', desc: 'Oferta voluntária para festividades de Cabalat Shabat e shiurim.' },
     { title: 'Auxílio de Israel', icon: 'public', desc: 'Apoio direto a projetos humanitários e de assistência em Israel.' },
@@ -207,14 +212,16 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                 </div>
                 <div className="space-y-1.5">
                   <span className="text-[10px] uppercase tracking-widest font-black text-brand-red bg-brand-red/10 px-2.5 py-0.5 rounded-full inline-block">
-                    {brand.type === 'synagogue' ? 'Tsedaká Comunitária' : `Generosidade ${brand.campusName}`}
+                    {brand.type === 'synagogue' ? 'Tsedaká Comunitária' : brand.id === 'ymcactx' ? 'Mensalidades & Suporte' : `Generosidade ${brand.campusName}`}
                   </span>
                   <h3 className="text-lg font-black text-brand-dark tracking-tight">
-                    Meta de Gratidão Diária 🎯
+                    {brand.id === 'ymcactx' ? 'Meta Diária de Contribuição 🎯' : 'Meta de Gratidão Diária 🎯'}
                   </h3>
                   <p className="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
                     {brand.type === 'synagogue'
                       ? `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 in tsedakás! Nossa meta hoje é alcançar esse valor para apoiar a manutenção da sinagoga e auxílio social.`
+                      : brand.id === 'ymcactx'
+                      ? `No dia de ontem, nossos atletas e parceiros somaram um total de R$ 5.480,00 em mensalidades e apoio! Nossa meta hoje é garantir esse suporte para financiar bolsas de treino e melhorias de materiais.`
                       : `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 em dízimos e ofertas voluntárias! Nossa meta hoje é igualar ou ultrapassar essa bênção para apoiar as ações sociais.`}
                   </p>
                 </div>

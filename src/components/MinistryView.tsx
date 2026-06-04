@@ -131,6 +131,61 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
       ];
     }
 
+    if (brand.id === 'ymcactx') {
+      return [
+        {
+          id: 'tecnico',
+          name: 'Auxiliar Técnico',
+          tag: 'Esportes & Liderança',
+          icon: 'sports',
+          color: 'bg-indigo-900 border-indigo-950',
+          wide: true,
+          desc: 'Auxilie nossos treinadores na preparação de treinos, instruções de jogo e desenvolvimento de atletas.',
+        },
+        {
+          id: 'quadra',
+          name: 'Apoio de Quadra (Staff)',
+          tag: 'Logística',
+          icon: 'sports_basketball',
+          color: 'bg-[#fcaf17] border-yellow-600',
+          desc: 'Ajude na organização da quadra, cronômetro, placar e distribuição de águas e coletes.',
+        },
+        {
+          id: 'pais',
+          name: 'Comitê de Pais',
+          tag: 'Integração',
+          icon: 'diversity_3',
+          color: 'bg-brand-charcoal border-slate-800',
+          desc: 'Faça parte da organização de eventos da academia, recepção de novos atletas e reuniões.',
+        },
+        {
+          id: 'lanches',
+          name: 'Logística & Lanches',
+          tag: 'Bem-estar',
+          icon: 'restaurant',
+          color: 'bg-emerald-900 border-emerald-950',
+          desc: 'Apoie no fornecimento e distribuição de lanches saudáveis e hidratação nos dias de jogo.',
+        },
+        {
+          id: 'midia',
+          name: 'Fotografia & Mídia',
+          tag: 'Comunicação',
+          icon: 'photo_camera',
+          color: 'bg-rose-950 border-rose-900',
+          desc: 'Registre as partidas, treinos e eventos da academia para divulgação e mídias sociais.',
+        },
+        {
+          id: 'socorros',
+          name: 'Primeiros Socorros',
+          tag: 'Saúde',
+          icon: 'medical_services',
+          color: 'bg-[#0f172a] border-[#1e293b]',
+          wide: true,
+          desc: 'Ofereça suporte preventivo e atendimento básico de primeiros socorros em treinos e torneios.',
+        }
+      ];
+    }
+
     // Default or Atitude/Lagoinha
     return [
       {

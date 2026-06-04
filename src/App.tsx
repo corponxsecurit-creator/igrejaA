@@ -15,6 +15,7 @@ import InactivityTimer from './components/InactivityTimer';
 import { playTapSound, playSuccessSound } from './utils/audio';
 import { speakText, setVoiceAssistEnabled } from './utils/tts';
 import { getCurrentBrand } from './utils/brand';
+import { translateBrandTerms, Lang } from './utils/i18n';
 
 const hexToRgb = (hex: string): string => {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -31,8 +32,15 @@ export default function App() {
   const [textZoom, setTextZoom] = useState(false);
   const [voiceAssist, setVoiceAssist] = useState(false);
   const [showAccessModal, setShowAccessModal] = useState(false);
+  const [lang, setLang] = useState<Lang>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('totem_lang') as Lang) || 'pt';
+    }
+    return 'pt';
+  });
 
-  const brand = getCurrentBrand();
+  const rawBrand = getCurrentBrand();
+  const brand = translateBrandTerms(rawBrand, lang);
 
   useEffect(() => {
     document.documentElement.style.setProperty('--color-brand-red', brand.primaryColor);
@@ -54,19 +62,37 @@ export default function App() {
     document.title = `Santuário Digital - ${brand.name}`;
   }, [brand]);
 
+  const handleLanguageChange = (newLang: Lang) => {
+    setLang(newLang);
+    localStorage.setItem('totem_lang', newLang);
+    if (newLang === 'pt') speakText('Idioma: Português.', true);
+    else if (newLang === 'en') speakText('Language: English.', true);
+    else if (newLang === 'es') speakText('Idioma: Español.', true);
+    else if (newLang === 'de') speakText('Sprache: Deutsch.', true);
+  };
+
   const handleStart = () => {
     setView('dashboard');
-    speakText('Entrando no painel principal. Como podemos ajudar você hoje?');
+    if (lang === 'en') speakText('Entering main panel. How can we help you today?');
+    else if (lang === 'es') speakText('Entrando al panel principal. ¿Cómo podemos ayudarle hoy?');
+    else if (lang === 'de') speakText('Hauptmenü aufgerufen. Wie können wir Ihnen heute helfen?');
+    else speakText('Entrando no painel principal. Como podemos ajudar você hoje?');
   };
 
   const handleBackToDashboard = () => {
     setView('dashboard');
-    speakText('Retornando ao painel principal.');
+    if (lang === 'en') speakText('Returning to main panel.');
+    else if (lang === 'es') speakText('Retornando al panel principal.');
+    else if (lang === 'de') speakText('Zurück zum Hauptmenü.');
+    else speakText('Retornando ao painel principal.');
   };
 
   const handleGoHome = () => {
     setView('home');
-    speakText('Retornando à tela inicial.');
+    if (lang === 'en') speakText('Returning to start screen.');
+    else if (lang === 'es') speakText('Retornando a la pantalla de inicio.');
+    else if (lang === 'de') speakText('Zurück zum Startbildschirm.');
+    else speakText('Retornando à tela inicial.');
   };
 
   const handleCheckinSuccess = () => {
@@ -75,13 +101,51 @@ export default function App() {
 
   const handleSelectView = (v: ViewState) => {
     setView(v);
-    if (v === 'new_member') speakText(`Iniciando formulário de ${brand.termMember.toLowerCase()}.`);
-    else if (v === 'prayer') speakText(`Abri a tela para enviar pedidos de ${brand.type === 'synagogue' ? 'orações' : 'oração'}.`);
-    else if (v === 'checkin') speakText(`Acessando check-in de ${brand.termCults.toLowerCase()} e encontros.`);
-    else if (v === 'donations') speakText(`Acessando altar de generosidade para ${brand.termDonations.toLowerCase()}.`);
-    else if (v === 'ministries') speakText('Abrindo painel de voluntariado e atividades.');
-    else if (v === 'my_cell') speakText(`Abri a busca de ${brand.termConnects.toLowerCase()}.`);
-    else if (v === 'pastoral') speakText(`Exibindo ${brand.termPastors.toLowerCase()} de plantão.`);
+    if (v === 'new_member') {
+      const term = brand.termMember.toLowerCase();
+      if (lang === 'en') speakText('Starting athlete registration form.');
+      else if (lang === 'es') speakText('Iniciando formulario de registro de atleta.');
+      else if (lang === 'de') speakText('Athleten-Registrierung gestartet.');
+      else speakText(`Iniciando formulário de ${term}.`);
+    } else if (v === 'prayer') {
+      if (brand.id === 'ymcactx') {
+        if (lang === 'en') speakText('Opening support and suggestions screen.');
+        else if (lang === 'es') speakText('Abriendo pantalla de soporte y sugerencias.');
+        else if (lang === 'de') speakText('Support- und Feedbackseite geöffnet.');
+        else speakText('Abri a tela de suporte e sugestões.');
+      } else {
+        const text = brand.type === 'synagogue' ? 'orações' : 'oração';
+        if (lang === 'en') speakText('Opening prayer request screen.');
+        else if (lang === 'es') speakText('Abriendo pantalla de peticiones de oración.');
+        else if (lang === 'de') speakText('Gebetsanliegen geöffnet.');
+        else speakText(`Abri a tela para enviar pedidos de ${text}.`);
+      }
+    } else if (v === 'checkin') {
+      if (lang === 'en') speakText(`Opening check-in for ${brand.termCults.toLowerCase()}.`);
+      else if (lang === 'es') speakText(`Abriendo check-in para ${brand.termCults.toLowerCase()}.`);
+      else if (lang === 'de') speakText(`Check-in für ${brand.termCults.toLowerCase()} geöffnet.`);
+      else speakText(`Acessando check-in de ${brand.termCults.toLowerCase()} e encontros.`);
+    } else if (v === 'donations') {
+      if (lang === 'en') speakText('Opening fees and contributions screen.');
+      else if (lang === 'es') speakText('Abriendo pantalla de mensualidades y contribuciones.');
+      else if (lang === 'de') speakText('Beiträge und Zahlungen geöffnet.');
+      else speakText(`Acessando altar de generosidade para ${brand.termDonations.toLowerCase()}.`);
+    } else if (v === 'ministries') {
+      if (lang === 'en') speakText('Opening volunteering panel.');
+      else if (lang === 'es') speakText('Abriendo panel de voluntariado.');
+      else if (lang === 'de') speakText('Mitwirkung und Ehrenamt geöffnet.');
+      else speakText('Abrindo painel de voluntariado e atividades.');
+    } else if (v === 'my_cell') {
+      if (lang === 'en') speakText(`Opening ${brand.termConnects.toLowerCase()} search.`);
+      else if (lang === 'es') speakText(`Abriendo búsqueda de ${brand.termConnects.toLowerCase()}.`);
+      else if (lang === 'de') speakText(`Suche für ${brand.termConnects.toLowerCase()} geöffnet.`);
+      else speakText(`Abri a busca de ${brand.termConnects.toLowerCase()}.`);
+    } else if (v === 'pastoral') {
+      if (lang === 'en') speakText('Displaying coaches on duty.');
+      else if (lang === 'es') speakText('Mostrando entrenadores de guardia.');
+      else if (lang === 'de') speakText('Trainer im Dienst angezeigt.');
+      else speakText(`Exibindo ${brand.termPastors.toLowerCase()} de plantão.`);
+    }
   };
 
   return (
@@ -100,6 +164,8 @@ export default function App() {
               speakText('Acessando painel administrativo.');
             }}
             brand={brand}
+            lang={lang}
+            onLanguageChange={handleLanguageChange}
           />
         )}
 
@@ -113,6 +179,8 @@ export default function App() {
               speakText('Acessando painel administrativo.');
             }}
             brand={brand}
+            lang={lang}
+            onLanguageChange={handleLanguageChange}
           />
         )}
 
@@ -121,6 +189,7 @@ export default function App() {
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
             brand={brand}
+            lang={lang}
           />
         )}
 
@@ -129,6 +198,7 @@ export default function App() {
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
             brand={brand}
+            lang={lang}
           />
         )}
 
@@ -137,6 +207,7 @@ export default function App() {
             onBack={handleBackToDashboard} 
             onSuccess={handleCheckinSuccess} 
             brand={brand}
+            lang={lang}
           />
         )}
 
@@ -144,6 +215,7 @@ export default function App() {
           <CheckinSuccessView 
             onGoHome={handleGoHome} 
             brand={brand}
+            lang={lang}
           />
         )}
 
@@ -152,6 +224,7 @@ export default function App() {
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
             brand={brand}
+            lang={lang}
           />
         )}
 
@@ -160,6 +233,7 @@ export default function App() {
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
             brand={brand}
+            lang={lang}
           />
         )}
 
@@ -168,6 +242,7 @@ export default function App() {
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
             brand={brand}
+            lang={lang}
           />
         )}
 
@@ -177,6 +252,7 @@ export default function App() {
             onGoHome={handleGoHome} 
             onSelectView={handleSelectView}
             brand={brand}
+            lang={lang}
           />
         )}
 
@@ -184,6 +260,7 @@ export default function App() {
           <AdminView 
             onBack={handleBackToDashboard} 
             brand={brand}
+            lang={lang}
           />
         )}
 

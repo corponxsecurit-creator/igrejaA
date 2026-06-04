@@ -5,14 +5,16 @@ import VirtualKeyboard from './VirtualKeyboard';
 import NumericKeypad from './NumericKeypad';
 import LiveClock from './LiveClock';
 import { BrandConfig } from '../utils/brand';
+import { Lang, t } from '../utils/i18n';
 
 interface NewMemberViewProps {
   onBack: () => void;
   onGoHome: () => void;
   brand: BrandConfig;
+  lang: Lang;
 }
 
-export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberViewProps) {
+export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemberViewProps) {
   const [form, setForm] = useState<NewMemberState>({
     step: 1,
     name: '',
@@ -185,36 +187,105 @@ export default function NewMemberView({ onBack, onGoHome, brand }: NewMemberView
           }}
         />
 
-        <div className="relative overflow-hidden w-full max-w-4xl text-center p-12 md:p-16 rounded-3xl shadow-xl border border-white/60 animate-fade-in z-10 bg-white/90 backdrop-blur-md">
+        <div className="relative overflow-hidden w-full max-w-4xl text-center p-8 md:p-12 rounded-3xl shadow-xl border border-white/60 animate-fade-in z-10 bg-white/90 backdrop-blur-md space-y-6">
           {/* Background image related to client virtual identity inside card */}
           <div 
             className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.15] pointer-events-none"
             style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(2px)' }}
           />
           <div className="relative z-10 space-y-6">
-            <div className="w-24 h-24 bg-brand-red text-white rounded-full flex items-center justify-center mx-auto shadow-md">
-              <span className="material-symbols-fill !text-6xl">celebration</span>
+            <div className="w-20 h-20 bg-brand-red text-white rounded-full flex items-center justify-center mx-auto shadow-md">
+              <span className="material-symbols-fill !text-5xl">celebration</span>
             </div>
 
             <div className="space-y-3">
               <h2 className="text-3xl md:text-4xl font-extrabold text-brand-dark tracking-tight">
-                {brand.type === 'synagogue' ? 'Registro Concluído!' : 'Cadastro Concluído!'}
+                {brand.id === 'ymcactx' 
+                  ? t('regSuccessTitleSports', lang) 
+                  : (brand.type === 'synagogue' ? t('regSuccessTitleSynagogue', lang) : t('regSuccessTitle', lang))}
               </h2>
               <p className="text-lg text-slate-600 max-w-lg mx-auto leading-relaxed">
-                Ficamos muito felizes em ter você conosco na <span className="font-bold text-brand-dark">{brand.name} {brand.campusName}</span>. Em breve nossa equipe entrará em contato!
+                {t('regSuccessGreeting', lang).replace('!', ` ${brand.name} ${brand.campusName}!`)}
               </p>
             </div>
 
-            <div className="bg-white/40 border border-slate-200 p-6 rounded-2xl italic text-slate-500 max-w-md mx-auto">
-              "Antes de falar, eu já te conhecia..." Jeremias 1:5
+            {/* Localized Quote Block */}
+            <div className="bg-white/40 border border-slate-200 p-5 rounded-2xl italic text-slate-550 max-w-md mx-auto text-sm">
+              {brand.id === 'ymcactx'
+                ? t('supportQuoteSports', lang)
+                : (brand.type === 'synagogue' ? t('supportQuoteSynagogue', lang) : t('supportQuoteDefault', lang))}
             </div>
+
+            {/* YMCA App Download Panel */}
+            {brand.id === 'ymcactx' && (
+              <div className="bg-white/80 border border-slate-200 p-6 rounded-3xl max-w-2xl mx-auto space-y-5 shadow-sm text-left">
+                <div className="space-y-1 text-center">
+                  <h3 className="text-lg font-black text-brand-dark">
+                    {t('downloadTitle', lang)}
+                  </h3>
+                  <p className="text-xs text-slate-500 font-semibold max-w-md mx-auto">
+                    {t('downloadDesc', lang)}
+                  </p>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                  {/* Android Download */}
+                  <div className="flex flex-col items-center p-4 bg-slate-50/50 border border-slate-150 rounded-2xl space-y-3">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
+                      {t('downloadAndroid', lang)}
+                    </span>
+                    <div className="bg-white p-2 rounded-xl shadow-sm border border-slate-200">
+                      <img 
+                        src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.netpulse.mobile.ymcaofgreaterwilliamsoncounty%26hl%3Den_US%26gl%3DUS%26pli%3D1"
+                        alt="Android App QR Code"
+                        className="w-[120px] h-[120px] object-contain"
+                        loading="lazy"
+                      />
+                    </div>
+                    <a 
+                      href="https://play.google.com/store/apps/details?id=com.netpulse.mobile.ymcaofgreaterwilliamsoncounty&hl=en_US&gl=US&pli=1"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-slate-900 hover:bg-slate-850 text-white font-extrabold rounded-xl transition-all hover:scale-105 active:scale-95 shadow-md text-xs cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined !text-base">android</span>
+                      <span>Google Play</span>
+                    </a>
+                  </div>
+
+                  {/* iOS Download */}
+                  <div className="flex flex-col items-center p-4 bg-slate-50/50 border border-slate-150 rounded-2xl space-y-3">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-sky-600 bg-sky-50 px-3 py-1 rounded-full border border-sky-100">
+                      {t('downloadIos', lang)}
+                    </span>
+                    <div className="bg-white p-2 rounded-xl shadow-sm border border-slate-200">
+                      <img 
+                        src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fapps.apple.com%2Fus%2Fapp%2Fymca-ctx%2Fid1485537145"
+                        alt="iOS App QR Code"
+                        className="w-[120px] h-[120px] object-contain"
+                        loading="lazy"
+                      />
+                    </div>
+                    <a 
+                      href="https://apps.apple.com/us/app/ymca-ctx/id1485537145"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-slate-900 hover:bg-slate-850 text-white font-extrabold rounded-xl transition-all hover:scale-105 active:scale-95 shadow-md text-xs cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined !text-base">phone_iphone</span>
+                      <span>App Store</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <button
               type="button"
               onClick={onGoHome}
               className="h-16 px-12 bg-brand-dark hover:bg-brand-red text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer z-10"
             >
-              <span>Voltar ao Início</span>
+              <span>{t('goBackHome', lang)}</span>
               <span className="material-symbols-outlined !text-xl">arrow_forward</span>
             </button>
           </div>

@@ -4,14 +4,16 @@ import { playSuccessSound, playTapSound } from '../utils/audio';
 import VirtualKeyboard from './VirtualKeyboard';
 import LiveClock from './LiveClock';
 import { BrandConfig } from '../utils/brand';
+import { t, Lang } from '../utils/i18n';
 
 interface PrayerRequestViewProps {
   onBack: () => void;
   onGoHome: () => void;
   brand: BrandConfig;
+  lang: Lang;
 }
 
-export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerRequestViewProps) {
+export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: PrayerRequestViewProps) {
   const [request, setRequest] = useState<PrayerRequest>({
     isAnonymous: true,
     name: '',
@@ -47,21 +49,21 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
 
   const handleSubmit = () => {
     if (!request.isAnonymous && !request.name.trim()) {
-      alert('Por favor, informe seu nome ou mude o pedido para Anônimo.');
+      alert(lang === 'en' ? 'Please enter your name or submit anonymously.' : lang === 'es' ? 'Por favor, ingrese su nombre o envíe de forma anónima.' : 'Por favor, informe seu nome ou mude o pedido para Anônimo.');
       return;
     }
     if (!request.message.trim()) {
-      alert(brand.type === 'synagogue' ? 'Por favor, escreva o seu pedido de reza.' : 'Por favor, escreva o seu pedido de oração.');
+      alert(brand.id === 'ymcactx' ? t('supportAlertSports', lang) : brand.type === 'synagogue' ? t('supportAlertSynagogue', lang) : t('supportAlertDefault', lang));
       return;
     }
 
     // Save registration to localStorage
     const newReg = {
       id: `prayer_${Date.now()}`,
-      name: request.isAnonymous ? 'Pedido Anônimo' : request.name,
+      name: request.isAnonymous ? (lang === 'en' ? 'Anonymous Message' : lang === 'es' ? 'Mensaje Anónimo' : 'Pedido Anônimo') : request.name,
       phone: '-',
       email: '-',
-      type: brand.type === 'synagogue' ? `Pedido de Rezas: ${request.message.slice(0, 40)}...` : `Pedido de Oração: ${request.message.slice(0, 40)}...`,
+      type: brand.id === 'ymcactx' ? `Fale Conosco: ${request.message.slice(0, 40)}...` : brand.type === 'synagogue' ? `Pedido de Rezas: ${request.message.slice(0, 40)}...` : `Pedido de Oração: ${request.message.slice(0, 40)}...`,
       brandId: brand.id,
       date: new Date().toISOString()
     };
@@ -126,26 +128,24 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
             </div>
 
             <div className="space-y-3">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-brand-dark tracking-tight">
-                Pedido Enviado!
+              <h2 className="text-3xl md:text-4xl font-black text-brand-dark tracking-tight mb-2">
+                {brand.id === 'ymcactx' ? t('supportSuccessTitleSports', lang) : (lang === 'en' ? 'Request Sent!' : lang === 'es' ? '¡Pedido Enviado!' : 'Pedido Enviado!')}
               </h2>
               <p className="text-lg text-slate-600 max-w-lg mx-auto">
-                {brand.type === 'synagogue'
-                  ? 'Nossa comunidade e rabinos estarão em oração pelo seu pedido. Tenha fé de que o Criador atende às preces sinceras!'
-                  : 'Nossa equipe de intercessores estará em oração pelo seu pedido. Tenha certeza de que Deus estende as mãos sobre sua vida!'}
+                {brand.id === 'ymcactx'
+                  ? t('supportSuccessDescSports', lang)
+                  : brand.type === 'synagogue'
+                  ? t('supportSuccessDescSynagogue', lang)
+                  : t('supportSuccessDescDefault', lang)}
               </p>
             </div>
 
             <div className="bg-white/40 border border-slate-200 p-6 rounded-2xl italic text-slate-500 max-w-md mx-auto">
-              {brand.type === 'synagogue' ? (
-                <>
-                  "O Eterno está perto de todos os que O invocam, de todos os que O invocam in verdade." Salmos 145:18
-                </>
-              ) : (
-                <>
-                  "Clama a mim, e responder-te-ei, e anunciar-te-ei coisas grandes e firmes..." Jeremias 33:3
-                </>
-              )}
+              {brand.id === 'ymcactx'
+                ? t('supportQuoteSports', lang)
+                : brand.type === 'synagogue'
+                ? t('supportQuoteSynagogue', lang)
+                : t('supportQuoteDefault', lang)}
             </div>
 
             <button
@@ -153,7 +153,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
               onClick={onGoHome}
               className="h-16 px-12 bg-brand-dark hover:bg-brand-red text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer text-base uppercase tracking-wider"
             >
-              <span>Voltar ao Início</span>
+              <span>{t('home', lang)}</span>
               <span className="material-symbols-outlined !text-xl">arrow_forward</span>
             </button>
           </div>
@@ -182,10 +182,10 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
         <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
           <div>
             <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">
-              {brand.type === 'synagogue' ? 'Preces & Orações' : 'Intercessão'}
+              {brand.id === 'ymcactx' ? t('supportHeaderSports', lang) : brand.type === 'synagogue' ? 'Preces & Orações' : 'Intercessão'}
             </span>
             <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
-              {brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
+              {brand.id === 'ymcactx' ? t('prayerTitleSports', lang) : brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
             </h1>
           </div>
 
@@ -223,7 +223,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
                         : 'text-slate-600 hover:bg-slate-200/50'
                     }`}
                   >
-                    Anônimo
+                    {t('anonymous', lang)}
                   </button>
                   <button
                     type="button"
@@ -234,7 +234,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
                         : 'text-slate-600 hover:bg-slate-200/50'
                     }`}
                   >
-                    Com Nome
+                    {t('withName', lang)}
                   </button>
                 </div>
 
@@ -242,7 +242,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
                 {!request.isAnonymous && (
                   <div className="space-y-2 animate-fade-in">
                     <label className="block text-xs uppercase tracking-widest font-black text-brand-red ml-1">
-                      Seu nome ou iniciais
+                      {lang === 'en' ? 'Your name or initials' : lang === 'es' ? 'Su nombre o iniciales' : 'Seu nome ou iniciais'}
                     </label>
                     <div
                       onClick={() => handleFieldFocus('name')}
@@ -250,7 +250,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
                         activeField === 'name' ? 'border-brand-red bg-white' : 'border-slate-200'
                       }`}
                     >
-                      {request.name || <span className="text-slate-400 font-normal">Toque para digitar</span>}
+                      {request.name || <span className="text-slate-400 font-normal">{t('tapToType', lang)}</span>}
                     </div>
                   </div>
                 )}
@@ -267,9 +267,11 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
                   <span className="material-symbols-outlined !text-base">lock</span>
                   <span>Sigilo Absoluto</span>
                 </div>
-                {brand.type === 'synagogue'
-                  ? 'Todos os pedidos de rezas recebidos em nossa sinagoga são mantidos em absoluto sigilo e lembrados nas preces diárias por nossos rabinos e comunidade.'
-                  : 'Todos os pedidos de oração recebidos em nosso Santuário são mantidos em absoluto sigilo e levados por nossos intercessores nas reuniões de oração diárias.'}
+                {brand.id === 'ymcactx'
+                  ? t('supportInfoSports', lang)
+                  : brand.type === 'synagogue'
+                  ? t('supportInfoSynagogue', lang)
+                  : t('supportInfoDefault', lang)}
               </div>
             </div>
           </div>
@@ -282,7 +284,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
             />
             <div className="relative z-10 flex flex-col flex-grow h-full w-full gap-2">
               <label className="block text-xs uppercase tracking-widest font-black text-brand-red ml-1 shrink-0">
-                Escreva aqui sua intenção ou necessidade
+                {brand.id === 'ymcactx' ? t('supportWriteMessageSports', lang) : 'Escreva aqui sua intenção ou necessidade'}
               </label>
               <div
                 onClick={() => handleFieldFocus('message')}
@@ -290,7 +292,9 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
                   activeField === 'message' ? 'border-brand-red bg-white' : 'border-slate-200'
                 }`}
               >
-                {request.message || <span className="text-slate-400 font-normal">Escreva seu pedido aqui...</span>}
+                {request.message || <span className="text-slate-400 font-normal">
+                  {brand.id === 'ymcactx' ? t('supportPlaceholderSports', lang) : (lang === 'en' ? 'Write your request here...' : lang === 'es' ? 'Escriba su petición aquí...' : 'Escreva seu pedido aqui...')}
+                </span>}
               </div>
 
               {/* Submit Button Inside Card */}
@@ -304,7 +308,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
                     boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
                   }}
                 >
-                  <span>Enviar Pedido</span>
+                  <span>{brand.id === 'ymcactx' ? t('supportSubmitSports', lang) : t('supportSubmitDefault', lang)}</span>
                   <span className="material-symbols-outlined !text-xl">send</span>
                 </button>
               </div>
@@ -332,7 +336,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand }: PrayerReq
           }}
         >
           <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>
-          <span>Voltar</span>
+          <span>{t('back', lang)}</span>
         </button>
       </footer>
 

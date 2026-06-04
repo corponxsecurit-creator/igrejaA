@@ -4,6 +4,7 @@ import { playTapSound } from '../utils/audio';
 import LiveClock from './LiveClock';
 import { speakText } from '../utils/tts';
 import { BrandConfig } from '../utils/brand';
+import { t, Lang } from '../utils/i18n';
 
 /* ─── Particle data ─────────── */
 const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
@@ -22,9 +23,11 @@ interface DashboardViewProps {
   onOpenAccessibility: () => void;
   onOpenAdmin?: () => void;
   brand: BrandConfig;
+  lang: Lang;
+  onLanguageChange: (lang: Lang) => void;
 }
 
-export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibility, onOpenAdmin, brand }: DashboardViewProps) {
+export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibility, onOpenAdmin, brand, lang, onLanguageChange }: DashboardViewProps) {
   const handleSelect = (view: ViewState) => {
     playTapSound();
     onSelectView(view);
@@ -101,7 +104,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         <div className="flex items-center gap-3">
           <img 
             src={brand.logoUrl} 
-            className={`h-12 object-contain ${['atitude', 'ibmalphaville'].includes(brand.id) ? 'logo-white' : ''}`} 
+            className={`h-12 object-contain ${['atitude', 'ibmalphaville', 'lagoinha'].includes(brand.id) ? 'logo-white' : ''}`} 
             alt={brand.name} 
             referrerPolicy="no-referrer"
           />
@@ -115,8 +118,20 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <LiveClock />
         </div>
         
-        <div className="flex gap-4 text-white">
-          {/* Pastoral button moved to bottom dock for accessibility */}
+        <div className="flex gap-4 items-center text-white">
+          <button
+            type="button"
+            onClick={() => {
+              playTapSound();
+              const nextLang = lang === 'pt' ? 'en' : lang === 'en' ? 'es' : lang === 'es' ? 'de' : 'pt';
+              onLanguageChange(nextLang);
+            }}
+            className="h-10 px-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center cursor-pointer backdrop-blur-xl gap-1.5 text-xs font-black uppercase tracking-wider text-white transition-all active:scale-95"
+            title="Mudar idioma / Change language / Cambiar idioma"
+          >
+            <span className="material-symbols-outlined !text-base">language</span>
+            <span>{lang}</span>
+          </button>
         </div>
       </nav>
 
@@ -127,10 +142,24 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         {/* Header Title */}
         <header className="mb-6 text-center">
           <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-2 drop-shadow-lg">
-            Bem-vindo à {brand.name}
+            {lang === 'en'
+              ? `Welcome to ${brand.name}`
+              : lang === 'es'
+              ? `Bienvenido a ${brand.name}`
+              : brand.id === 'ymcactx'
+              ? `Bem-vindo ao ${brand.name}`
+              : `Bem-vindo à ${brand.name}`}
           </h2>
           <p className="text-lg md:text-xl text-white/80 font-medium tracking-wide">
-            Como podemos caminhar com você hoje?
+            {lang === 'en'
+              ? (brand.id === 'ymcactx' ? 'How can we support you today?' : 'How can we walk with you today?')
+              : lang === 'es'
+              ? (brand.id === 'ymcactx' ? '¿Cómo podemos apoyarle hoy?' : '¿Cómo podemos caminar con usted hoy?')
+              : brand.id === 'ymcactx'
+              ? 'Como podemos apoiar você hoje?'
+              : brand.type === 'synagogue'
+              ? 'Como podemos ajudar você hoje?'
+              : 'Como podemos caminhar com você hoje?'}
           </p>
         </header>
 
@@ -148,8 +177,10 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               person_add
             </span>
             <div className="text-left mt-4 z-10">
-              <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">Membro ou Visitante</span>
-              <span className="text-3xl md:text-4xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termMember}</span>
+              <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
+                {brand.id === 'ymcactx' ? t('newMemberEyebrowSports', lang) : t('newMemberEyebrow', lang)}
+              </span>
+              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">{brand.termMember}</span>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 z-0">
               <span className="material-symbols-outlined !text-[160px]">id_card</span>
@@ -168,7 +199,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </span>
             <div className="text-left mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">{brand.termDonations}</span>
-              <span className="text-3xl md:text-4xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termDonation}</span>
+              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">{brand.termDonation}</span>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-12 group-hover:scale-125 z-0">
               <span className="material-symbols-outlined !text-[160px]">qr_code</span>
@@ -187,9 +218,11 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </span>
             <div className="text-left mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.type === 'synagogue' ? 'Engajamento & Mitzvot' : 'Voluntariado'}
+                {brand.id === 'ymcactx' ? t('volunteerEyebrowSports', lang) : brand.type === 'synagogue' ? t('volunteerEyebrowSynagogue', lang) : t('volunteerEyebrow', lang)}
               </span>
-              <span className="text-3xl md:text-4xl font-black uppercase tracking-wider block drop-shadow-sm">Participar</span>
+              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">
+                {t('volunteerTitle', lang)}
+              </span>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:rotate-6 group-hover:scale-125 z-0">
               <span className="material-symbols-outlined !text-[160px]">handshake</span>
@@ -208,9 +241,9 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </span>
             <div className="text-left mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.type === 'synagogue' ? 'Shabat & Festividades' : 'Agenda & Encontros'}
+                {brand.id === 'ymcactx' ? t('calendarEyebrowSports', lang) : brand.type === 'synagogue' ? t('calendarEyebrowSynagogue', lang) : t('calendarEyebrow', lang)}
               </span>
-              <span className="text-3xl md:text-4xl font-black uppercase tracking-wider block drop-shadow-sm">{brand.termCults}</span>
+              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">{brand.termCults}</span>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-6 group-hover:scale-125 z-0">
               <span className="material-symbols-outlined !text-[160px]">event</span>
@@ -229,9 +262,9 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </span>
             <div className="text-left mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.type === 'synagogue' ? 'Grupos de Estudo' : 'Conexão Grupos'}
+                {brand.id === 'ymcactx' ? t('groupsEyebrowSports', lang) : brand.type === 'synagogue' ? t('groupsEyebrowSynagogue', lang) : t('groupsEyebrow', lang)}
               </span>
-              <span className="text-3xl md:text-4xl font-black uppercase tracking-wider block drop-shadow-sm line-clamp-2">
+              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm line-clamp-2 break-words">
                 {brand.termConnects}
               </span>
             </div>
@@ -248,12 +281,14 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           >
             <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="material-symbols-outlined !text-[60px] text-rose-300 group-hover:text-rose-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
-              volunteer_activism
+              {brand.id === 'ymcactx' ? 'chat' : 'volunteer_activism'}
             </span>
             <div className="text-left mt-4 z-10">
-              <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">Intercessão</span>
-              <span className="text-3xl md:text-4xl font-black uppercase tracking-wider block drop-shadow-sm">
-                {brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
+              <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
+                {brand.id === 'ymcactx' ? t('prayerEyebrowSports', lang) : t('prayerEyebrow', lang)}
+              </span>
+              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">
+                {brand.id === 'ymcactx' ? t('prayerTitleSports', lang) : brand.type === 'synagogue' ? t('prayerTitleSynagogue', lang) : t('prayerTitle', lang)}
               </span>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-12 group-hover:scale-125 z-0">
@@ -277,7 +312,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             boxShadow: `0 10px 25px ${brand.primaryColor}40`
           }}
         >
-          <span>Início</span>
+          <span>{t('home', lang)}</span>
         </button>
 
         {/* Atendimento Pastoral Accessibility Button */}
