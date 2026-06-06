@@ -110,10 +110,18 @@ const dictionary: Record<string, Record<Lang, string>> = {
   regIntroTextSports: {
     pt: 'Você pode preencher a ficha de atleta completa ou apenas registrar seu e-mail para que a coordenação esportiva envie os detalhes por e-mail.',
     en: 'You can fill out the full athlete sheet or just register your email so the sports coordination team can send you the details.',
-    es: 'Puede completar la ficha de atleta completa o simplemente registrar su correo para que la coordinación deportiva le envíe los detalhes.',
+    es: 'Puede completar la ficha de atleta completa o simplemente registrar su correo para que la coordinación deportiva le envíe os detalhes.',
     de: 'Sie können das vollständige Athletenformular ausfüllen oder einfach Ihre E-Mail-Adresse eintragen.'
   },
+  regIntroTextCarWash: {
+    pt: 'Você pode preencher o formulário de cliente completo ou apenas enviar seu e-mail para receber as promoções.',
+    en: 'You can fill out the complete customer profile or just submit your email to receive promotions.',
+    es: 'Puede completar el perfil de cliente completo o simplemente enviar su correo para recibir promociones.',
+    de: 'Sie können das vollständige Kundenprofil ausfüllen oder einfach Ihre E-Mail-Adresse eintragen.'
+  },
   regCardFull: { pt: 'Ficha de Cadastro Completa', en: 'Full Registration Sheet', es: 'Ficha de Registro Completa', de: 'Vollständiges Anmeldeformular' },
+  regCardFullSports: { pt: 'Ficha de Atleta Completa', en: 'Full Athlete Sheet', es: 'Ficha de Atleta Completa', de: 'Vollständiges Athletenformular' },
+  regCardFullCarWash: { pt: 'Ficha de Cliente Completa', en: 'Full Customer Profile', es: 'Perfil de Cliente Completo', de: 'Vollständiges Kundenprofil' },
   regCardFullDesc: {
     pt: 'Preencha nome, telefone, e-mail e cidade para nossa equipe de novos membros entrar em contato.',
     en: 'Fill in your name, phone, email, and city so our welcome team can contact you.',
@@ -126,8 +134,15 @@ const dictionary: Record<string, Record<Lang, string>> = {
     es: 'Complete su nombre, teléfono, correo y ciudad para que nuestra coordinación de baloncesto se comunique.',
     de: 'Geben Sie Name, Telefonnummer, E-Mail und Stadt an, damit unsere Basketball-Koordination Sie kontaktieren kann.'
   },
+  regCardFullDescCarWash: {
+    pt: 'Preencha nome, celular, e-mail e cidade para registrar seu perfil no IMO Car Wash.',
+    en: 'Fill in your name, mobile, email, and city to register your IMO Car Wash profile.',
+    es: 'Complete su nombre, móvil, correo y ciudad para registrar su perfil de IMO Car Wash.',
+    de: 'Geben Sie Name, Handynummer, E-Mail-Adresse und Stadt an, um Ihr Kundenprofil zu registrieren.'
+  },
   regCardQuick: { pt: 'Quero ser Membro (Rápido)', en: 'Join Us (Quick Email)', es: 'Quiero ser Miembro (Rápido)', de: 'Mitglied werden (Schnelle E-Mail)' },
   regCardQuickSports: { pt: 'Registro Rápido (E-mail)', en: 'Quick Registration (Email)', es: 'Registro Rápido (Correo)', de: 'Schnellregistrierung (E-Mail)' },
+  regCardQuickCarWash: { pt: 'Registro Rápido (E-mail)', en: 'Quick Registration (Email)', es: 'Registro Rápido (Correo)', de: 'Schnellregistrierung (E-Mail)' },
   regCardQuickDesc: {
     pt: 'Insira apenas seu e-mail para que nosso grupo de cadastro envie seu convite de participação.',
     en: 'Just enter your email and our integration team will send you an invitation.',
@@ -140,9 +155,16 @@ const dictionary: Record<string, Record<Lang, string>> = {
     es: 'Ingrese su correo para receber la ficha de inscrição digital y el calendario de entrenamientos.',
     de: 'Geben Sie Ihre E-Mail-Adresse ein, um das digitale Anmeldeformular und den Trainingsplan zu erhalten.'
   },
+  regCardQuickDescCarWash: {
+    pt: 'Insira seu e-mail para receber ofertas, novidades e cupons de lavagem.',
+    en: 'Enter your email to receive offers, news, and wash coupons.',
+    es: 'Ingrese su correo para recibir ofertas, noticias y cupones de lavado.',
+    de: 'Geben Sie Ihre E-Mail-Adresse ein, um Angebote, Neuigkeiten und Waschgutscheine zu erhalten.'
+  },
   regSuccessTitle: { pt: 'Cadastro Concluído!', en: 'Registration Completed!', es: '¡Registro Completado!', de: 'Registrierung abgeschlossen!' },
   regSuccessTitleSynagogue: { pt: 'Registro Concluído!', en: 'Registration Completed!', es: '¡Registro Completado!', de: 'Registrierung abgeschlossen!' },
   regSuccessTitleSports: { pt: 'Cadastro de Atleta Concluído!', en: 'Athlete Registration Completed!', es: '¡Registro de Atleta Completado!', de: 'Athleten-Registrierung abgeschlossen!' },
+  regSuccessTitleCarWash: { pt: 'Perfil de Cliente Criado!', en: 'Customer Profile Created!', es: '¡Perfil de Cliente Creado!', de: 'Kundenprofil erstellt!' },
   regSuccessDesc: {
     pt: 'Agradecemos o seu interesse! Em breve nossa equipe entrará em contato com você.',
     en: 'Thank you for your interest! Our team will contact you shortly.',
@@ -182,6 +204,18 @@ const dictionary: Record<string, Record<Lang, string>> = {
     en: 'Your questions, suggestions, and feedback are forwarded directly to the YMCA Central Texas sports coordination.',
     es: 'Sus dudas, sugerencias y comentarios se envían directamente a la coordinación deportiva de la YMCA Central Texas.',
     de: 'Ihre Fragen, Vorschläge und Ihr Feedback werden direkt an die Sportkoordination der YMCA Central Texas weitergeleitet.'
+  },
+  supportSuccessDescCarWash: {
+    pt: 'Sua mensagem foi enviada ao suporte do IMO Car Wash! Em breve entraremos em contato para responder às suas solicitações.',
+    en: 'Your message has been sent to IMO Car Wash support! We will reach out shortly to assist you.',
+    es: '¡Su mensagem ha sido enviado al suporte de IMO Car Wash! Nos pondremos en contacto en breve.',
+    de: 'Ihre Nachricht wurde an den Support von IMO Car Wash gesendet! Wir werden uns in Kürze bei Ihnen melden.'
+  },
+  supportInfoCarWash: {
+    pt: 'Suas dúvidas, sugestões e críticas de melhoria são encaminhadas diretamente à equipe de atendimento ao cliente do IMO Car Wash.',
+    en: 'Your questions, suggestions, and feedback are forwarded directly to the IMO Car Wash customer support team.',
+    es: 'Sus dudas, sugerencias y comentarios se envían directamente al equipo de atención al cliente de IMO Car Wash.',
+    de: 'Ihre Fragen, Vorschläge und Ihr Feedback werden direkt an das Kundensupport-Team von IMO Car Wash weitergeleitet.'
   },
   supportAlertDefault: {
     pt: 'Por favor, escreva o seu pedido de oração.',

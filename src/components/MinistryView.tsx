@@ -131,6 +131,52 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
       ];
     }
 
+    if (brand.id === 'imocarwash') {
+      return [
+        {
+          id: 'vip_club',
+          name: 'Clube IMO VIP',
+          tag: 'Assinatura Mensal',
+          icon: 'workspace_premium',
+          color: 'bg-indigo-900 border-indigo-950',
+          wide: true,
+          desc: 'Acesso a lavagens simples ilimitadas por uma assinatura fixa mensal, ideal para o dia a dia.',
+        },
+        {
+          id: 'xtr_club',
+          name: 'Clube Ceramic XTR',
+          tag: 'Assinatura Premium',
+          icon: 'auto_clean_detail',
+          color: 'bg-[#0067b1] border-sky-800',
+          desc: 'Acesso ilimitado à nossa melhor lavagem com película protetora Ceramic XTR, brilho e proteção adicionais.',
+        },
+        {
+          id: 'uber_taxi',
+          name: 'Clube Motorista Pro',
+          tag: 'Parceiro Táxi & Uber',
+          icon: 'local_taxi',
+          color: 'bg-[#fcaf17] border-yellow-600',
+          desc: 'Descontos exclusivos em pacotes de lavagens, ideal para motoristas de aplicativos e taxistas.',
+        },
+        {
+          id: 'corporativo',
+          name: 'Frota Corporativa',
+          tag: 'Soluções de Frota',
+          icon: 'local_shipping',
+          color: 'bg-emerald-900 border-emerald-950',
+          desc: 'Faturamento simplificado e controle completo de lavagens para veículos de empresas e frotas de entrega.',
+        },
+        {
+          id: 'imo_verde',
+          name: 'Clube IMO Verde',
+          tag: 'Sustentabilidade',
+          icon: 'forest',
+          color: 'bg-[#1e293b] border-slate-800',
+          desc: 'Participe do nosso programa de compensação de carbono e apoie a reciclagem de até 80% da água usada nas lavagens.',
+        }
+      ];
+    }
+
     if (brand.id === 'ymcactx') {
       return [
         {
@@ -327,7 +373,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
       name: name,
       phone: phone,
       email: '-',
-      type: `${brand.type === 'synagogue' ? 'Atividade' : 'Voluntariado'}: ${selectedMinistry?.name || ''}`,
+      type: `${brand.id === 'imocarwash' ? 'Plano/Clube' : brand.type === 'synagogue' ? 'Atividade' : 'Voluntariado'}: ${selectedMinistry?.name || ''}`,
       brandId: brand.id,
       date: new Date().toISOString()
     };
@@ -368,9 +414,9 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
       <header className="fixed top-0 left-0 w-full z-45 bg-white/80 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
         <div>
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">
-            {brand.type === 'synagogue' ? 'Atividades Comunitárias' : 'Serviço Voluntário'}
+            {brand.id === 'imocarwash' ? 'Clube & Fidelidade' : brand.type === 'synagogue' ? 'Atividades Comunitárias' : 'Serviço Voluntário'}
           </span>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Quero Participar</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">{brand.id === 'imocarwash' ? 'Fidelidade IMO' : 'Quero Participar'}</h1>
         </div>
 
         <div className="hidden md:block">
@@ -384,10 +430,12 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
       <main className="flex-grow pt-24 pb-32 px-6 md:px-20 max-w-[1550px] mx-auto w-full flex flex-col justify-center relative z-10">
         <header className="mb-8 text-center max-w-3xl mx-auto">
           <h2 className="text-3xl font-extrabold text-brand-dark tracking-tight mb-2">
-            {brand.type === 'synagogue' ? 'Escolha onde você deseja atuar' : 'Escolha onde você deseja servir'}
+            {brand.id === 'imocarwash' ? 'Selecione o seu plano ou clube' : brand.type === 'synagogue' ? 'Escolha onde você deseja atuar' : 'Escolha onde você deseja servir'}
           </h2>
           <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">
-            {brand.type === 'synagogue'
+            {brand.id === 'imocarwash'
+              ? `Adira a um de nossos planos de assinatura e clubes de vantagens e aproveite descontos em todas as lavagens.`
+              : brand.type === 'synagogue'
               ? `Descubra o seu propósito de mitzvá e faça parte da nossa comunidade ativa em ${brand.campusName}. Escolha uma das áreas abaixo para participar.`
               : `Descubra o seu propósito de voluntariado e faça parte da nossa comunidade ativa em ${brand.campusName}. Escolha uma das áreas abaixo para participar.`}
           </p>
@@ -443,7 +491,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
             <div className={`relative z-10 p-6 text-white ${selectedMinistry.color} border-b flex justify-between items-center relative shrink-0`}>
               <div>
                 <span className="text-[10px] uppercase font-black tracking-widest bg-white/20 px-2.5 py-1 rounded-md block w-fit mb-1">
-                  {brand.type === 'synagogue' ? 'Inscrição em Atividade' : 'Inscrição Voluntária'}
+                  {brand.id === 'imocarwash' ? 'Adesão ao Plano' : brand.type === 'synagogue' ? 'Inscrição em Atividade' : 'Inscrição Voluntária'}
                 </span>
                 <h3 className="text-xl font-bold">{selectedMinistry.name}</h3>
               </div>
@@ -463,9 +511,11 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                   <div className="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-md">
                     <span className="material-symbols-outlined !text-3xl font-black">done</span>
                   </div>
-                  <h4 className="text-xl font-black text-brand-dark">Inscrição Realizada!</h4>
+                  <h4 className="text-xl font-black text-brand-dark">{brand.id === 'imocarwash' ? 'Adesão Confirmada!' : 'Inscrição Realizada!'}</h4>
                   <p className="text-sm text-slate-600 leading-relaxed">
-                    {brand.type === 'synagogue'
+                    {brand.id === 'imocarwash'
+                      ? `Parabéns pela adesão ao ${selectedMinistry.name}! Enviamos os detalhes do seu plano e cupom de ativação para o WhatsApp ${formatPhone(phone)}.`
+                      : brand.type === 'synagogue'
                       ? `O coordenador da atividade de ${selectedMinistry.name} entrará em contato com você pelo WhatsApp ${formatPhone(phone)} em breve com os próximos passos.`
                       : `O líder do ministério de ${selectedMinistry.name} entrará em contato com você pelo WhatsApp ${formatPhone(phone)} em breve com os próximos passos.`}
                   </p>

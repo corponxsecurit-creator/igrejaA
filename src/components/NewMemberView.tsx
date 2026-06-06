@@ -68,7 +68,7 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
       name: 'Solicitação Rápida',
       phone: '-',
       email: form.email,
-      type: `Quero ser Membro (Envio Rápido)`,
+      type: brand.id === 'imocarwash' ? 'Ficha de Cliente (Envio Rápido)' : 'Quero ser Membro (Envio Rápido)',
       brandId: brand.id,
       date: new Date().toISOString()
     };
@@ -200,7 +200,9 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
 
             <div className="space-y-3">
               <h2 className="text-3xl md:text-4xl font-extrabold text-brand-dark tracking-tight">
-                {brand.id === 'ymcactx' 
+                {brand.id === 'imocarwash' 
+                  ? t('regSuccessTitleCarWash', lang)
+                  : brand.id === 'ymcactx' 
                   ? t('regSuccessTitleSports', lang) 
                   : (brand.type === 'synagogue' ? t('regSuccessTitleSynagogue', lang) : t('regSuccessTitle', lang))}
               </h2>
@@ -211,7 +213,9 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
 
             {/* Localized Quote Block */}
             <div className="bg-white/40 border border-slate-200 p-5 rounded-2xl italic text-slate-550 max-w-md mx-auto text-sm">
-              {brand.id === 'ymcactx'
+              {brand.id === 'imocarwash'
+                ? 'IMO Car Wash — Tecnologia alemã de lavagem com cuidado e sustentabilidade.'
+                : brand.id === 'ymcactx'
                 ? t('supportQuoteSports', lang)
                 : (brand.type === 'synagogue' ? t('supportQuoteSynagogue', lang) : t('supportQuoteDefault', lang))}
             </div>
@@ -326,10 +330,14 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
         <main className="flex-grow flex flex-col items-center justify-center px-6 md:px-20 pt-28 pb-32 max-w-6xl mx-auto w-full relative z-10 space-y-8">
           <div className="text-center max-w-xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-black text-brand-dark tracking-tight mb-2">
-              Como você prefere prosseguir?
+              {t('regHowToProceed', lang)}
             </h2>
             <p className="text-sm md:text-base text-slate-600 font-semibold leading-relaxed">
-              Você pode preencher o formulário de cadastro completo ou apenas enviar seu e-mail de contato para ser integrado ao grupo de cadastro.
+              {brand.id === 'imocarwash'
+                ? t('regIntroTextCarWash', lang)
+                : brand.id === 'ymcactx'
+                ? t('regIntroTextSports', lang)
+                : t('regIntroText', lang)}
             </p>
           </div>
 
@@ -354,11 +362,15 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
                   <span className="material-symbols-outlined !text-4xl">assignment_ind</span>
                 </div>
                 <div className="flex-grow">
-                  <h3 className="font-extrabold text-3xl text-brand-dark group-hover:text-brand-red transition-colors">Ficha de Cadastro Completa</h3>
-                  <p className="text-base text-slate-500 font-semibold mt-3 leading-relaxed">Preencha nome, telefone, e-mail e cidade para nossa equipe de novos membros entrar em contato.</p>
+                  <h3 className="font-extrabold text-3xl text-brand-dark group-hover:text-brand-red transition-colors">
+                    {brand.id === 'imocarwash' ? t('regCardFullCarWash', lang) : brand.id === 'ymcactx' ? t('regCardFullSports', lang) : t('regCardFull', lang)}
+                  </h3>
+                  <p className="text-base text-slate-500 font-semibold mt-3 leading-relaxed">
+                    {brand.id === 'imocarwash' ? t('regCardFullDescCarWash', lang) : brand.id === 'ymcactx' ? t('regCardFullDescSports', lang) : t('regCardFullDesc', lang)}
+                  </p>
                 </div>
                 <div className="mt-6 font-bold text-sm uppercase text-slate-450 group-hover:text-brand-red tracking-wider flex items-center gap-1.5 shrink-0">
-                  <span>Preencher Completo</span>
+                  <span>{brand.id === 'imocarwash' ? 'Cadastrar Perfil' : 'Preencher Completo'}</span>
                   <span className="material-symbols-outlined !text-base">arrow_forward</span>
                 </div>
               </div>
@@ -384,11 +396,15 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
                   <span className="material-symbols-outlined !text-4xl">alternate_email</span>
                 </div>
                 <div className="flex-grow">
-                  <h3 className="font-extrabold text-3xl text-brand-dark group-hover:text-brand-red transition-colors">Quero ser Membro (Rápido)</h3>
-                  <p className="text-base text-slate-500 font-semibold mt-3 leading-relaxed">Insira apenas seu e-mail para que nosso grupo de cadastro envie seu convite de participação.</p>
+                  <h3 className="font-extrabold text-3xl text-brand-dark group-hover:text-brand-red transition-colors">
+                    {brand.id === 'imocarwash' ? t('regCardQuickCarWash', lang) : brand.id === 'ymcactx' ? t('regCardQuickSports', lang) : t('regCardQuick', lang)}
+                  </h3>
+                  <p className="text-base text-slate-500 font-semibold mt-3 leading-relaxed">
+                    {brand.id === 'imocarwash' ? t('regCardQuickDescCarWash', lang) : brand.id === 'ymcactx' ? t('regCardQuickDescSports', lang) : t('regCardQuickDesc', lang)}
+                  </p>
                 </div>
                 <div className="mt-6 font-bold text-sm uppercase text-slate-450 group-hover:text-brand-red tracking-wider flex items-center gap-1.5 shrink-0">
-                  <span>Registrar E-mail</span>
+                  <span>{brand.id === 'imocarwash' ? 'Registrar E-mail' : 'Registrar E-mail'}</span>
                   <span className="material-symbols-outlined !text-base">arrow_forward</span>
                 </div>
               </div>
@@ -434,8 +450,12 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
         {/* Top Header */}
         <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-6 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
           <div>
-            <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">Envio Rápido</span>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Quero ser Membro</h1>
+            <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">
+              {brand.id === 'imocarwash' ? 'Registro Rápido' : 'Envio Rápido'}
+            </span>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
+              {brand.id === 'imocarwash' ? t('regCardQuickCarWash', lang) : brand.id === 'ymcactx' ? t('regCardQuickSports', lang) : t('regCardQuick', lang)}
+            </h1>
           </div>
 
           <div className="hidden md:block">
@@ -467,7 +487,9 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
               </div>
 
               <p className="text-sm text-slate-500 font-semibold leading-relaxed">
-                O e-mail indicado será enviado ao nosso grupo de cadastro e integração. Em breve enviaremos um convite completo!
+                {brand.id === 'imocarwash'
+                  ? 'O e-mail indicado será cadastrado no clube IMO Car Wash. Você receberá ofertas e cupons de lavagem.'
+                  : 'O e-mail indicado será enviado ao nosso grupo de cadastro e integração. Em breve enviaremos um convite completo!'}
               </p>
 
               {/* Submit Button Inside Card */}
@@ -481,7 +503,7 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
                     boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
                   }}
                 >
-                  <span>Enviar para o Grupo de Cadastro</span>
+                  <span>{brand.id === 'imocarwash' ? 'Cadastrar E-mail no Clube' : 'Enviar para o Grupo de Cadastro'}</span>
                   <span className="material-symbols-outlined !text-xl">send</span>
                 </button>
               </div>

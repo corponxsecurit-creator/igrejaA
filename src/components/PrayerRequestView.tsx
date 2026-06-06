@@ -53,7 +53,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
       return;
     }
     if (!request.message.trim()) {
-      alert(brand.id === 'ymcactx' ? t('supportAlertSports', lang) : brand.type === 'synagogue' ? t('supportAlertSynagogue', lang) : t('supportAlertDefault', lang));
+      alert((brand.id === 'ymcactx' || brand.id === 'imocarwash') ? t('supportAlertSports', lang) : brand.type === 'synagogue' ? t('supportAlertSynagogue', lang) : t('supportAlertDefault', lang));
       return;
     }
 
@@ -63,7 +63,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
       name: request.isAnonymous ? (lang === 'en' ? 'Anonymous Message' : lang === 'es' ? 'Mensaje Anónimo' : 'Pedido Anônimo') : request.name,
       phone: '-',
       email: '-',
-      type: brand.id === 'ymcactx' ? `Fale Conosco: ${request.message.slice(0, 40)}...` : brand.type === 'synagogue' ? `Pedido de Rezas: ${request.message.slice(0, 40)}...` : `Pedido de Oração: ${request.message.slice(0, 40)}...`,
+      type: (brand.id === 'ymcactx' || brand.id === 'imocarwash') ? `Fale Conosco: ${request.message.slice(0, 40)}...` : brand.type === 'synagogue' ? `Pedido de Rezas: ${request.message.slice(0, 40)}...` : `Pedido de Oração: ${request.message.slice(0, 40)}...`,
       brandId: brand.id,
       date: new Date().toISOString()
     };
@@ -129,10 +129,12 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
 
             <div className="space-y-3">
               <h2 className="text-3xl md:text-4xl font-black text-brand-dark tracking-tight mb-2">
-                {brand.id === 'ymcactx' ? t('supportSuccessTitleSports', lang) : (lang === 'en' ? 'Request Sent!' : lang === 'es' ? '¡Pedido Enviado!' : 'Pedido Enviado!')}
+                {(brand.id === 'ymcactx' || brand.id === 'imocarwash') ? t('supportSuccessTitleSports', lang) : (lang === 'en' ? 'Request Sent!' : lang === 'es' ? '¡Pedido Enviado!' : 'Pedido Enviado!')}
               </h2>
               <p className="text-lg text-slate-600 max-w-lg mx-auto">
-                {brand.id === 'ymcactx'
+                {brand.id === 'imocarwash'
+                  ? t('supportSuccessDescCarWash', lang)
+                  : brand.id === 'ymcactx'
                   ? t('supportSuccessDescSports', lang)
                   : brand.type === 'synagogue'
                   ? t('supportSuccessDescSynagogue', lang)
@@ -141,7 +143,9 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
             </div>
 
             <div className="bg-white/40 border border-slate-200 p-6 rounded-2xl italic text-slate-500 max-w-md mx-auto">
-              {brand.id === 'ymcactx'
+              {brand.id === 'imocarwash'
+                ? 'IMO Car Wash — O seu veículo limpo e protegido.'
+                : brand.id === 'ymcactx'
                 ? t('supportQuoteSports', lang)
                 : brand.type === 'synagogue'
                 ? t('supportQuoteSynagogue', lang)
@@ -182,10 +186,10 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
         <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
           <div>
             <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">
-              {brand.id === 'ymcactx' ? t('supportHeaderSports', lang) : brand.type === 'synagogue' ? 'Preces & Orações' : 'Intercessão'}
+              {brand.id === 'imocarwash' ? t('prayerEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('supportHeaderSports', lang) : brand.type === 'synagogue' ? 'Preces & Orações' : 'Intercessão'}
             </span>
             <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
-              {brand.id === 'ymcactx' ? t('prayerTitleSports', lang) : brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
+              {brand.id === 'imocarwash' ? t('prayerTitleCarWash', lang) : brand.id === 'ymcactx' ? t('prayerTitleSports', lang) : brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
             </h1>
           </div>
 
@@ -267,7 +271,9 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
                   <span className="material-symbols-outlined !text-base">lock</span>
                   <span>Sigilo Absoluto</span>
                 </div>
-                {brand.id === 'ymcactx'
+                {brand.id === 'imocarwash'
+                  ? t('supportInfoCarWash', lang)
+                  : brand.id === 'ymcactx'
                   ? t('supportInfoSports', lang)
                   : brand.type === 'synagogue'
                   ? t('supportInfoSynagogue', lang)
@@ -284,7 +290,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
             />
             <div className="relative z-10 flex flex-col flex-grow h-full w-full gap-2">
               <label className="block text-xs uppercase tracking-widest font-black text-brand-red ml-1 shrink-0">
-                {brand.id === 'ymcactx' ? t('supportWriteMessageSports', lang) : 'Escreva aqui sua intenção ou necessidade'}
+                {(brand.id === 'ymcactx' || brand.id === 'imocarwash') ? t('supportWriteMessageSports', lang) : 'Escreva aqui sua intenção ou necessidade'}
               </label>
               <div
                 onClick={() => handleFieldFocus('message')}
@@ -293,7 +299,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
                 }`}
               >
                 {request.message || <span className="text-slate-400 font-normal">
-                  {brand.id === 'ymcactx' ? t('supportPlaceholderSports', lang) : (lang === 'en' ? 'Write your request here...' : lang === 'es' ? 'Escriba su petición aquí...' : 'Escreva seu pedido aqui...')}
+                  {(brand.id === 'ymcactx' || brand.id === 'imocarwash') ? t('supportPlaceholderSports', lang) : (lang === 'en' ? 'Write your request here...' : lang === 'es' ? 'Escriba su petición aquí...' : 'Escreva seu pedido aqui...')}
                 </span>}
               </div>
 
@@ -308,7 +314,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
                     boxShadow: `0 8px 20px -6px ${brand.primaryColor}80`
                   }}
                 >
-                  <span>{brand.id === 'ymcactx' ? t('supportSubmitSports', lang) : t('supportSubmitDefault', lang)}</span>
+                  <span>{(brand.id === 'ymcactx' || brand.id === 'imocarwash') ? t('supportSubmitSports', lang) : t('supportSubmitDefault', lang)}</span>
                   <span className="material-symbols-outlined !text-xl">send</span>
                 </button>
               </div>
