@@ -146,17 +146,17 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               ? `Welcome to ${brand.name}`
               : lang === 'es'
               ? `Bienvenido a ${brand.name}`
-              : brand.id === 'ymcactx'
+              : (brand.id === 'ymcactx' || brand.id === 'imocarwash')
               ? `Bem-vindo ao ${brand.name}`
               : `Bem-vindo à ${brand.name}`}
           </h2>
           <p className="text-lg md:text-xl text-white/80 font-medium tracking-wide">
             {lang === 'en'
-              ? (brand.id === 'ymcactx' ? 'How can we support you today?' : 'How can we walk with you today?')
+              ? ((brand.id === 'ymcactx' || brand.id === 'imocarwash') ? 'How can we help you today?' : 'How can we walk with you today?')
               : lang === 'es'
-              ? (brand.id === 'ymcactx' ? '¿Cómo podemos apoyarle hoy?' : '¿Cómo podemos caminar con usted hoy?')
-              : brand.id === 'ymcactx'
-              ? 'Como podemos apoiar você hoje?'
+              ? ((brand.id === 'ymcactx' || brand.id === 'imocarwash') ? '¿Cómo podemos ayudarle hoy?' : '¿Cómo podemos caminar con usted hoy?')
+              : (brand.id === 'ymcactx' || brand.id === 'imocarwash')
+              ? 'Como podemos ajudar você hoje?'
               : brand.type === 'synagogue'
               ? 'Como podemos ajudar você hoje?'
               : 'Como podemos caminhar com você hoje?'}
@@ -178,7 +178,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </span>
             <div className="text-left mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.id === 'ymcactx' ? t('newMemberEyebrowSports', lang) : t('newMemberEyebrow', lang)}
+                {brand.id === 'imocarwash' ? t('newMemberEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('newMemberEyebrowSports', lang) : t('newMemberEyebrow', lang)}
               </span>
               <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">{brand.termMember}</span>
             </div>
@@ -218,10 +218,10 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </span>
             <div className="text-left mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.id === 'ymcactx' ? t('volunteerEyebrowSports', lang) : brand.type === 'synagogue' ? t('volunteerEyebrowSynagogue', lang) : t('volunteerEyebrow', lang)}
+                {brand.id === 'imocarwash' ? t('volunteerEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('volunteerEyebrowSports', lang) : brand.type === 'synagogue' ? t('volunteerEyebrowSynagogue', lang) : t('volunteerEyebrow', lang)}
               </span>
               <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">
-                {t('volunteerTitle', lang)}
+                {brand.id === 'imocarwash' ? t('volunteerTitleCarWash', lang) : t('volunteerTitle', lang)}
               </span>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:rotate-6 group-hover:scale-125 z-0">
@@ -241,7 +241,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </span>
             <div className="text-left mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.id === 'ymcactx' ? t('calendarEyebrowSports', lang) : brand.type === 'synagogue' ? t('calendarEyebrowSynagogue', lang) : t('calendarEyebrow', lang)}
+                {brand.id === 'imocarwash' ? t('calendarEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('calendarEyebrowSports', lang) : brand.type === 'synagogue' ? t('calendarEyebrowSynagogue', lang) : t('calendarEyebrow', lang)}
               </span>
               <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">{brand.termCults}</span>
             </div>
@@ -262,7 +262,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
             </span>
             <div className="text-left mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.id === 'ymcactx' ? t('groupsEyebrowSports', lang) : brand.type === 'synagogue' ? t('groupsEyebrowSynagogue', lang) : t('groupsEyebrow', lang)}
+                {brand.id === 'imocarwash' ? t('groupsEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('groupsEyebrowSports', lang) : brand.type === 'synagogue' ? t('groupsEyebrowSynagogue', lang) : t('groupsEyebrow', lang)}
               </span>
               <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm line-clamp-2 break-words">
                 {brand.termConnects}
@@ -281,14 +281,14 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           >
             <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="material-symbols-outlined !text-[60px] text-rose-300 group-hover:text-rose-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
-              {brand.id === 'ymcactx' ? 'chat' : 'volunteer_activism'}
+              {(brand.id === 'ymcactx' || brand.id === 'imocarwash') ? 'chat' : 'volunteer_activism'}
             </span>
             <div className="text-left mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.id === 'ymcactx' ? t('prayerEyebrowSports', lang) : t('prayerEyebrow', lang)}
+                {brand.id === 'imocarwash' ? t('prayerEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('prayerEyebrowSports', lang) : t('prayerEyebrow', lang)}
               </span>
               <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">
-                {brand.id === 'ymcactx' ? t('prayerTitleSports', lang) : brand.type === 'synagogue' ? t('prayerTitleSynagogue', lang) : t('prayerTitle', lang)}
+                {brand.id === 'imocarwash' ? t('prayerTitleCarWash', lang) : brand.id === 'ymcactx' ? t('prayerTitleSports', lang) : brand.type === 'synagogue' ? t('prayerTitleSynagogue', lang) : t('prayerTitle', lang)}
               </span>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-12 group-hover:scale-125 z-0">

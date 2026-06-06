@@ -272,6 +272,7 @@ export default function HomeView({
             <option value="ibmalphaville" className="bg-slate-900">IBM Alphaville</option>
             <option value="icconselheira" className="bg-slate-900">ICC</option>
             <option value="ymcactx"      className="bg-slate-900">YMCA Academy Sports</option>
+            <option value="imocarwash"   className="bg-slate-900">IMO Car Wash</option>
           </select>
         </div>
 

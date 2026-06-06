@@ -49,6 +49,8 @@ export default function CheckinSuccessView({ onGoHome, brand, lang }: CheckinSuc
           <span className="bg-brand-red text-white text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full inline-block shadow-md border border-brand-red-hover">
             {brand.id === 'ymcactx'
               ? t('specialEventLabelSports', lang)
+              : brand.id === 'imocarwash'
+              ? t('specialEventLabelCarWash', lang)
               : (brand.type === 'synagogue' ? t('specialEventLabelSynagogue', lang) : `${t('specialEventLabelDefault', lang)} ${brand.name}`)}
           </span>
           <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-xl">
@@ -64,6 +66,8 @@ export default function CheckinSuccessView({ onGoHome, brand, lang }: CheckinSuc
           <p className="text-sm text-white/70 leading-relaxed">
             {brand.id === 'ymcactx'
               ? t('checkinSuccessDescSports', lang)
+              : brand.id === 'imocarwash'
+              ? t('checkinSuccessDescCarWash', lang)
               : (brand.type === 'synagogue' ? t('checkinSuccessDescSynagogue', lang) : t('checkinSuccessDescDefault', lang))}
           </p>
         </div>

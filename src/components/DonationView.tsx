@@ -6,13 +6,16 @@ import LiveClock from './LiveClock';
 import { speakText } from '../utils/tts';
 import { BrandConfig } from '../utils/brand';
 
+import { Lang } from '../utils/i18n';
+
 interface DonationViewProps {
   onBack: () => void;
   onGoHome: () => void;
   brand: BrandConfig;
+  lang: Lang;
 }
 
-export default function DonationView({ onBack, onGoHome, brand }: DonationViewProps) {
+export default function DonationView({ onBack, onGoHome, brand, lang }: DonationViewProps) {
   const [state, setState] = useState<DonationState>({
     category: '',
     value: 0,
@@ -69,7 +72,12 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
     setTimeout(() => setCopied(false), 3000);
   };
 
-  const categories = brand.id === 'ymcactx' ? [
+  const categories = brand.id === 'imocarwash' ? [
+    { title: lang === 'en' ? 'Simple Wash' : lang === 'es' ? 'Lavado Simple' : lang === 'de' ? 'Einfache Wäsche' : 'Lavagem Simples', icon: 'local_car_wash', desc: lang === 'en' ? 'Exterior wash with soap and water drying.' : lang === 'es' ? 'Lavado exterior con jabón y secado de agua.' : lang === 'de' ? 'Außenwäsche mit Seife und Trocknung.' : 'Lavagem externa com água, shampoo e secagem rápida.' },
+    { title: lang === 'en' ? 'Triple Wash' : lang === 'es' ? 'Lavado Triple' : lang === 'de' ? 'Triple-Wäsche' : 'Lavagem Tripla', icon: 'wash', desc: lang === 'en' ? 'Exterior wash, underbody protection and hot wax.' : lang === 'es' ? 'Lavado exterior, protección de bajos y cera caliente.' : lang === 'de' ? 'Außenwäsche, Unterbodenschutz und Heißwachs.' : 'Lavagem externa completa com proteção de chassi e cera quente.' },
+    { title: lang === 'en' ? 'Ultra HD Premium (Ceramic XTR)' : lang === 'es' ? 'Ultra HD Premium (Ceramic XTR)' : lang === 'de' ? 'Ultra HD Premium (Ceramic XTR)' : 'Ultra HD Premium (Ceramic XTR)', icon: 'auto_clean_detail', desc: lang === 'en' ? 'Our best wash with Ceramic XTR coating protection and tyre shine.' : lang === 'es' ? 'Nuestro mejor lavado con Ceramic XTR y abrillantador de neumáticos.' : lang === 'de' ? 'Unsere beste Wäsche mit Ceramic XTR Lackschutz und Reifenpflege.' : 'Nossa melhor lavagem com película protetora Ceramic XTR e brilho de pneus.' },
+    { title: lang === 'en' ? 'IMO Card Reload' : lang === 'es' ? 'Recarga de Tarjeta IMO' : lang === 'de' ? 'IMO-Karte aufladen' : 'Recarga de Cartão IMO', icon: 'credit_card', desc: lang === 'en' ? 'Add balance to your customer loyalty card for future washes.' : lang === 'es' ? 'Añada saldo a su tarjeta de fidelización para futuros lavados.' : lang === 'de' ? 'Guthaben auf Ihre Kundenkarte für zukünftige Wäschen laden.' : 'Adicione saldo ao seu cartão de fidelidade IMO para futuras lavagens.' }
+  ] : brand.id === 'ymcactx' ? [
     { title: 'Mensalidade Geral', icon: 'payments', desc: 'Mensalidade padrão de treinamento e uso da quadra.' },
     { title: 'Inscrição em Torneio', icon: 'emoji_events', desc: 'Taxa de inscrição para copas locais, uniformes e taxas de arbitragem.' },
     { title: 'Bolsas Esportivas', icon: 'volunteer_activism', desc: 'Fundo para subsidiar mensalidades e uniformes de atletas carentes.' },
@@ -212,14 +220,16 @@ export default function DonationView({ onBack, onGoHome, brand }: DonationViewPr
                 </div>
                 <div className="space-y-1.5">
                   <span className="text-[10px] uppercase tracking-widest font-black text-brand-red bg-brand-red/10 px-2.5 py-0.5 rounded-full inline-block">
-                    {brand.type === 'synagogue' ? 'Tsedaká Comunitária' : brand.id === 'ymcactx' ? 'Mensalidades & Suporte' : `Generosidade ${brand.campusName}`}
+                    {brand.id === 'imocarwash' ? 'Lavagem & Serviços' : brand.type === 'synagogue' ? 'Tsedaká Comunitária' : brand.id === 'ymcactx' ? 'Mensalidades & Suporte' : `Generosidade ${brand.campusName}`}
                   </span>
                   <h3 className="text-lg font-black text-brand-dark tracking-tight">
-                    {brand.id === 'ymcactx' ? 'Meta Diária de Contribuição 🎯' : 'Meta de Gratidão Diária 🎯'}
+                    {brand.id === 'imocarwash' ? 'Meta Diária de Lavagens 🎯' : brand.id === 'ymcactx' ? 'Meta Diária de Contribuição 🎯' : 'Meta de Gratidão Diária 🎯'}
                   </h3>
                   <p className="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
-                    {brand.type === 'synagogue'
-                      ? `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 in tsedakás! Nossa meta hoje é alcançar esse valor para apoiar a manutenção da sinagoga e auxílio social.`
+                    {brand.id === 'imocarwash'
+                      ? `No dia de ontem, nosso centro de lavagem somou um total acumulado de R$ 5.480,00 em programas e recargas! Nossa meta hoje é igualar ou superar esse valor para garantir a melhor eficiência e produtos biodegradáveis.`
+                      : brand.type === 'synagogue'
+                      ? `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 em tsedakás! Nossa meta hoje é alcançar esse valor para apoiar a manutenção da sinagoga e auxílio social.`
                       : brand.id === 'ymcactx'
                       ? `No dia de ontem, nossos atletas e parceiros somaram um total de R$ 5.480,00 em mensalidades e apoio! Nossa meta hoje é garantir esse suporte para financiar bolsas de treino e melhorias de materiais.`
                       : `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 em dízimos e ofertas voluntárias! Nossa meta hoje é igualar ou ultrapassar essa bênção para apoiar as ações sociais.`}

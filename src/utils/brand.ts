@@ -766,6 +766,104 @@ export const brands: Record<string, BrandConfig> = {
         phone: '(11) 98765-4321',
       }
     ]
+  },
+  imocarwash: {
+    id: 'imocarwash',
+    name: 'IMO Car Wash',
+    campusName: 'Centro de Lavagem',
+    logoUrl: '/images/imo/logo.png',
+    bgUrl: '/images/imo/hero.jpg',
+    primaryColor: '#0067b1',
+    primaryColorHover: '#004b82',
+    accentColor: '#ffb300',
+    glowColor: 'rgba(0, 103, 177, 0.25)',
+    badgeBgColor: '#0067b1',
+    badgeTextColor: '#ffffff',
+    badgeLabel: 'IMO Car Wash',
+    accentSplashColor: '#00a4ec',
+    slides: [
+      {
+        bgUrl: '/images/imo/hero.jpg',
+        verse: 'A lavagem de carros mais popular do mundo. Proteja o seu veículo dos sinais de envelhecimento.',
+        verseRef: 'IMO Car Wash'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=1600&fit=crop&q=80',
+        verse: 'Reciclamos até 80% da água que usamos e descartamos os resíduos de forma responsável.',
+        verseRef: 'Sustentabilidade IMO'
+      },
+      {
+        bgUrl: 'https://images.unsplash.com/photo-1520340356584-f9917d1eed69?w=1600&fit=crop&q=80',
+        verse: 'Ceramic XTR: O nosso revestimento cerâmico mais avançado para brilho e proteção incomparáveis.',
+        verseRef: 'Premium Wash'
+      }
+    ],
+    type: 'church',
+    termPastor: 'Operador',
+    termPastors: 'Operadores',
+    termPastoral: 'Falar com o Operador',
+    termCult: 'Lavagem',
+    termCults: 'Programas de Lavagem',
+    termDonation: 'Pagamento',
+    termDonations: 'Serviços & Recargas',
+    termConnect: 'Clube',
+    termConnects: 'Promoções & Clubes',
+    termMember: 'Ficha de Cliente',
+    location: 'Lisboa - Portugal (10 localizações em todo o país)',
+    wifi: 'IMO_Free_Wash',
+    pixKey: 'pagamentos@imocarwash.pt',
+    pastors: [
+      {
+        id: '1',
+        name: 'João Silva',
+        role: 'Supervisor de Pista',
+        available: true,
+        photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&fit=crop&q=80',
+      },
+      {
+        id: '2',
+        name: 'Maria Santos',
+        role: 'Atendimento & Caixa',
+        available: true,
+        photoUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&fit=crop&q=80',
+      },
+      {
+        id: '3',
+        name: 'Pedro Costa',
+        role: 'Polimento & Acabamento',
+        available: true,
+        photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&fit=crop&q=80',
+      }
+    ],
+    cellGroups: [
+      {
+        id: '1',
+        name: 'Lavagem Ultra HD',
+        neighborhood: 'Pista Principal',
+        day: 'Segunda a Sábado',
+        hour: '08:00 - 20:00',
+        leader: 'Pista 1',
+        phone: 'IMO Lisboa',
+      },
+      {
+        id: '2',
+        name: 'Ceramic XTR Premium',
+        neighborhood: 'Pista Principal',
+        day: 'Segunda a Sábado',
+        hour: '08:00 - 20:00',
+        leader: 'Pista 2',
+        phone: 'IMO Lisboa',
+      },
+      {
+        id: '3',
+        name: 'Clube do Táxi & Uber',
+        neighborhood: 'Atendimento Geral',
+        day: 'Todos os dias',
+        hour: '08:00 - 22:00',
+        leader: 'Recepção',
+        phone: 'IMO Apoio',
+      }
+    ]
   }
 };
 
@@ -775,30 +873,24 @@ export function getStoredBrands(): Record<string, BrandConfig> {
   if (stored) {
     try {
       const parsed = JSON.parse(stored);
-      let needsSave = false;
       const merged: Record<string, BrandConfig> = JSON.parse(JSON.stringify(brands));
       for (const key of Object.keys(parsed)) {
-        if (merged[key]) {
-          if (key === 'atitude') {
-            if (parsed[key].logoUrl === 'https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png' || (parsed[key].logoUrl && !parsed[key].logoUrl.includes('i0.wp.com'))) {
-              parsed[key].logoUrl = brands.atitude.logoUrl;
-              needsSave = true;
-            }
-            if (parsed[key].bgUrl === 'https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png' || (parsed[key].bgUrl && !parsed[key].bgUrl.includes('i0.wp.com'))) {
-              parsed[key].bgUrl = brands.atitude.bgUrl;
-              needsSave = true;
-            }
-          }
-          merged[key] = { ...merged[key], ...parsed[key] };
-          if (!parsed[key].slides && brands[key]?.slides) {
-            merged[key].slides = brands[key].slides;
-          }
+        if (brands[key]) {
+          // Default brand: Keep all visual and system configurations from source code
+          // and only merge customizable operational/text fields if present
+          merged[key] = {
+            ...brands[key],
+            campusName: parsed[key].campusName ?? brands[key].campusName,
+            location: parsed[key].location ?? brands[key].location,
+            wifi: parsed[key].wifi ?? brands[key].wifi,
+            pixKey: parsed[key].pixKey ?? brands[key].pixKey,
+            pastors: parsed[key].pastors ?? brands[key].pastors,
+            cellGroups: parsed[key].cellGroups ?? brands[key].cellGroups,
+          };
         } else {
+          // Custom dynamically created brand: Keep all parsed fields
           merged[key] = parsed[key];
         }
-      }
-      if (needsSave) {
-        localStorage.setItem('santuario_brands', JSON.stringify(parsed));
       }
       return merged;
     } catch (e) {
@@ -807,6 +899,7 @@ export function getStoredBrands(): Record<string, BrandConfig> {
   }
   return brands;
 }
+
 
 export function saveStoredBrands(updatedBrands: Record<string, BrandConfig>) {
   if (typeof window !== 'undefined') {
@@ -834,6 +927,8 @@ export function getCurrentBrand(): BrandConfig {
     client = 'icconselheira';
   } else if (client === 'ymcactx' || client === 'ymca' || client === 'ymca-academy' || client === 'ymca-sports') {
     client = 'ymcactx';
+  } else if (client === 'imocarwash' || client === 'imo' || client === 'imo-car-wash' || client === 'imowash') {
+    client = 'imocarwash';
   }
   
   const dynamicBrands = getStoredBrands();

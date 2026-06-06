@@ -15,7 +15,7 @@ import InactivityTimer from './components/InactivityTimer';
 import { playTapSound, playSuccessSound } from './utils/audio';
 import { speakText, setVoiceAssistEnabled } from './utils/tts';
 import { getCurrentBrand } from './utils/brand';
-import { translateBrandTerms, Lang } from './utils/i18n';
+import { translateBrandTerms, Lang, t } from './utils/i18n';
 
 const hexToRgb = (hex: string): string => {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -39,8 +39,45 @@ export default function App() {
     return 'pt';
   });
 
+  // Kiosk Security & Admin Protection States
+  const [showAdminPasscodeModal, setShowAdminPasscodeModal] = useState(false);
+  const [enteredPasscode, setEnteredPasscode] = useState('');
+  const [passcodeError, setPasscodeError] = useState('');
+  const [attemptsLeft, setAttemptsLeft] = useState(5);
+  const [blockUntil, setBlockUntil] = useState<number | null>(null);
+
   const rawBrand = getCurrentBrand();
   const brand = translateBrandTerms(rawBrand, lang);
+
+  // Kiosk Mode Defenses (context menu and keyboard shortcuts block)
+  useEffect(() => {
+    const disableContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    const disableKeyCombos = (e: KeyboardEvent) => {
+      // Disable F12, Ctrl+Shift+I/J, Ctrl+U/S (common DevTools / page escape keys)
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) ||
+        (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('contextmenu', disableContextMenu);
+      window.addEventListener('keydown', disableKeyCombos);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('contextmenu', disableContextMenu);
+        window.removeEventListener('keydown', disableKeyCombos);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     document.documentElement.style.setProperty('--color-brand-red', brand.primaryColor);
@@ -61,6 +98,43 @@ export default function App() {
     
     document.title = `Santuário Digital - ${brand.name}`;
   }, [brand]);
+
+  // Block state verification
+  const isBlocked = blockUntil ? Date.now() < blockUntil : false;
+
+  const handlePasscodeNumber = (num: string) => {
+    if (isBlocked) return;
+    playTapSound();
+    setPasscodeError('');
+    if (enteredPasscode.length < 4) {
+      const next = enteredPasscode + num;
+      setEnteredPasscode(next);
+      
+      if (next.length === 4) {
+        if (next === '1903') {
+          playSuccessSound();
+          setView('admin');
+          setShowAdminPasscodeModal(false);
+          setEnteredPasscode('');
+          setAttemptsLeft(5);
+          speakText('Acesso administrativo autorizado.', true);
+        } else {
+          const nextAttempts = attemptsLeft - 1;
+          setEnteredPasscode('');
+          if (nextAttempts <= 0) {
+            setBlockUntil(Date.now() + 30000); // Lock for 30s
+            setAttemptsLeft(5);
+            setPasscodeError(t('adminPasscodeBlocked', lang));
+            speakText(t('adminPasscodeBlocked', lang), true);
+          } else {
+            setAttemptsLeft(nextAttempts);
+            setPasscodeError(t('adminPasscodeInvalid', lang));
+            speakText(t('adminPasscodeInvalid', lang), true);
+          }
+        }
+      }
+    }
+  };
 
   const handleLanguageChange = (newLang: Lang) => {
     setLang(newLang);
@@ -110,7 +184,7 @@ export default function App() {
     } else if (v === 'prayer') {
       if (brand.id === 'ymcactx') {
         if (lang === 'en') speakText('Opening support and suggestions screen.');
-        else if (lang === 'es') speakText('Abriendo pantalla de soporte y sugerencias.');
+        else if (lang === 'es') speakText('Abriendo pantalla de suporte y sugerencias.');
         else if (lang === 'de') speakText('Support- und Feedbackseite geöffnet.');
         else speakText('Abri a tela de suporte e sugestões.');
       } else {
@@ -127,7 +201,7 @@ export default function App() {
       else speakText(`Acessando check-in de ${brand.termCults.toLowerCase()} e encontros.`);
     } else if (v === 'donations') {
       if (lang === 'en') speakText('Opening fees and contributions screen.');
-      else if (lang === 'es') speakText('Abriendo pantalla de mensualidades y contribuciones.');
+      else if (lang === 'es') speakText('Abriendo pantalla de mensalidades y contribuciones.');
       else if (lang === 'de') speakText('Beiträge und Zahlungen geöffnet.');
       else speakText(`Acessando altar de generosidade para ${brand.termDonations.toLowerCase()}.`);
     } else if (v === 'ministries') {
@@ -160,8 +234,8 @@ export default function App() {
             onStart={handleStart} 
             onOpenAccessibility={() => setShowAccessModal(true)}
             onOpenAdmin={() => {
-              setView('admin');
-              speakText('Acessando painel administrativo.');
+              setShowAdminPasscodeModal(true);
+              speakText(t('adminPasscodePrompt', lang));
             }}
             brand={brand}
             lang={lang}
@@ -175,8 +249,8 @@ export default function App() {
             onGoHome={handleGoHome} 
             onOpenAccessibility={() => setShowAccessModal(true)}
             onOpenAdmin={() => {
-              setView('admin');
-              speakText('Acessando painel administrativo.');
+              setShowAdminPasscodeModal(true);
+              speakText(t('adminPasscodePrompt', lang));
             }}
             brand={brand}
             lang={lang}
@@ -262,6 +336,95 @@ export default function App() {
             brand={brand}
             lang={lang}
           />
+        )}
+        {/* Admin Passcode Modal Overlay */}
+        {showAdminPasscodeModal && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/85 backdrop-blur-md p-6 select-none animate-fade-in">
+            <div className="bg-slate-900 text-white rounded-3xl w-full max-w-sm shadow-2xl p-6 border border-white/10 text-center space-y-6">
+              <div className="space-y-1">
+                <span className="material-symbols-outlined text-4xl text-amber-500">lock</span>
+                <h2 className="text-xl font-black tracking-tight">Painel Administrativo</h2>
+                <p className="text-sm text-slate-400 font-medium">
+                  {isBlocked 
+                    ? t('adminPasscodeBlocked', lang) 
+                    : t('adminPasscodePrompt', lang)}
+                </p>
+              </div>
+
+              {/* Dots representing entered passcode */}
+              <div className="flex justify-center gap-4 py-2">
+                {[0, 1, 2, 3].map((idx) => (
+                  <div
+                    key={idx}
+                    className={`w-4 h-4 rounded-full border-2 border-white/20 transition-all duration-150 ${
+                      idx < enteredPasscode.length
+                        ? 'bg-amber-500 border-amber-500 scale-110 shadow-lg shadow-amber-500/30'
+                        : 'bg-transparent'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Error messages */}
+              {passcodeError && (
+                <div className="text-red-400 text-sm font-semibold animate-pulse">
+                  {passcodeError}
+                  {!isBlocked && (
+                    <div className="text-xs text-slate-400 mt-1 font-normal">
+                      {t('adminPasscodeAttempts', lang)}: {attemptsLeft}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Keypad Grid */}
+              <div className="grid grid-cols-3 gap-3 max-w-[260px] mx-auto">
+                {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    disabled={isBlocked}
+                    onClick={() => handlePasscodeNumber(num)}
+                    className="w-16 h-16 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-xl font-bold transition-all active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                  >
+                    {num}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => {
+                    playTapSound();
+                    setEnteredPasscode('');
+                    setPasscodeError('');
+                  }}
+                  className="w-16 h-16 rounded-full bg-red-950/20 hover:bg-red-950/40 border border-red-500/20 flex items-center justify-center text-xs font-bold text-red-400 uppercase tracking-widest active:scale-95 cursor-pointer"
+                >
+                  Limpar
+                </button>
+                <button
+                  key="0"
+                  type="button"
+                  disabled={isBlocked}
+                  onClick={() => handlePasscodeNumber('0')}
+                  className="w-16 h-16 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-xl font-bold transition-all active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                >
+                  0
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playTapSound();
+                    setShowAdminPasscodeModal(false);
+                    setEnteredPasscode('');
+                    setPasscodeError('');
+                  }}
+                  className="w-16 h-16 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-xs font-bold text-slate-300 uppercase tracking-widest active:scale-95 cursor-pointer"
+                >
+                  Sair
+                </button>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Global Accessibility Modal Overlay */}

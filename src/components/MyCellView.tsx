@@ -160,18 +160,20 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
         {/* Banner Card de Pequenos Grupos */}
         <div 
           className="w-full h-48 rounded-3xl overflow-hidden mb-8 shadow-sm border border-slate-200 bg-cover bg-center flex flex-col justify-end p-6 md:p-8 relative"
-          style={{ backgroundImage: `url(${brand.type === 'synagogue' ? 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&fit=crop&q=80' : 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&fit=crop&q=80'})` }}
+          style={{ backgroundImage: `url(${brand.id === 'imocarwash' ? 'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=800&fit=crop&q=80' : brand.type === 'synagogue' ? 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&fit=crop&q=80' : 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&fit=crop&q=80'})` }}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent z-0" />
           <div className="relative z-10 text-left">
             <span className="bg-brand-red text-white text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md block w-fit mb-1 border border-brand-red-hover">
-              {brand.type === 'synagogue' ? 'Estudos & Mitzvot' : 'Vida em Comunidade'}
+              {brand.id === 'imocarwash' ? 'Promoções & Pistas' : brand.type === 'synagogue' ? 'Estudos & Mitzvot' : 'Vida em Comunidade'}
             </span>
             <h2 className="text-xl md:text-2xl font-black text-white leading-tight uppercase">
               {brand.termConnects} {brand.name}
             </h2>
             <p className="text-xs text-white/80 font-semibold mt-1">
-              {brand.type === 'synagogue'
+              {brand.id === 'imocarwash'
+                ? `Conheça os nossos programas de lavagem em andamento e as localizações das pistas de serviço.`
+                : brand.type === 'synagogue'
                 ? `Participe de um grupo de estudos perto de você e viva uma verdadeira comunhão em ${brand.campusName}.`
                 : `Encontre um(a) ${brand.termConnect.toLowerCase()} perto de você e viva uma verdadeira comunhão em ${brand.campusName}.`}
             </p>
@@ -227,7 +229,7 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
                       boxShadow: `0 4px 12px ${brand.primaryColor}30`
                     }}
                   >
-                    <span>{brand.type === 'synagogue' ? 'Quero Participar' : 'Quero Visitar'}</span>
+                    <span>{brand.id === 'imocarwash' ? 'Saber Mais' : brand.type === 'synagogue' ? 'Quero Participar' : 'Quero Visitar'}</span>
                     <span className="material-symbols-outlined !text-base">arrow_forward</span>
                   </button>
                 </div>
@@ -257,7 +259,7 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
             <div className="relative z-10 p-6 bg-brand-dark text-white border-b flex justify-between items-center shrink-0">
               <div>
                 <span className="text-[10px] uppercase font-black tracking-widest bg-brand-red px-2.5 py-1 rounded-md mb-1 block w-fit">
-                  {brand.type === 'synagogue' ? 'Participar do Grupo' : 'Visitar Grupo'}
+                  {brand.id === 'imocarwash' ? 'Detalhes do Programa' : brand.type === 'synagogue' ? 'Participar do Grupo' : 'Visitar Grupo'}
                 </span>
                 <h3 className="text-xl font-bold uppercase tracking-tight">{activeCellModal.name}</h3>
               </div>
@@ -298,7 +300,9 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
                   {/* Left Column: Description & WhatsApp Input */}
                   <div className="space-y-6 flex flex-col justify-center">
                     <p className="text-sm text-slate-650 font-semibold bg-red-50/60 rounded-2xl p-4 border border-red-100 leading-relaxed">
-                      {brand.type === 'synagogue'
+                      {brand.id === 'imocarwash'
+                        ? 'Enviaremos os detalhes do clube de lavagem e cupons de desconto diretamente por WhatsApp.'
+                        : brand.type === 'synagogue'
                         ? 'Por segurança de nossos membros, enviamos o local das preces e shiurim exclusivamente por WhatsApp.'
                         : 'Por segurança de nossos pequenos grupos, enviamos o endereço completo exclusivamente por WhatsApp.'}
                     </p>
@@ -318,7 +322,7 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
                     <NumericKeypad 
                       onKeyPress={handleKeypadPress} 
                       onConfirm={handleSubmitAddress} 
-                      confirmLabel={brand.type === 'synagogue' ? 'Solicitar Local' : 'Solicitar Endereço'}
+                      confirmLabel={brand.id === 'imocarwash' ? 'Solicitar Detalhes' : brand.type === 'synagogue' ? 'Solicitar Local' : 'Solicitar Endereço'}
                     />
                   </div>
                 </div>

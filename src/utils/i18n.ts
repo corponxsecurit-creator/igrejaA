@@ -22,6 +22,30 @@ const dictionary: Record<string, Record<Lang, string>> = {
   next: { pt: 'Avançar', en: 'Next', es: 'Siguiente', de: 'Weiter' },
   finish: { pt: 'Finalizar', en: 'Finish', es: 'Finalizar', de: 'Abschließen' },
   copied: { pt: 'Copiado!', en: 'Copied!', es: '¡Copiado!', de: 'Kopiert!' },
+  adminPasscodePrompt: {
+    pt: 'Digite a senha de administrador para continuar',
+    en: 'Enter the admin passcode to continue',
+    es: 'Ingrese la contraseña de administrador para continuar',
+    de: 'Geben Sie den Admin-Passcode ein, um fortzufahren'
+  },
+  adminPasscodeInvalid: {
+    pt: 'Senha incorreta!',
+    en: 'Incorrect passcode!',
+    es: '¡Contraseña incorrecta!',
+    de: 'Falscher Passcode!'
+  },
+  adminPasscodeAttempts: {
+    pt: 'Tentativas restantes',
+    en: 'Remaining attempts',
+    es: 'Intentos restantes',
+    de: 'Verbleibende Versuche'
+  },
+  adminPasscodeBlocked: {
+    pt: 'Acesso bloqueado por segurança.',
+    en: 'Access blocked for security.',
+    es: 'Acceso bloqueado por seguridad.',
+    de: 'Zugriff aus Sicherheitsgründen gesperrt.'
+  },
 
   // Home View
   welcome: { pt: 'Bem-vindo', en: 'Welcome', es: 'Bienvenido', de: 'Willkommen' },
@@ -44,24 +68,31 @@ const dictionary: Record<string, Record<Lang, string>> = {
   // Dashboard Options (YMCA vs Others)
   newMemberEyebrow: { pt: 'Cadastro', en: 'Registration', es: 'Registro', de: 'Registrierung' },
   newMemberEyebrowSports: { pt: 'Cadastro de Atleta', en: 'Athlete Registration', es: 'Registro de Atleta', de: 'Athleten-Registrierung' },
+  newMemberEyebrowCarWash: { pt: 'Ficha de Cliente', en: 'Customer Profile', es: 'Ficha de Cliente', de: 'Kundenkartei' },
   volunteerEyebrow: { pt: 'Voluntariado', en: 'Volunteering', es: 'Voluntariado', de: 'Ehrenamt' },
   volunteerEyebrowSynagogue: { pt: 'Engajamento & Mitzvot', en: 'Engagement & Mitzvot', es: 'Compromiso & Mitzvot', de: 'Mitzwot & Engagement' },
   volunteerEyebrowSports: { pt: 'Participação & Apoio', en: 'Involvement & Help', es: 'Participación & Apoyo', de: 'Mitarbeit & Unterstützung' },
+  volunteerEyebrowCarWash: { pt: 'Clube & Fidelidade', en: 'Club & Loyalty', es: 'Club & Fidelidad', de: 'Club & Treue' },
   volunteerTitle: { pt: 'Participar', en: 'Participate', es: 'Participar', de: 'Teilnehmen' },
+  volunteerTitleCarWash: { pt: 'Fidelizar / Participar', en: 'Join Club / Loyalty', es: 'Unirse al Club', de: 'Klub beitreten' },
   
   calendarEyebrow: { pt: 'Agenda & Encontros', en: 'Schedule & Gatherings', es: 'Agenda & Encuentros', de: 'Termine & Treffen' },
   calendarEyebrowSynagogue: { pt: 'Shabat & Festividades', en: 'Shabat & Festivities', es: 'Shabat & Festividades', de: 'Schabbat & Feiertage' },
   calendarEyebrowSports: { pt: 'Treinos & Horários', en: 'Practices & Schedules', es: 'Entrenamientos & Horarios', de: 'Training & Termine' },
+  calendarEyebrowCarWash: { pt: 'Pistas & Programas', en: 'Lanes & Programs', es: 'Carriles & Programas', de: 'Bahnen & Programme' },
 
   groupsEyebrow: { pt: 'Conexão Grupos', en: 'Group Connection', es: 'Conexión de Grupos', de: 'Gruppen-Verbindung' },
   groupsEyebrowSynagogue: { pt: 'Grupos de Estudo', en: 'Study Groups', es: 'Grupos de Estudio', de: 'Lerngruppen' },
   groupsEyebrowSports: { pt: 'Nossos Times', en: 'Our Teams', es: 'Nuestros Equipos', de: 'Unsere Teams' },
+  groupsEyebrowCarWash: { pt: 'Assinaturas & Vantagens', en: 'Subs & Benefits', es: 'Sub & Beneficios', de: 'Abos & Vorteile' },
 
   prayerEyebrow: { pt: 'Intercessão', en: 'Intercession', es: 'Intercesión', de: 'Fürbitte' },
-  prayerEyebrowSports: { pt: 'Feedback & Ouvidoria', en: 'Feedback & Support', es: 'Sugerencias & Soporte', de: 'Feedback & Support' },
+  prayerEyebrowSports: { pt: 'Feedback & Ouvidoria', en: 'Feedback & Support', es: 'Sugerencias & Suporte', de: 'Feedback & Support' },
+  prayerEyebrowCarWash: { pt: 'Suporte ao Cliente', en: 'Customer Support', es: 'Soporte al Cliente', de: 'Kundenservice' },
   prayerTitle: { pt: 'Pedido de Oração', en: 'Prayer Request', es: 'Pedido de Oración', de: 'Gebetsanliegen' },
   prayerTitleSynagogue: { pt: 'Pedido de Rezas', en: 'Prayer Request', es: 'Pedido de Rezos', de: 'Gebetsanliegen' },
   prayerTitleSports: { pt: 'Suporte & Ouvidoria', en: 'Support & Suggestions', es: 'Soporte & Sugerencias', de: 'Support & Vorschläge' },
+  prayerTitleCarWash: { pt: 'Fale Conosco', en: 'Contact Us', es: 'Contáctenos', de: 'Kontakt' },
 
   // New Member View
   regHowToProceed: {
@@ -345,12 +376,19 @@ de: 'Finden Sie ein passendes Team und Trainingszeiten für Ihre Altersgruppe.'
     es: '¡Bienvenido! Su presencia en el entrenamiento de hoy ha sido confirmada. ¡Buen entrenamiento, atleta!',
     de: 'Willkommen! Ihre Anwesenheit beim heutigen Training wurde bestätigt. Hab ein gutes Training, Athlet!'
   },
+  checkinSuccessDescCarWash: {
+    pt: 'Seja muito bem-vindo! Seu programa de lavagem foi agendado e a cancela foi liberada. Dirija-se à pista de lavagem indicada.',
+    en: 'Welcome! Your wash program has been confirmed and the gate is open. Please proceed to the designated wash lane.',
+    es: '¡Bienvenido! Su programa de lavado ha sido confirmado y la barrera se ha abierto. Diríjase al carril de lavado indicado.',
+    de: 'Willkommen! Ihr Waschprogramm wurde bestätigt und die Schranke ist geöffnet. Bitte fahren Sie in die zugewiesene Waschstraße.'
+  },
   checkinSuccessFinishBtn: { pt: 'Concluir e Voltar ao Início', en: 'Finish and Return Home', es: 'Concluir y Volver al Inicio', de: 'Abschließen und zurück' },
   
   // Custom Events / Activities Top Pill Labels
   specialEventLabelDefault: { pt: 'Celebração Especial', en: 'Special Celebration', es: 'Celebración Especial', de: 'Besondere Feier' },
   specialEventLabelSynagogue: { pt: 'Serviços do Shabat', en: 'Shabat Services', es: 'Servicios del Shabat', de: 'Schabbat-Gottesdienste' },
   specialEventLabelSports: { pt: 'Treino de Basquete YMCA', en: 'YMCA Basketball Practice', es: 'Entrenamiento de Baloncesto YMCA', de: 'YMCA Basketball Training' },
+  specialEventLabelCarWash: { pt: 'Serviço de Lavagem Expressa', en: 'Express Wash Service', es: 'Servicio de Lavado Express', de: 'Express-Waschservice' },
 
   // New Member View Success Screen Translations
   regSuccessGreeting: {
@@ -390,6 +428,30 @@ export function translateBrandTerms(brand: BrandConfig, lang: Lang): BrandConfig
     for (const key of Object.keys(ymcactxTranslations)) {
       if (key in copy) {
         (copy as any)[key] = ymcactxTranslations[key][lang === 'pt' ? 'en' : (lang === 'es' ? 'es' : (lang === 'de' ? 'de' : 'en'))];
+      }
+    }
+    return copy;
+  }
+
+  // Custom translation for imocarwash
+  if (brand.id === 'imocarwash') {
+    const imocarwashTranslations: Record<string, Record<'en' | 'es' | 'de', string>> = {
+      termPastor: { en: 'Operator', es: 'Operador', de: 'Mitarbeiter' },
+      termPastors: { en: 'Operators', es: 'Operadores', de: 'Mitarbeiter' },
+      termPastoral: { en: 'Talk to Operator', es: 'Hablar con el Operador', de: 'Mitarbeiter sprechen' },
+      termCult: { en: 'Wash', es: 'Lavado', de: 'Wäsche' },
+      termCults: { en: 'Wash Programs', es: 'Programas de Lavado', de: 'Waschprogramme' },
+      termDonation: { en: 'Payment', es: 'Pago', de: 'Zahlung' },
+      termDonations: { en: 'Services & Subscriptions', es: 'Servicios & Recargas', de: 'Dienste & Pässe' },
+      termConnect: { en: 'Club', es: 'Club', de: 'Klub' },
+      termConnects: { en: 'Promotions & Clubs', es: 'Promociones & Clubes', de: 'Aktionen & Klubs' },
+      termMember: { en: 'Customer Card', es: 'Ficha de Cliente', de: 'Kundenkarte' },
+    };
+
+    const copy = { ...brand };
+    for (const key of Object.keys(imocarwashTranslations)) {
+      if (key in copy) {
+        (copy as any)[key] = imocarwashTranslations[key][lang === 'pt' ? 'en' : (lang === 'es' ? 'es' : (lang === 'de' ? 'de' : 'en'))];
       }
     }
     return copy;
