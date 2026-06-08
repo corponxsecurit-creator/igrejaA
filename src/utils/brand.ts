@@ -256,7 +256,7 @@ export const brands: Record<string, BrandConfig> = {
     id: 'lagoinha',
     name: 'Lagoinha',
     campusName: 'Alphaville',
-    logoUrl: 'https://static.wixstatic.com/media/d7e284_cc885f7885304ff482e3a73fa536436a~mv2.png/v1/fill/w_241,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Lagoinha2021_B.png',
+    logoUrl: '/images/lagoinha/logo.png',
     bgUrl: 'https://static.wixstatic.com/media/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg/v1/fill/w_1600,h_1000,al_c/d7e284_e0cb83d5c8204ecb96855d028995d338~mv2.jpeg',
     primaryColor: '#d4af37',
     primaryColorHover: '#b8942a',
