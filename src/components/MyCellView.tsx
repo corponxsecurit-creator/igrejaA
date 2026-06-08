@@ -279,9 +279,15 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
                   <div className="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-sm">
                     <span className="material-symbols-outlined !text-3xl font-black">done</span>
                   </div>
-                  <h4 className="text-xl font-black text-brand-dark">Local Enviado!</h4>
+                  <h4 className="text-xl font-black text-brand-dark">
+                    {brand.id === 'imocarwash' ? 'Detalhes Enviados!' : 'Local Enviado!'}
+                  </h4>
                   <p className="text-sm text-slate-600 leading-relaxed">
-                    O local completo e as orientações de <span className="font-bold text-brand-dark">{activeCellModal.leader}</span> foram enviados por WhatsApp para o número <span className="font-bold text-brand-dark">{formatPhone(phoneNumber)}</span>. Seja muito bem-vindo!
+                    {brand.id === 'imocarwash'
+                      ? `As instruções da pista e detalhes sobre a/o ${activeCellModal.name} foram enviados por WhatsApp para o número `
+                      : `O local completo e as orientações de ${activeCellModal.leader} foram enviados por WhatsApp para o número `}
+                    <span className="font-bold text-brand-dark">{formatPhone(phoneNumber)}</span>.
+                    {brand.id === 'imocarwash' ? ' Obrigado pela preferência!' : ' Seja muito bem-vindo!'}
                   </p>
                   <button
                     type="button"

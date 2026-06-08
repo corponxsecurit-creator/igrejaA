@@ -4,15 +4,17 @@ import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
 import LiveClock from './LiveClock';
 import { BrandConfig } from '../utils/brand';
+import { Lang, t } from '../utils/i18n';
 
 interface PastoralViewProps {
   onBack: () => void;
   onGoHome: () => void;
   onSelectView?: (view: ViewState) => void;
   brand: BrandConfig;
+  lang: Lang;
 }
 
-export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: PastoralViewProps) {
+export default function PastoralView({ onBack, onGoHome, onSelectView, brand, lang }: PastoralViewProps) {
   const [selectedPastor, setSelectedPastor] = useState<Pastor | null>(null);
   const [userPhone, setUserPhone] = useState('');
   const [isScheduled, setIsScheduled] = useState(false);
@@ -20,10 +22,16 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: 
   const handlePastorSelect = (p: Pastor) => {
     if (!p.available) {
       playTapSound();
-      alert(brand.type === 'synagogue'
-        ? 'Este rabino está em atendimento no momento. Por favor, escolha outro disponível ou aguarde alguns minutos.'
-        : 'Este pastor está em atendimento individual no momento. Por favor escolha um de nossos conselheiros disponíveis ou aguarde alguns minutos.'
-      );
+      if (brand.id === 'imocarwash') {
+        alert('Este operador está em atendimento no momento. Por favor, chame outro disponível ou aguarde alguns minutos.');
+      } else if (brand.id === 'ymcactx') {
+        alert('Este treinador está em atendimento no momento. Por favor, chame outro disponível ou aguarde alguns minutos.');
+      } else {
+        alert(brand.type === 'synagogue'
+          ? 'Este rabino está em atendimento no momento. Por favor, escolha outro disponível ou aguarde alguns minutos.'
+          : 'Este pastor está em atendimento individual no momento. Por favor escolha um de nossos conselheiros disponíveis ou aguarde alguns minutos.'
+        );
+      }
       return;
     }
     playTapSound();
@@ -65,7 +73,13 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: 
       name: `Atendimento com ${selectedPastor?.name || brand.termPastor}`,
       phone: userPhone,
       email: '-',
-      type: brand.type === 'synagogue' ? 'Aconselhamento Rabínico' : 'Aconselhamento Pastoral',
+      type: brand.id === 'imocarwash'
+        ? 'Chamar Operador'
+        : brand.id === 'ymcactx'
+        ? 'Falar com Treinador'
+        : brand.type === 'synagogue'
+        ? 'Aconselhamento Rabínico'
+        : 'Aconselhamento Pastoral',
       brandId: brand.id,
       date: new Date().toISOString()
     };
@@ -112,10 +126,28 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: 
     { view: 'dashboard' as ViewState, label: 'Painel Principal', icon: 'dashboard' },
     { view: 'new_member' as ViewState, label: brand.termMember, icon: 'person_add' },
     { view: 'donations' as ViewState, label: brand.termDonations, icon: 'payments' },
-    { view: 'ministries' as ViewState, label: brand.type === 'synagogue' ? 'Mitzvot' : 'Participar', icon: 'groups' },
+    { 
+      view: 'ministries' as ViewState, 
+      label: brand.id === 'imocarwash' 
+        ? t('volunteerTitleCarWash', lang) 
+        : brand.type === 'synagogue' 
+        ? 'Mitzvot' 
+        : 'Participar', 
+      icon: 'groups' 
+    },
     { view: 'checkin' as ViewState, label: brand.termCults, icon: 'calendar_month' },
     { view: 'my_cell' as ViewState, label: brand.termConnects, icon: 'diversity_3' },
-    { view: 'prayer' as ViewState, label: brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração', icon: 'volunteer_activism' },
+    { 
+      view: 'prayer' as ViewState, 
+      label: brand.id === 'imocarwash' 
+        ? t('prayerTitleCarWash', lang) 
+        : brand.id === 'ymcactx' 
+        ? t('prayerTitleSports', lang) 
+        : brand.type === 'synagogue' 
+        ? 'Pedido de Rezas' 
+        : 'Pedido de Oração', 
+      icon: (brand.id === 'ymcactx' || brand.id === 'imocarwash') ? 'chat' : 'volunteer_activism' 
+    },
     { view: 'pastoral' as ViewState, label: brand.termPastoral, icon: 'chat' },
   ];
 
@@ -137,7 +169,13 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: 
       <header className="sticky top-0 left-0 w-full z-45 bg-white/80 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm">
         <div>
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">
-            {brand.type === 'synagogue' ? 'Orientação Espiritual' : 'Cuidado e Aconselhamento'}
+            {brand.id === 'imocarwash'
+              ? 'Suporte & Pista'
+              : brand.id === 'ymcactx'
+              ? 'Instrução & Treino'
+              : brand.type === 'synagogue'
+              ? 'Orientação Espiritual'
+              : 'Cuidado e Aconselhamento'}
           </span>
           <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">{brand.termPastoral}</h1>
         </div>
@@ -238,12 +276,20 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: 
           
           <header className="mb-8 text-center lg:text-left max-w-2xl pt-2">
             <h2 className="text-2xl md:text-3xl font-extrabold text-brand-dark tracking-tight mb-2">
-              {brand.type === 'synagogue'
+              {brand.id === 'imocarwash'
+                ? 'Precisa de ajuda ou atendimento na pista?'
+                : brand.id === 'ymcactx'
+                ? 'Precisa falar com um treinador ou instrutor?'
+                : brand.type === 'synagogue'
                 ? 'Precisa de orientação espiritual ou auxílio do Rabinato?'
                 : 'Precisa conversar ou receber uma oração presencial?'}
             </h2>
             <p className="text-sm md:text-base text-slate-600 font-semibold leading-relaxed">
-              {brand.type === 'synagogue'
+              {brand.id === 'imocarwash'
+                ? `Nossos ${brand.termPastors.toLowerCase()} de plantão estão prontos para auxiliar você com as pistas e programas. Escolha um ${brand.termPastor.toLowerCase()} abaixo para solicitar ajuda agora.`
+                : brand.id === 'ymcactx'
+                ? `Nossos ${brand.termPastors.toLowerCase()} estão disponíveis para tirar dúvidas e dar orientações esportivas. Escolha um ${brand.termPastor.toLowerCase()} abaixo para agendar um atendimento.`
+                : brand.type === 'synagogue'
                 ? `Nossa equipe de ${brand.termPastors.toLowerCase()} está pronta para ouvir você, oferecer conselhos baseados na Torá e prestar apoio espiritual. Escolha um ${brand.termPastor.toLowerCase()} abaixo para agendar um encontro hoje.`
                 : `Nossa equipe de ${brand.termPastors.toLowerCase()} de plantão está pronta para ouvir você, oferecer conselhos bíblicos e orar pelas suas necessidades. Escolha um ${brand.termPastor.toLowerCase()} abaixo para agendar um encontro reservado hoje mesmo.`}
             </p>
@@ -332,7 +378,13 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: 
             <div className="relative z-10 p-6 bg-brand-dark text-white border-b flex justify-between items-center shrink-0">
               <div>
                 <span className="text-[10px] uppercase font-black tracking-widest bg-brand-red px-2.5 py-1 rounded-md mb-1 block w-fit">
-                  {brand.type === 'synagogue' ? 'Orientação Espiritual' : 'Conselho Reservado'}
+                  {brand.id === 'imocarwash'
+                    ? 'Suporte de Pista'
+                    : brand.id === 'ymcactx'
+                    ? 'Atendimento Esportivo'
+                    : brand.type === 'synagogue'
+                    ? 'Orientação Espiritual'
+                    : 'Conselho Reservado'}
                 </span>
                 <h3 className="text-xl font-bold uppercase tracking-tight">{selectedPastor.name}</h3>
               </div>
@@ -354,7 +406,11 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: 
                   </div>
                   <h4 className="text-xl font-black text-brand-dark">Solicitação Confirmada!</h4>
                   <p className="text-sm text-slate-600 leading-relaxed">
-                    {brand.type === 'synagogue'
+                    {brand.id === 'imocarwash'
+                      ? `O ${selectedPastor.name} foi acionado imediatamente. Por favor, dirija-se à área de espera de clientes ou aguarde ao lado da pista. Obrigado!`
+                      : brand.id === 'ymcactx'
+                      ? `O ${selectedPastor.name} foi acionado imediatamente. Por favor, aguarde confortavelmente na recepção ou área de convivência da academia. Obrigado!`
+                      : brand.type === 'synagogue'
                       ? `O ${selectedPastor.name} foi acionado imediatamente. Por favor, aguarde confortavelmente nas poltronas localizadas no saguão principal de recepção.`
                       : `O ${selectedPastor.name} foi acionado imediatamente. Por favor, contorne o balcão esquerdo e aguarde confortavelmente nas poltronas de acolhimento localizadas no saguão principal do Lobby. Deus abençoe!`}
                   </p>
@@ -375,7 +431,11 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: 
                   {/* Left Column: Description & WhatsApp Input */}
                   <div className="space-y-6 flex flex-col justify-center">
                     <p className="text-sm text-slate-650 font-semibold bg-slate-50/60 rounded-2xl p-4 border border-slate-200 leading-relaxed">
-                      {brand.type === 'synagogue'
+                      {brand.id === 'imocarwash'
+                        ? `Ao confirmar a solicitação, o ${brand.termPastor.toLowerCase()} de plantão virá ao seu encontro para ajudá-lo na pista.`
+                        : brand.id === 'ymcactx'
+                        ? `Ao confirmar a solicitação, o ${brand.termPastor.toLowerCase()} entrará em contato para agendar o seu atendimento.`
+                        : brand.type === 'synagogue'
                         ? 'Ao confirmar a solicitação, o rabino de plantão se organizará para recebê-lo de forma individual em nossa sala reservada de estudos e orientação.'
                         : 'Ao confirmar o atendimento, o pastor de plantão se organizará para recebê-lo de forma individual em nossa sala reservada de aconselhamento.'}
                     </p>
@@ -395,7 +455,7 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand }: 
                     <NumericKeypad 
                       onKeyPress={handleKeypadPress} 
                       onConfirm={handleScheduleSubmit} 
-                      confirmLabel={brand.type === 'synagogue' ? 'Chamar Rabino' : 'Solicitar Atendimento'}
+                      confirmLabel={brand.id === 'imocarwash' ? 'Chamar Operador' : brand.id === 'ymcactx' ? 'Chamar Treinador' : brand.type === 'synagogue' ? 'Chamar Rabino' : 'Solicitar Atendimento'}
                     />
                   </div>
                 </div>

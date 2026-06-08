@@ -137,7 +137,15 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">
             {brand.id === 'imocarwash' ? 'Autoatendimento' : brand.type === 'synagogue' ? 'Totem de Entrada' : 'Totem de Acesso'}
           </span>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Check-in do {brand.termCult}</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
+            {brand.id === 'imocarwash'
+              ? 'Check-in de Lavagem'
+              : brand.id === 'ymcactx'
+              ? 'Check-in de Treino'
+              : brand.type === 'synagogue'
+              ? 'Check-in do Shabat'
+              : `Check-in do ${brand.termCult}`}
+          </h1>
         </div>
 
         <div className="hidden md:block">
@@ -208,7 +216,11 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
 
                   <div className="bg-red-50/50 rounded-2xl p-4 border border-dashed border-brand-red/20 text-xs text-slate-500 font-medium bg-white/60">
                     <p className="font-bold text-slate-700 mb-1">Problemas no check-in?</p>
-                    Por favor, solicite suporte a um de nossos voluntários e recepcionistas no saguão para auxílio imediato.
+                    {brand.id === 'imocarwash'
+                      ? 'Por favor, solicite suporte a um de nossos operadores de pista para auxílio imediato.'
+                      : brand.id === 'ymcactx'
+                      ? 'Por favor, solicite suporte na recepção da academia para auxílio imediato.'
+                      : 'Por favor, solicite suporte a um de nossos voluntários e recepcionistas no saguão para auxílio imediato.'}
                   </div>
                 </div>
               </div>
@@ -365,7 +377,13 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
                               );
                             })
                           ) : (
-                            <p className="text-center text-xs text-slate-400 py-10">Nenhum membro encontrado com as iniciais atuais.</p>
+                            <p className="text-center text-xs text-slate-400 py-10">
+                              {brand.id === 'imocarwash'
+                                ? 'Nenhum cliente encontrado com as iniciais atuais.'
+                                : brand.id === 'ymcactx'
+                                ? 'Nenhum atleta encontrado com as iniciais atuais.'
+                                : 'Nenhum membro encontrado com as iniciais atuais.'}
+                            </p>
                           )}
                         </div>
                       </div>

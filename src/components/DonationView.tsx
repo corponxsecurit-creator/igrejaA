@@ -183,7 +183,13 @@ export default function DonationView({ onBack, onGoHome, brand, lang }: Donation
       <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
         <div>
           <span className="text-xs uppercase tracking-widest text-brand-red font-black block">{brand.termDonations}</span>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Contribuições {brand.name}</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
+            {brand.id === 'imocarwash' 
+              ? `${brand.termDonations} ${brand.name}` 
+              : brand.id === 'ymcactx'
+              ? `${brand.termDonations} ${brand.name}`
+              : `Contribuições ${brand.name}`}
+          </h1>
         </div>
 
         <div className="hidden md:block">
@@ -605,15 +611,35 @@ export default function DonationView({ onBack, onGoHome, brand, lang }: Donation
               <div className="space-y-2">
                 <h2 className="text-3xl font-black text-brand-dark tracking-tight">Muito Obrigado!</h2>
                 <p className="text-base text-slate-600 font-semibold">
-                  {brand.type === 'synagogue'
+                  {brand.id === 'imocarwash'
+                    ? 'Obrigado por lavar conosco! Seu pagamento foi confirmado e a cancela foi liberada. Siga as instruções da pista.'
+                    : brand.id === 'ymcactx'
+                    ? 'Agradecemos o seu pagamento! O seu acesso às instalações esportivas e atividades foi registrado com sucesso.'
+                    : brand.type === 'synagogue'
                     ? 'Sua tsedaká apoia os estudos da Torá, os serviços diários e as ações de auxílio social da nossa comunidade.'
                     : `Sua generosidade faz a igreja de Cristo crescer e transbordar amor e bênçãos em nossa região de ${brand.campusName}.`}
                 </p>
               </div>
 
-              {/* Biblical snippet graphic style card */}
-              {brand.type === 'synagogue' ? (
-                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full">
+              {/* Snippet graphic style card */}
+              {brand.id === 'imocarwash' ? (
+                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full text-center">
+                  <span className="absolute -top-3 left-6 px-3 py-0.5 text-white font-black text-[10px] uppercase rounded-full tracking-widest block" style={{ backgroundColor: brand.primaryColor }}>
+                    IMO Car Wash
+                  </span>
+                  "A lavagem de carros mais popular do mundo. Proteja o seu veículo dos sinais de envelhecimento."
+                  <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">Garantia de Qualidade</p>
+                </div>
+              ) : brand.id === 'ymcactx' ? (
+                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full text-center">
+                  <span className="absolute -top-3 left-6 px-3 py-0.5 text-white font-black text-[10px] uppercase rounded-full tracking-widest block" style={{ backgroundColor: brand.primaryColor }}>
+                    Valores YMCA
+                  </span>
+                  "Desenvolvendo caráter, liderança e espírito de equipe através do esporte."
+                  <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">YMCA Central Texas</p>
+                </div>
+              ) : brand.type === 'synagogue' ? (
+                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full text-center">
                   <span className="absolute -top-3 left-6 px-3 py-0.5 bg-brand-red text-white font-black text-[10px] uppercase rounded-full tracking-widest block">
                     Palavra da Torá
                   </span>
@@ -621,7 +647,7 @@ export default function DonationView({ onBack, onGoHome, brand, lang }: Donation
                   <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">Deuteronômio 15:11</p>
                 </div>
               ) : (
-                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full">
+                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full text-center">
                   <span className="absolute -top-3 left-6 px-3 py-0.5 bg-brand-red text-white font-black text-[10px] uppercase rounded-full tracking-widest block">
                     Palavra do Altar
                   </span>

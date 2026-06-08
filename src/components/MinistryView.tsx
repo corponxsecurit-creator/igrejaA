@@ -528,7 +528,11 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                       boxShadow: `0 4px 12px ${brand.primaryColor}40`
                     }}
                   >
-                    {brand.type === 'synagogue' ? 'Voltar às Atividades' : 'Voltar aos Ministérios'}
+                    {brand.id === 'imocarwash'
+                      ? 'Voltar aos Clubes'
+                      : brand.type === 'synagogue'
+                      ? 'Voltar às Atividades'
+                      : 'Voltar aos Ministérios'}
                   </button>
                 </div>
               ) : (
@@ -536,7 +540,9 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                   {/* Left Column: Form Details & Inputs */}
                   <div className="space-y-4 flex flex-col justify-start">
                     <p className="text-xs text-slate-500 font-semibold mb-2 bg-slate-50/60 p-3 rounded-xl border border-slate-200">
-                      {brand.type === 'synagogue'
+                      {brand.id === 'imocarwash'
+                        ? 'Confirme a adesão abaixo. Nossos atendentes entrarão em contato para ativar seu plano.'
+                        : brand.type === 'synagogue'
                         ? 'Inscreva-se abaixo. Seus dados serão encaminhados diretamente para os responsáveis pela coordenação.'
                         : 'Inscreva-se abaixo. Seus dados serão encaminhados diretamente para o líder responsável pelo preenchimento de vagas.'}
                     </p>
@@ -607,7 +613,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                         <NumericKeypad 
                           onKeyPress={handleKeypadPress} 
                           onConfirm={handleRegisterSubmit} 
-                          confirmLabel="Confirmar Inscrição"
+                          confirmLabel={brand.id === 'imocarwash' ? 'Confirmar Adesão' : 'Confirmar Inscrição'}
                         />
                       </div>
                     )}

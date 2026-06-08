@@ -182,11 +182,11 @@ export default function App() {
       else if (lang === 'de') speakText('Athleten-Registrierung gestartet.');
       else speakText(`Iniciando formulário de ${term}.`);
     } else if (v === 'prayer') {
-      if (brand.id === 'ymcactx') {
-        if (lang === 'en') speakText('Opening support and suggestions screen.');
-        else if (lang === 'es') speakText('Abriendo pantalla de suporte y sugerencias.');
-        else if (lang === 'de') speakText('Support- und Feedbackseite geöffnet.');
-        else speakText('Abri a tela de suporte e sugestões.');
+      if (brand.id === 'ymcactx' || brand.id === 'imocarwash') {
+        if (lang === 'en') speakText('Opening customer support screen.');
+        else if (lang === 'es') speakText('Abriendo pantalla de soporte al cliente.');
+        else if (lang === 'de') speakText('Kundenservice geöffnet.');
+        else speakText('Abri a tela de suporte ao cliente.');
       } else {
         const text = brand.type === 'synagogue' ? 'orações' : 'oração';
         if (lang === 'en') speakText('Opening prayer request screen.');
@@ -200,10 +200,22 @@ export default function App() {
       else if (lang === 'de') speakText(`Check-in für ${brand.termCults.toLowerCase()} geöffnet.`);
       else speakText(`Acessando check-in de ${brand.termCults.toLowerCase()} e encontros.`);
     } else if (v === 'donations') {
-      if (lang === 'en') speakText('Opening fees and contributions screen.');
-      else if (lang === 'es') speakText('Abriendo pantalla de mensalidades y contribuciones.');
-      else if (lang === 'de') speakText('Beiträge und Zahlungen geöffnet.');
-      else speakText(`Acessando altar de generosidade para ${brand.termDonations.toLowerCase()}.`);
+      if (brand.id === 'imocarwash') {
+        if (lang === 'en') speakText('Opening wash programs and payments.');
+        else if (lang === 'es') speakText('Abriendo programas de lavado y pagos.');
+        else if (lang === 'de') speakText('Waschprogramme und Zahlungen geöffnet.');
+        else speakText('Acessando programas de lavagem e recargas.');
+      } else if (brand.id === 'ymcactx') {
+        if (lang === 'en') speakText('Opening fees and payments.');
+        else if (lang === 'es') speakText('Abriendo mensualidades y pagos.');
+        else if (lang === 'de') speakText('Mitgliedsbeiträge und Zahlungen geöffnet.');
+        else speakText('Acessando pagamentos de mensalidades.');
+      } else {
+        if (lang === 'en') speakText('Opening fees and contributions screen.');
+        else if (lang === 'es') speakText('Abriendo pantalla de mensalidades y contribuciones.');
+        else if (lang === 'de') speakText('Beiträge und Zahlungen geöffnet.');
+        else speakText(`Acessando altar de generosidade para ${brand.termDonations.toLowerCase()}.`);
+      }
     } else if (v === 'ministries') {
       if (lang === 'en') speakText('Opening volunteering panel.');
       else if (lang === 'es') speakText('Abriendo panel de voluntariado.');
