@@ -1,3 +1,5 @@
+import { BrandConfig } from './brand';
+
 export type Lang = 'pt' | 'en' | 'es' | 'de';
 
 const dictionary: Record<string, Record<Lang, string>> = {
@@ -80,6 +82,15 @@ const dictionary: Record<string, Record<Lang, string>> = {
   calendarEyebrowSynagogue: { pt: 'Shabat & Festividades', en: 'Shabat & Festivities', es: 'Shabat & Festividades', de: 'Schabbat & Feiertage' },
   calendarEyebrowSports: { pt: 'Treinos & Horários', en: 'Practices & Schedules', es: 'Entrenamientos & Horarios', de: 'Training & Termine' },
   calendarEyebrowCarWash: { pt: 'Pistas & Programas', en: 'Lanes & Programs', es: 'Carriles & Programas', de: 'Bahnen & Programme' },
+
+  // YMCA Specific Flow Terms
+  ymcaHomeEventsBtn: { pt: 'Eventos dos Clientes', en: 'Client Events', es: 'Eventos de Clientes', de: 'Kunden-Events' },
+  ymcaClassesCardTitle: { pt: 'Aulas & Inscrição', en: 'Classes & Registration', es: 'Clases e Inscripción', de: 'Kurse & Anmeldung' },
+  ymcaClassesCardEyebrow: { pt: 'Aplicativo e Inscrições', en: 'App & Registrations', es: 'Aplicación e Inscripciones', de: 'App & Anmeldung' },
+  ymcaModalTitle: { pt: 'Aulas & Inscrição YMCA', en: 'YMCA Classes & Registration', es: 'Clases e Inscripción YMCA', de: 'YMCA Kurse & Anmeldung' },
+  ymcaModalDesc: { pt: 'Escaneie o QR Code abaixo para acessar o aplicativo oficial da YMCA ou para encontrar sua unidade e se inscrever nas aulas.', en: 'Scan the QR Code below to access the official YMCA app or to find your branch and register for classes.', es: 'Escanee el código QR para acceder a la aplicación oficial de la YMCA o encontrar su unidad e inscribirse.', de: 'Scannen Sie den QR-Code, um die YMCA-App aufzurufen ou Ihre Filiale zu finden und sich anzumelden.' },
+  ymcaLocatorLabel: { pt: 'Encontrar Unidade (Web)', en: 'Find your Y (Web)', es: 'Encontrar Unidad (Web)', de: 'Filiale finden (Web)' },
+
 
   groupsEyebrow: { pt: 'Conexão Grupos', en: 'Group Connection', es: 'Conexión de Grupos', de: 'Gruppen-Verbindung' },
   groupsEyebrowSynagogue: { pt: 'Grupos de Estudo', en: 'Study Groups', es: 'Grupos de Estudio', de: 'Lerngruppen' },
@@ -461,7 +472,7 @@ export function translateBrandTerms(brand: BrandConfig, lang: Lang): BrandConfig
     const copy = { ...brand };
     for (const key of Object.keys(ymcactxTranslations)) {
       if (key in copy) {
-        (copy as any)[key] = ymcactxTranslations[key][lang === 'pt' ? 'en' : (lang === 'es' ? 'es' : (lang === 'de' ? 'de' : 'en'))];
+        (copy as any)[key] = ymcactxTranslations[key][lang === 'es' ? 'es' : (lang === 'de' ? 'de' : 'en')];
       }
     }
     return copy;
@@ -485,7 +496,7 @@ export function translateBrandTerms(brand: BrandConfig, lang: Lang): BrandConfig
     const copy = { ...brand };
     for (const key of Object.keys(imocarwashTranslations)) {
       if (key in copy) {
-        (copy as any)[key] = imocarwashTranslations[key][lang === 'pt' ? 'en' : (lang === 'es' ? 'es' : (lang === 'de' ? 'de' : 'en'))];
+        (copy as any)[key] = imocarwashTranslations[key][lang === 'es' ? 'es' : (lang === 'de' ? 'de' : 'en')];
       }
     }
     return copy;
@@ -508,7 +519,7 @@ export function translateBrandTerms(brand: BrandConfig, lang: Lang): BrandConfig
   const copy = { ...brand };
   for (const key of Object.keys(defaultChurchTranslations)) {
     if (key in copy) {
-      (copy as any)[key] = defaultChurchTranslations[key][lang === 'pt' ? 'en' : (lang === 'es' ? 'es' : (lang === 'de' ? 'de' : 'en'))];
+      (copy as any)[key] = defaultChurchTranslations[key][lang === 'es' ? 'es' : (lang === 'de' ? 'de' : 'en')];
     }
   }
   return copy;

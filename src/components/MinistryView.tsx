@@ -4,11 +4,13 @@ import VirtualKeyboard from './VirtualKeyboard';
 import NumericKeypad from './NumericKeypad';
 import LiveClock from './LiveClock';
 import { BrandConfig } from '../utils/brand';
+import { Lang } from '../utils/i18n';
 
 interface MinistryViewProps {
   onBack: () => void;
   onGoHome: () => void;
   brand: BrandConfig;
+  lang: Lang;
 }
 
 interface Ministry {
@@ -21,7 +23,7 @@ interface Ministry {
   desc: string;
 }
 
-export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewProps) {
+export default function MinistryView({ onBack, onGoHome, brand, lang }: MinistryViewProps) {
   const [selectedMinistry, setSelectedMinistry] = useState<Ministry | null>(null);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -402,7 +404,7 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
       {/* Dynamic client-specific identity background */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
-        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+        style={{ backgroundImage: `url(https://images.unsplash.com/photo-1559027615-cd264cde14b8?w=1600&fit=crop&q=80)`, filter: 'blur(3px)' }}
       />
       <div 
         className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
@@ -442,13 +444,13 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
         </header>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-12 gap-5 w-full">
+        <div className="grid grid-cols-12 gap-6 w-full max-w-7xl mx-auto">
           {ministries.map((min) => (
             <button
               key={min.id}
               type="button"
               onClick={() => handleMinistrySelect(min)}
-              className={`col-span-12 md:col-span-6 text-white rounded-3xl p-6 text-left flex flex-col justify-between cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-md border ${min.color} min-h-[230px] relative overflow-hidden group`}
+              className={`col-span-12 md:col-span-6 text-white rounded-[2.5rem] p-10 text-left flex flex-col justify-between cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-md border ${min.color} min-h-[290px] relative overflow-hidden group`}
             >
               {/* Background image related to client virtual identity inside button */}
               <div 
@@ -456,21 +458,20 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                 style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
               />
               <div className="relative z-10 flex justify-between items-start w-full">
-                <span className="material-symbols-outlined !text-5xl text-brand-red group-hover:scale-115 transition-transform">
+                <span className="material-symbols-outlined !text-6xl text-brand-red group-hover:scale-115 transition-transform">
                   {min.icon}
                 </span>
-                <span className="bg-white/10 text-[10px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-full inline-block">
+                <span className="bg-white/10 text-xs lg:text-sm font-black uppercase tracking-widest px-3 py-1.5 rounded-full inline-block">
                   {min.tag}
                 </span>
               </div>
               
-              <div className="relative z-10 mt-4">
-                <h3 className="text-2xl font-black uppercase tracking-wide leading-tight">{min.name}</h3>
-                <p className="text-sm text-white/80 line-clamp-2 mt-1 font-semibold">{min.desc}</p>
+              <div className="relative z-10 mt-6">
+                <h3 className="text-3xl lg:text-4xl font-black uppercase tracking-wide leading-tight break-words">{min.name}</h3>
               </div>
 
               <div className="absolute right-4 bottom-4 opacity-10">
-                <span className="material-symbols-outlined !text-[80px]">{min.icon}</span>
+                <span className="material-symbols-outlined !text-[150px]">{min.icon}</span>
               </div>
             </button>
           ))}
@@ -522,9 +523,9 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="h-16 w-full text-white font-black rounded-xl mt-4 cursor-pointer text-base hover:scale-[1.02] active:scale-[0.96] transition-all shadow-md uppercase tracking-wider"
+                    className="h-16 w-full text-white font-black rounded-xl mt-4 cursor-pointer text-base hover:scale-[1.02] active:scale-[0.96] transition-all shadow-md uppercase tracking-wider border border-white/10"
                     style={{
-                      backgroundColor: brand.primaryColor,
+                      background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
                       boxShadow: `0 4px 12px ${brand.primaryColor}40`
                     }}
                   >
@@ -550,11 +551,13 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                     {/* Name Input Box */}
                     <div 
                       onClick={() => { playTapSound(); setActiveField('name'); }}
-                      className={`space-y-1.5 text-left p-4 rounded-2xl border-2 transition-all cursor-pointer ${
-                        activeField === 'name' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200 bg-white'
-                      }`}
+                      className="space-y-1.5 text-left p-4 rounded-2xl border-2 transition-all cursor-pointer bg-white"
+                      style={{ borderColor: activeField === 'name' ? brand.primaryColor : '#e2e8f0' }}
                     >
-                      <label className="block text-xs uppercase tracking-widest font-black text-brand-red ml-1">
+                      <label 
+                        className="block text-xs uppercase tracking-widest font-black ml-1"
+                        style={{ color: activeField === 'name' ? brand.primaryColor : '#94a3b8' }}
+                      >
                         Seu Nome Completo
                       </label>
                       <div className="h-10 font-bold text-slate-800 flex items-center text-md">
@@ -565,11 +568,13 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                     {/* Phone Input Box */}
                     <div 
                       onClick={() => { playTapSound(); setActiveField('phone'); }}
-                      className={`space-y-1.5 text-left p-4 rounded-2xl border-2 transition-all cursor-pointer ${
-                        activeField === 'phone' ? 'border-brand-red bg-slate-50/50' : 'border-slate-200 bg-white'
-                      }`}
+                      className="space-y-1.5 text-left p-4 rounded-2xl border-2 transition-all cursor-pointer bg-white"
+                      style={{ borderColor: activeField === 'phone' ? brand.primaryColor : '#e2e8f0' }}
                     >
-                      <label className="block text-xs uppercase tracking-widest font-black text-brand-red ml-1">
+                      <label 
+                        className="block text-xs uppercase tracking-widest font-black ml-1"
+                        style={{ color: activeField === 'phone' ? brand.primaryColor : '#94a3b8' }}
+                      >
                         Seu WhatsApp / Telefone
                       </label>
                       <div className="h-10 font-bold text-slate-800 flex items-center text-md">
@@ -590,9 +595,9 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
                         <button
                           type="button"
                           onClick={() => { playTapSound(); setActiveField('phone'); }}
-                          className="flex-1 h-16 text-white rounded-xl font-black cursor-pointer text-base flex items-center justify-center gap-1.5 hover:scale-[1.02] active:scale-[0.96] transition-all shadow-md"
+                          className="flex-1 h-16 text-white rounded-xl font-black cursor-pointer text-base flex items-center justify-center gap-1.5 hover:scale-[1.02] active:scale-[0.96] transition-all shadow-md border border-white/10"
                           style={{
-                            backgroundColor: brand.primaryColor,
+                            background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
                             boxShadow: `0 4px 12px ${brand.primaryColor}40`
                           }}
                         >
@@ -630,9 +635,10 @@ export default function MinistryView({ onBack, onGoHome, brand }: MinistryViewPr
       <button
         type="button"
         onClick={handleGoBack}
-        className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
+        className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-white/10"
         style={{
-          background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+          background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+          boxShadow: `0 10px 25px ${brand.primaryColor}55`
         }}
       >
         <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>

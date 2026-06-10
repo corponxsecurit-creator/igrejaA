@@ -24,6 +24,8 @@ interface HomeViewProps {
   brand: BrandConfig;
   lang: Lang;
   onLanguageChange: (lang: Lang) => void;
+  onDirectDonation?: () => void;
+  onDirectCheckin?: () => void;
 }
 
 /* ─── HomeView ──────────────────────────────────────── */
@@ -34,6 +36,8 @@ export default function HomeView({
   brand,
   lang,
   onLanguageChange,
+  onDirectDonation,
+  onDirectCheckin,
 }: HomeViewProps) {
   const slides = useMemo(() => {
     if (brand.slides && brand.slides.length > 0) {
@@ -346,7 +350,7 @@ export default function HomeView({
           >
             <img
               src={brand.logoUrl}
-              className={`h-24 md:h-36 object-contain ${['atitude', 'ibmalphaville', 'lagoinha'].includes(brand.id) ? 'logo-white' : ''}`}
+              className={`h-24 md:h-36 object-contain ${['atitude', 'ibmalphaville', 'lagoinha', 'universal', 'beityaacov', 'icconselheira'].includes(brand.id) ? 'logo-white' : ''}`}
               alt={brand.name}
               referrerPolicy="no-referrer"
             />
@@ -381,51 +385,133 @@ export default function HomeView({
         </div>
 
         {/* ── CTA Button ─────────────────────────────── */}
-        <div
-          className="relative flex flex-col items-center group cursor-pointer slide-reveal"
-          style={{ animationDelay: '0.36s' }}
-          onClick={handleStart}
-          role="button"
-          tabIndex={0}
-          aria-label="Tocar para iniciar o atendimento"
-          onKeyDown={(e) => e.key === 'Enter' && handleStart()}
-        >
-          {/* Ambient glow behind button */}
-          <div
-            className="absolute -inset-8 rounded-full blur-3xl opacity-25 group-hover:opacity-45 transition-opacity duration-500 pointer-events-none"
-            style={{ backgroundColor: accent }}
-            aria-hidden="true"
-          />
+        {brand.id === 'ymcactx' ? (
+          <div className="relative flex flex-col items-center slide-reveal" style={{ animationDelay: '0.36s' }}>
+            <div className="flex flex-col sm:flex-row gap-6 items-center justify-center">
+              {/* Button 1: Iniciar */}
+              <div
+                className="relative flex flex-col items-center group cursor-pointer"
+                onClick={handleStart}
+                role="button"
+                tabIndex={0}
+                aria-label={lang === 'en' ? 'Start Services' : lang === 'es' ? 'Iniciar Atendimiento' : lang === 'de' ? 'Dienste Starten' : 'Iniciar Atendimento'}
+                onKeyDown={(e) => e.key === 'Enter' && handleStart()}
+              >
+                {/* Ambient glow */}
+                <div
+                  className="absolute -inset-6 rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none"
+                  style={{ backgroundColor: brand.primaryColor }}
+                  aria-hidden="true"
+                />
+                <button
+                  type="button"
+                  className="relative w-[280px] md:w-[320px] h-20 md:h-24 text-white font-bold text-lg md:text-xl flex items-center justify-center rounded-full border-2 hover:scale-[1.03] active:scale-[0.97] transition-transform duration-150 cursor-pointer shadow-2xl btn-shine"
+                  style={{
+                    background:   `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+                    borderColor:  'rgba(255, 255, 255, 0.15)',
+                    fontFamily:   'Inter, Segoe UI, Roboto, Arial, sans-serif',
+                    fontWeight:   700,
+                  }}
+                >
+                  <span className="material-symbols-outlined !text-3xl mr-3" aria-hidden="true">
+                    play_arrow
+                  </span>
+                  {lang === 'en' ? 'Start' : lang === 'es' ? 'Iniciar' : lang === 'de' ? 'Starten' : 'Iniciar'}
+                </button>
+              </div>
 
-          <button
-            type="button"
-            className="relative w-[280px] md:w-[520px] h-20 md:h-24 text-white font-bold text-xl md:text-2xl flex items-center justify-center rounded-full border-2 hover:scale-[1.03] active:scale-[0.97] transition-transform duration-150 cursor-pointer shadow-2xl animate-cta-pulse btn-shine"
-            style={{
-              background:   `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
-              borderColor:  `${accent}55`,
-              fontFamily:   'Inter, Segoe UI, Roboto, Arial, sans-serif',
-              fontWeight:   700,
-            }}
-            aria-label="Iniciar atendimento"
-          >
-            <span
-              className="material-symbols-outlined !text-4xl mr-3 animate-hand-bounce"
-              aria-hidden="true"
-            >
-              touch_app
-            </span>
-            {t('ctaQuestion', lang)}
-          </button>
+              {/* Button 2: Eventos / Acesso */}
+              <div
+                className="relative flex flex-col items-center group cursor-pointer"
+                onClick={() => {
+                  playTapSound();
+                  if (onDirectCheckin) onDirectCheckin();
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label="Acessar Eventos"
+                onKeyDown={(e) => e.key === 'Enter' && onDirectCheckin && onDirectCheckin()}
+              >
+                {/* Ambient glow */}
+                <div
+                  className="absolute -inset-6 rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none"
+                  style={{ backgroundColor: brand.accentColor }}
+                  aria-hidden="true"
+                />
+                <button
+                  type="button"
+                  className="relative w-[280px] md:w-[320px] h-20 md:h-24 text-white font-bold text-lg md:text-xl flex items-center justify-center rounded-full border-2 hover:scale-[1.03] active:scale-[0.97] transition-transform duration-150 cursor-pointer shadow-2xl btn-shine"
+                  style={{
+                    background:   `linear-gradient(135deg, ${brand.accentColor} 0%, #d58f05 100%)`,
+                    borderColor:  'rgba(255, 255, 255, 0.15)',
+                    fontFamily:   'Inter, Segoe UI, Roboto, Arial, sans-serif',
+                    fontWeight:   700,
+                  }}
+                >
+                  <span className="material-symbols-outlined !text-3xl mr-3" aria-hidden="true">
+                    event
+                  </span>
+                  {t('ymcaHomeEventsBtn', lang)}
+                </button>
+              </div>
+            </div>
 
-          {/* Tap prompt */}
-          <div className="mt-5 flex items-center gap-3" aria-hidden="true">
-            <span className="w-8 h-px bg-white/20" />
-            <span className="text-white/45 text-xs uppercase tracking-[0.3em] font-semibold animate-pulse">
-              {t('tapToStart', lang)}
-            </span>
-            <span className="w-8 h-px bg-white/20" />
+            {/* Tap prompt */}
+            <div className="mt-6 flex items-center gap-3" aria-hidden="true">
+              <span className="w-8 h-px bg-white/20" />
+              <span className="text-white/45 text-xs uppercase tracking-[0.3em] font-semibold animate-pulse">
+                {t('tapToStart', lang)}
+              </span>
+              <span className="w-8 h-px bg-white/20" />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div
+            className="relative flex flex-col items-center group cursor-pointer slide-reveal"
+            style={{ animationDelay: '0.36s' }}
+            onClick={handleStart}
+            role="button"
+            tabIndex={0}
+            aria-label="Tocar para iniciar o atendimento"
+            onKeyDown={(e) => e.key === 'Enter' && handleStart()}
+          >
+            {/* Ambient glow behind button */}
+            <div
+              className="absolute -inset-8 rounded-full blur-3xl opacity-25 group-hover:opacity-45 transition-opacity duration-500 pointer-events-none"
+              style={{ backgroundColor: brand.primaryColor }}
+              aria-hidden="true"
+            />
+
+            <button
+              type="button"
+              className="relative w-[280px] md:w-[520px] h-20 md:h-24 text-white font-bold text-xl md:text-2xl flex items-center justify-center rounded-full border-2 hover:scale-[1.03] active:scale-[0.97] transition-transform duration-150 cursor-pointer shadow-2xl animate-cta-pulse btn-shine"
+              style={{
+                background:   `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+                borderColor:  'rgba(255, 255, 255, 0.15)',
+                fontFamily:   'Inter, Segoe UI, Roboto, Arial, sans-serif',
+                fontWeight:   700,
+              }}
+              aria-label="Iniciar atendimento"
+            >
+              <span
+                className="material-symbols-outlined !text-4xl mr-3 animate-hand-bounce"
+                aria-hidden="true"
+              >
+                touch_app
+              </span>
+              {t('ctaQuestion', lang)}
+            </button>
+
+            {/* Tap prompt */}
+            <div className="mt-5 flex items-center gap-3" aria-hidden="true">
+              <span className="w-8 h-px bg-white/20" />
+              <span className="text-white/45 text-xs uppercase tracking-[0.3em] font-semibold animate-pulse">
+                {t('tapToStart', lang)}
+              </span>
+              <span className="w-8 h-px bg-white/20" />
+            </div>
+          </div>
+        )}
       </main>
 
       {/* ════════════════════════════════════════════════

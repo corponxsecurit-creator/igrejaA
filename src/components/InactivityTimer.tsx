@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { playTapSound, playSuccessSound } from '../utils/audio';
+import { BrandConfig, hexToRgb } from '../utils/brand';
 
 interface InactivityTimerProps {
   currentView: string;
   onReset: () => void;
+  brand: BrandConfig;
   children: React.ReactNode;
 }
 
-export default function InactivityTimer({ currentView, onReset, children }: InactivityTimerProps) {
+export default function InactivityTimer({ currentView, onReset, brand, children }: InactivityTimerProps) {
   const [showWarning, setShowWarning] = useState(false);
   const [countdown, setCountdown] = useState(15);
   
@@ -101,12 +103,25 @@ export default function InactivityTimer({ currentView, onReset, children }: Inac
       {children}
 
       {showWarning && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0a0a0a]/90 backdrop-blur-md p-6 select-none animate-fade-in">
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0a0a0a]/90 backdrop-blur-md p-6 select-none animate-fade-in"
+          style={{
+            '--color-brand-red': brand.primaryColor,
+            '--color-brand-red-hover': brand.primaryColorHover,
+            '--color-brand-red-rgb': hexToRgb(brand.primaryColor)
+          } as React.CSSProperties}
+        >
           <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl p-8 border border-slate-200 text-center space-y-6 relative overflow-hidden">
             {/* Warning visual border glow */}
-            <div className="absolute top-0 left-0 w-full h-2 bg-[#e30613] animate-pulse" />
+            <div className="absolute top-0 left-0 w-full h-2 bg-brand-red animate-pulse" />
 
-            <div className="w-20 h-20 bg-red-50 text-[#e30613] rounded-full flex items-center justify-center mx-auto shadow-inner">
+            <div 
+              className="w-20 h-20 rounded-full flex items-center justify-center mx-auto shadow-inner"
+              style={{
+                backgroundColor: `rgba(${hexToRgb(brand.primaryColor)}, 0.1)`,
+                color: brand.primaryColor
+              }}
+            >
               <span className="material-symbols-outlined !text-4xl font-bold animate-bounce">hourglass_empty</span>
             </div>
 
@@ -118,7 +133,7 @@ export default function InactivityTimer({ currentView, onReset, children }: Inac
             </div>
 
             <div className="py-2">
-              <div className="text-6xl font-black text-[#e30613] tracking-tighter">
+              <div className="text-6xl font-black text-brand-red tracking-tighter">
                 {countdown}
               </div>
               <span className="text-[10px] uppercase tracking-widest font-extrabold text-slate-400">Segundos restantes</span>
@@ -127,7 +142,7 @@ export default function InactivityTimer({ currentView, onReset, children }: Inac
             {/* Simulated progress timer circle or line */}
             <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-[#e30613] transition-all duration-1000 ease-linear"
+                className="h-full bg-brand-red transition-all duration-1000 ease-linear"
                 style={{ width: `${(countdown / WARNING_LIMIT) * 100}%` }}
               />
             </div>
@@ -135,7 +150,7 @@ export default function InactivityTimer({ currentView, onReset, children }: Inac
             <button
               type="button"
               onClick={handleContinue}
-              className="w-full h-14 bg-[#121212] hover:bg-[#e30613] text-white font-extrabold uppercase tracking-widest rounded-2xl shadow-lg transition-colors cursor-pointer flex items-center justify-center gap-2 active:scale-95 duration-100"
+              className="w-full h-14 bg-[#121212] hover:bg-brand-red-hover text-white font-extrabold uppercase tracking-widest rounded-2xl shadow-lg transition-colors cursor-pointer flex items-center justify-center gap-2 active:scale-95 duration-100 border border-white/5"
             >
               <span>Continuar Usando</span>
               <span className="material-symbols-outlined !text-lg">play_arrow</span>

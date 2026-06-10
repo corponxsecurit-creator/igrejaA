@@ -6,14 +6,16 @@ import NumericKeypad from './NumericKeypad';
 import VirtualKeyboard from './VirtualKeyboard';
 import LiveClock from './LiveClock';
 import { BrandConfig } from '../utils/brand';
+import { Lang } from '../utils/i18n';
 
 interface CheckinViewProps {
   onBack: () => void;
   onSuccess: () => void;
   brand: BrandConfig;
+  lang: Lang;
 }
 
-export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewProps) {
+export default function CheckinView({ onBack, onSuccess, brand, lang }: CheckinViewProps) {
   const [method, setMethod] = useState<'qr' | 'phone' | 'name'>('qr');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [nameSearch, setNameSearch] = useState('');
@@ -122,7 +124,7 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
       {/* Dynamic client-specific identity background */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
-        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+        style={{ backgroundImage: `url(https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1600&fit=crop&q=80)`, filter: 'blur(3px)' }}
       />
       <div 
         className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
@@ -427,9 +429,10 @@ export default function CheckinView({ onBack, onSuccess, brand }: CheckinViewPro
       <button
         type="button"
         onClick={handleGoBack}
-        className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
+        className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-white/10"
         style={{
-          background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+          background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+          boxShadow: `0 10px 25px ${brand.primaryColor}55`
         }}
       >
         <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ViewState } from '../types';
 import { playTapSound } from '../utils/audio';
 import LiveClock from './LiveClock';
@@ -28,6 +28,9 @@ interface DashboardViewProps {
 }
 
 export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibility, onOpenAdmin, brand, lang, onLanguageChange }: DashboardViewProps) {
+  const [showPromo, setShowPromo] = useState(false);
+  const [showYmcaQrModal, setShowYmcaQrModal] = useState(false);
+
   const handleSelect = (view: ViewState) => {
     playTapSound();
     onSelectView(view);
@@ -52,6 +55,16 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
   const accent = '#F5C31E'; // Institutional generic yellow
   const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
   const isAdminMode = params ? params.get('admin') === 'true' : false;
+
+  const getFooterFontSizeClass = (text: string) => {
+    if (text.length > 20) {
+      return 'text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl';
+    }
+    if (text.length > 15) {
+      return 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl';
+    }
+    return 'text-base sm:text-lg md:text-xl lg:text-2xl';
+  };
 
   return (
     <div className="relative min-h-screen bg-[#020617] text-white flex flex-col justify-between overflow-x-hidden animate-fade-in font-sans">
@@ -104,7 +117,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         <div className="flex items-center gap-3">
           <img 
             src={brand.logoUrl} 
-            className={`h-12 object-contain ${['atitude', 'ibmalphaville', 'lagoinha'].includes(brand.id) ? 'logo-white' : ''}`} 
+            className={`h-12 object-contain ${['atitude', 'ibmalphaville', 'lagoinha', 'universal', 'beityaacov', 'icconselheira'].includes(brand.id) ? 'logo-white' : ''}`} 
             alt={brand.name} 
             referrerPolicy="no-referrer"
           />
@@ -163,20 +176,20 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           </p>
         </header>
 
-        {/* Bento Grid Layout - Tighter gap, better proportions */}
-        <div className="grid grid-cols-12 gap-5 w-full">
+        {/* Bento Grid Layout - Organized horizontally two by two */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl mx-auto">
           
           {/* SOU NOVO AQUI */}
           <button
             type="button"
             onClick={() => handleSelect('new_member')}
-            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-indigo-400/60 hover:bg-indigo-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-indigo-400/60 hover:bg-indigo-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="material-symbols-outlined !text-[60px] text-indigo-300 group-hover:text-indigo-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
               person_add
             </span>
-            <div className="text-left mt-4 z-10">
+            <div className="text-center mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
                 {brand.id === 'imocarwash' ? t('newMemberEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('newMemberEyebrowSports', lang) : t('newMemberEyebrow', lang)}
               </span>
@@ -191,13 +204,13 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('donations')}
-            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-amber-400/60 hover:bg-amber-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-amber-400/60 hover:bg-amber-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-bl from-amber-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="material-symbols-outlined !text-[60px] text-amber-300 group-hover:text-amber-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
               payments
             </span>
-            <div className="text-left mt-4 z-10">
+            <div className="text-center mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">{brand.termDonations}</span>
               <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">{brand.termDonation}</span>
             </div>
@@ -210,13 +223,13 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('ministries')}
-            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-cyan-400/60 hover:bg-cyan-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-cyan-400/60 hover:bg-cyan-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="material-symbols-outlined !text-[60px] text-cyan-300 group-hover:text-cyan-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
               groups
             </span>
-            <div className="text-left mt-4 z-10">
+            <div className="text-center mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
                 {brand.id === 'imocarwash' ? t('volunteerEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('volunteerEyebrowSports', lang) : brand.type === 'synagogue' ? t('volunteerEyebrowSynagogue', lang) : t('volunteerEyebrow', lang)}
               </span>
@@ -230,37 +243,64 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           </button>
 
           {/* EVENTOS / CULTOS */}
-          <button
-            type="button"
-            onClick={() => handleSelect('checkin')}
-            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-emerald-400/60 hover:bg-emerald-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
-          >
-            <div className="absolute inset-0 bg-gradient-to-tl from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="material-symbols-outlined !text-[60px] text-emerald-300 group-hover:text-emerald-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
-              calendar_month
-            </span>
-            <div className="text-left mt-4 z-10">
-              <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.id === 'imocarwash' ? t('calendarEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('calendarEyebrowSports', lang) : brand.type === 'synagogue' ? t('calendarEyebrowSynagogue', lang) : t('calendarEyebrow', lang)}
+          {brand.id === 'ymcactx' ? (
+            <button
+              type="button"
+              onClick={() => {
+                playTapSound();
+                setShowYmcaQrModal(true);
+              }}
+              className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-emerald-400/60 hover:bg-emerald-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            >
+              <div className="absolute inset-0 bg-gradient-to-tl from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="material-symbols-outlined !text-[60px] text-emerald-300 group-hover:text-emerald-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
+                qr_code_2
               </span>
-              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">{brand.termCults}</span>
-            </div>
-            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-6 group-hover:scale-125 z-0">
-              <span className="material-symbols-outlined !text-[160px]">event</span>
-            </div>
-          </button>
+              <div className="text-center mt-4 z-10">
+                <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
+                  {t('ymcaClassesCardEyebrow', lang)}
+                </span>
+                <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">
+                  {t('ymcaClassesCardTitle', lang)}
+                </span>
+              </div>
+              <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-6 group-hover:scale-125 z-0">
+                <span className="material-symbols-outlined !text-[160px]">app_registration</span>
+              </div>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => handleSelect('checkin')}
+              className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-emerald-400/60 hover:bg-emerald-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            >
+              <div className="absolute inset-0 bg-gradient-to-tl from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="material-symbols-outlined !text-[60px] text-emerald-300 group-hover:text-emerald-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
+                calendar_month
+              </span>
+              <div className="text-center mt-4 z-10">
+                <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
+                  {brand.id === 'imocarwash' ? t('calendarEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('calendarEyebrowSports', lang) : brand.type === 'synagogue' ? t('calendarEyebrowSynagogue', lang) : t('calendarEyebrow', lang)}
+                </span>
+                <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">{brand.termCults}</span>
+              </div>
+              <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-6 group-hover:scale-125 z-0">
+                <span className="material-symbols-outlined !text-[160px]">event</span>
+              </div>
+            </button>
+          )}
 
           {/* MY CELL / CONEXÃO GRUPOS */}
           <button
             type="button"
             onClick={() => handleSelect('my_cell')}
-            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-slate-400/60 hover:bg-slate-800/60 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-slate-400/60 hover:bg-slate-800/60 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-bl from-slate-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="material-symbols-outlined !text-[60px] text-slate-300 group-hover:text-white group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
               diversity_3
             </span>
-            <div className="text-left mt-4 z-10">
+            <div className="text-center mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
                 {brand.id === 'imocarwash' ? t('groupsEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('groupsEyebrowSports', lang) : brand.type === 'synagogue' ? t('groupsEyebrowSynagogue', lang) : t('groupsEyebrow', lang)}
               </span>
@@ -277,13 +317,13 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('prayer')}
-            className="col-span-12 md:col-span-6 lg:col-span-4 bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-rose-400/60 hover:bg-rose-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-between items-start cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-rose-400/60 hover:bg-rose-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="material-symbols-outlined !text-[60px] text-rose-300 group-hover:text-rose-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
               {(brand.id === 'ymcactx' || brand.id === 'imocarwash') ? 'chat' : 'volunteer_activism'}
             </span>
-            <div className="text-left mt-4 z-10">
+            <div className="text-center mt-4 z-10">
               <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
                 {brand.id === 'imocarwash' ? t('prayerEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('prayerEyebrowSports', lang) : t('prayerEyebrow', lang)}
               </span>
@@ -299,6 +339,78 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         </div>
       </main>
 
+      {showPromo && (
+        <div 
+          className="fixed bottom-36 left-1/2 -translate-x-1/2 z-[100] w-80 bg-slate-950/95 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-5 text-left shadow-2xl flex flex-col gap-4 animate-slide-up-popup select-none animate-fade-in"
+        >
+          {/* Close button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              playTapSound();
+              setShowPromo(false);
+            }}
+            className="absolute top-3 right-3 text-white/50 hover:text-white hover:bg-white/10 w-6 h-6 rounded-full flex items-center justify-center transition-colors cursor-pointer"
+          >
+            <span className="material-symbols-outlined !text-sm">close</span>
+          </button>
+          
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-red/15 to-transparent opacity-60 pointer-events-none rounded-[2rem]" />
+          <div 
+            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.04] pointer-events-none rounded-[2rem]"
+            style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+          />
+
+          <div className="relative z-10 flex gap-3 items-center">
+            <div className="p-2 bg-brand-red text-white rounded-xl flex items-center justify-center shrink-0 shadow-md">
+              <span className="material-symbols-outlined !text-xl font-black">emoji_events</span>
+            </div>
+            <div>
+              <span className="text-[9px] uppercase tracking-widest font-black text-brand-red block">
+                {brand.id === 'imocarwash' ? 'Meta IMO' : brand.type === 'synagogue' ? 'Meta Tsedaká' : brand.id === 'ymcactx' ? 'Meta YMCA' : 'Meta Generosidade'}
+              </span>
+              <h3 className="text-xs font-black text-white tracking-tight">
+                {brand.id === 'imocarwash' ? 'Meta de Lavagens 🎯' : brand.id === 'ymcactx' ? 'Meta de Contribuição 🎯' : 'Meta de Gratidão 🎯'}
+              </h3>
+            </div>
+          </div>
+
+          <p className="relative z-10 text-[11px] text-white/75 font-medium leading-relaxed">
+            {brand.id === 'imocarwash'
+              ? 'Ajude-nos a superar a meta de programas hoje!'
+              : brand.type === 'synagogue'
+              ? 'Contribua para alcançarmos a meta de tsedaká de hoje.'
+              : brand.id === 'ymcactx'
+              ? 'Apoie nosso financiamento de bolsas esportivas.'
+              : 'Faça parte de nossas ações sociais e missionárias de hoje.'}
+          </p>
+          
+          {/* Compact Progress Bar */}
+          <div className="relative z-10 w-full bg-white/5 border border-white/10 p-3.5 rounded-xl flex flex-col gap-2 shadow-inner">
+            <div className="flex justify-between text-[9px] font-black text-white/60 uppercase tracking-wider">
+              <span>Progresso</span>
+              <span className="text-emerald-400 font-extrabold">82%</span>
+            </div>
+            <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-brand-red to-rose-500 rounded-full" style={{ width: '82%' }} />
+            </div>
+            <div className="flex justify-between items-center text-[8px] font-bold text-white/40">
+              <span>Hoje: R$ 4.500</span>
+              <span>Meta: R$ 5.480</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => handleSelect('donations')}
+            className="relative z-10 w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[10px] uppercase tracking-wider rounded-lg transition-all duration-200 active:scale-95 cursor-pointer text-center shadow-md border border-emerald-500/20"
+          >
+            Contribuir
+          </button>
+        </div>
+      )}
+
       {/* Floating Glass Dock Footer */}
       <footer className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 p-3 bg-white/10 backdrop-blur-2xl shadow-2xl rounded-[2.5rem] border border-white/20 max-w-[95vw] md:max-w-max overflow-x-auto scrollbar-none">
         
@@ -306,20 +418,48 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         <button
           type="button"
           onClick={handleHomeClick}
-          className="flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider text-xl md:text-2xl border border-white/20 animate-home-pulse home-btn-hover"
+          className={`flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider border border-white/20 animate-home-pulse home-btn-hover ${getFooterFontSizeClass(t('home', lang))}`}
           style={{
             background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
-            boxShadow: `0 10px 25px ${brand.primaryColor}40`
+            boxShadow: `0 10px 25px ${brand.primaryColor}55`
           }}
         >
           <span>{t('home', lang)}</span>
         </button>
 
+        {/* Generosidade Button */}
+        {brand.id !== 'ymcactx' && (() => {
+          const promoText = brand.id === 'imocarwash' ? 'Meta IMO' : brand.type === 'synagogue' ? 'Tsedaká' : 'Generosidade';
+          return (
+            <button
+              type="button"
+              onClick={() => {
+                playTapSound();
+                setShowPromo(!showPromo);
+              }}
+              className={`flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider border border-white/20 hover:scale-[1.05] ${
+                showPromo ? 'bg-emerald-750 border-emerald-400' : ''
+              } ${getFooterFontSizeClass(promoText)}`}
+              style={{
+                background: showPromo 
+                  ? 'linear-gradient(135deg, #047857 0%, #065f46 100%)'
+                  : 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                boxShadow: showPromo
+                  ? '0 10px 25px rgba(4, 120, 87, 0.5)'
+                  : '0 10px 25px rgba(16, 185, 129, 0.4)'
+              }}
+            >
+              <span className="material-symbols-outlined !text-3xl font-black">emoji_events</span>
+              <span>{promoText}</span>
+            </button>
+          );
+        })()}
+
         {/* Atendimento Pastoral Accessibility Button */}
         <button
           type="button"
           onClick={() => handleSelect('pastoral')}
-          className="flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider text-xl md:text-2xl border border-white/20 hover:scale-[1.05]"
+          className={`flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider border border-white/20 hover:scale-[1.05] ${getFooterFontSizeClass(brand.termPastoral)}`}
           style={{
             background: `linear-gradient(135deg, ${brand.primaryColorHover} 0%, ${brand.primaryColor} 100%)`,
             boxShadow: `0 10px 25px ${brand.primaryColor}40`
@@ -379,6 +519,128 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           </>
         )}
       </footer>
+
+      {/* YMCA App / Locator QR Code Modal Overlay */}
+      {showYmcaQrModal && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/85 backdrop-blur-md p-6 select-none animate-fade-in">
+          <div className="bg-slate-900/95 text-white rounded-[2.5rem] w-full max-w-4xl shadow-2xl p-8 border border-white/10 text-center space-y-6 max-h-[90vh] overflow-y-auto relative">
+            
+            {/* Header */}
+            <div className="space-y-2">
+              <div className="flex justify-center mb-2">
+                <img 
+                  src={brand.logoUrl} 
+                  alt="YMCA Logo" 
+                  className="h-16 object-contain"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black tracking-tight text-white">
+                {t('ymcaModalTitle', lang)}
+              </h2>
+              <p className="text-sm text-slate-300 font-medium max-w-2xl mx-auto leading-relaxed">
+                {t('ymcaModalDesc', lang)}
+              </p>
+            </div>
+
+            {/* QR Code Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+              
+              {/* 1. Locator Web */}
+              <div className="flex flex-col items-center p-5 bg-white/5 border border-white/10 rounded-2xl space-y-4">
+                <span className="text-xs font-black uppercase tracking-wider text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                  {t('ymcaLocatorLabel', lang)}
+                </span>
+                <div className="bg-white p-2.5 rounded-xl shadow-inner">
+                  <img 
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fwww.ymca.org%2Ffind-your-y"
+                    alt="YMCA Find Your Y QR Code"
+                    className="w-[140px] h-[140px] object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <a 
+                  href="https://www.ymca.org/find-your-y"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-white font-extrabold rounded-xl hover:scale-105 active:scale-95 shadow-md text-xs cursor-pointer text-center border border-white/5"
+                >
+                  <span className="material-symbols-outlined !text-base">explore</span>
+                  <span>find-your-y</span>
+                </a>
+              </div>
+
+              {/* 2. Google Play Android */}
+              <div className="flex flex-col items-center p-5 bg-white/5 border border-white/10 rounded-2xl space-y-4">
+                <span className="text-xs font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                  Google Play (Android)
+                </span>
+                <div className="bg-white p-2.5 rounded-xl shadow-inner">
+                  <img 
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.netpulse.mobile.ymcaofgreaterwilliamsoncounty%26hl%3Den_US%26gl%3DUS%26pli%3D1"
+                    alt="YMCA Play Store QR Code"
+                    className="w-[140px] h-[140px] object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <a 
+                  href="https://play.google.com/store/apps/details?id=com.netpulse.mobile.ymcaofgreaterwilliamsoncounty&hl=en_US&gl=US&pli=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-white font-extrabold rounded-xl hover:scale-105 active:scale-95 shadow-md text-xs cursor-pointer text-center border border-white/5"
+                >
+                  <span className="material-symbols-outlined !text-base">android</span>
+                  <span>Google Play</span>
+                </a>
+              </div>
+
+              {/* 3. App Store iOS */}
+              <div className="flex flex-col items-center p-5 bg-white/5 border border-white/10 rounded-2xl space-y-4">
+                <span className="text-xs font-black uppercase tracking-wider text-sky-400 bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20">
+                  App Store (iOS)
+                </span>
+                <div className="bg-white p-2.5 rounded-xl shadow-inner">
+                  <img 
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fapps.apple.com%2Fus%2Fapp%2Fymca-ctx%2Fid1485537145"
+                    alt="YMCA App Store QR Code"
+                    className="w-[140px] h-[140px] object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <a 
+                  href="https://apps.apple.com/us/app/ymca-ctx/id1485537145"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-white font-extrabold rounded-xl hover:scale-105 active:scale-95 shadow-md text-xs cursor-pointer text-center border border-white/5"
+                >
+                  <span className="material-symbols-outlined !text-base">phone_iphone</span>
+                  <span>App Store</span>
+                </a>
+              </div>
+
+            </div>
+
+            {/* Back Button */}
+            <div className="pt-6">
+              <button
+                type="button"
+                onClick={() => {
+                  playTapSound();
+                  setShowYmcaQrModal(false);
+                }}
+                className="h-16 px-12 text-white font-extrabold text-lg rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-3 cursor-pointer"
+                style={{
+                  background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+                }}
+              >
+                <span className="material-symbols-outlined !text-2xl font-bold">arrow_back</span>
+                <span>{t('back', lang)}</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   );

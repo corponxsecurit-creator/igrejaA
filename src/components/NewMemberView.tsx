@@ -4,7 +4,7 @@ import { playSuccessSound, playTapSound } from '../utils/audio';
 import VirtualKeyboard from './VirtualKeyboard';
 import NumericKeypad from './NumericKeypad';
 import LiveClock from './LiveClock';
-import { BrandConfig } from '../utils/brand';
+import { BrandConfig, hexToRgb } from '../utils/brand';
 import { Lang, t } from '../utils/i18n';
 
 interface NewMemberViewProps {
@@ -27,6 +27,7 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
   const [registrationMode, setRegistrationMode] = useState<'standard' | 'quick' | null>(null);
   const [activeField, setActiveField] = useState<'name' | 'phone' | 'email' | 'city' | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [hoveredCategoryBg, setHoveredCategoryBg] = useState<string | null>(null);
 
   const handleKeyboardPress = (char: string) => {
     if (!activeField) return;
@@ -173,12 +174,19 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
 
   if (isSuccess) {
     return (
-      <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col items-center justify-center p-6 animate-fade-in font-sans">
+      <div 
+        className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col items-center justify-center p-6 animate-fade-in font-sans"
+        style={{
+          '--color-brand-red': brand.primaryColor,
+          '--color-brand-red-hover': brand.primaryColorHover,
+          '--color-brand-red-rgb': hexToRgb(brand.primaryColor)
+        } as React.CSSProperties}
+      >
         
         {/* Dynamic client-specific identity background */}
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
-          style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+          style={{ backgroundImage: `url(https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1600&fit=crop&q=80)`, filter: 'blur(3px)' }}
         />
         <div 
           className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
@@ -287,7 +295,11 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
             <button
               type="button"
               onClick={onGoHome}
-              className="h-16 px-12 bg-brand-dark hover:bg-brand-red text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer z-10"
+              className="h-16 px-12 text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer z-10 border border-white/10"
+              style={{
+                background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+                boxShadow: `0 4px 12px ${brand.primaryColor}40`
+              }}
             >
               <span>{t('goBackHome', lang)}</span>
               <span className="material-symbols-outlined !text-xl">arrow_forward</span>
@@ -300,12 +312,19 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
 
   if (registrationMode === null) {
     return (
-      <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
+      <div 
+        className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans"
+        style={{
+          '--color-brand-red': brand.primaryColor,
+          '--color-brand-red-hover': brand.primaryColorHover,
+          '--color-brand-red-rgb': hexToRgb(brand.primaryColor)
+        } as React.CSSProperties}
+      >
         
         {/* Dynamic client-specific identity background */}
         <div 
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
-          style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-700"
+          style={{ backgroundImage: `url(${hoveredCategoryBg || 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1600&fit=crop&q=80'})`, filter: 'blur(3px)' }}
         />
         <div 
           className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
@@ -341,7 +360,7 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
             {/* Standard Mode */}
             <button
               type="button"
@@ -350,29 +369,36 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
                 setRegistrationMode('standard');
                 setActiveField('name');
               }}
-              className="relative overflow-hidden bg-white/90 backdrop-blur-md hover:bg-white rounded-3xl p-10 text-left border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col justify-between items-start group shadow-md hover:scale-[1.05] active:scale-[0.96] min-h-[320px]"
+              onMouseEnter={() => setHoveredCategoryBg('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&fit=crop&q=80')}
+              onMouseLeave={() => setHoveredCategoryBg(null)}
+              className="relative overflow-hidden bg-slate-900/90 hover:bg-slate-900/40 backdrop-blur-2xl border-2 border-white/10 hover:border-brand-red cursor-pointer transition-all flex flex-col justify-between items-start group shadow-2xl hover:scale-[1.05] active:scale-[0.96] duration-300 min-h-[380px] p-12 rounded-[2.5rem]"
             >
               {/* Background image related to client virtual identity inside button */}
               <div 
-                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.10] pointer-events-none"
-                style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none"
+                style={{ backgroundImage: `url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&fit=crop&q=80)`, filter: 'blur(1px)' }}
               />
               <div className="relative z-10 flex flex-col justify-between h-full w-full items-start">
-                <div className="w-16 h-16 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center font-bold mb-4 shrink-0">
+                <div className="w-16 h-16 rounded-full bg-brand-red/20 text-brand-red flex items-center justify-center font-bold mb-6 shrink-0">
                   <span className="material-symbols-outlined !text-4xl">assignment_ind</span>
                 </div>
-                <div className="flex-grow">
-                  <h3 className="font-extrabold text-3xl text-brand-dark group-hover:text-brand-red transition-colors">
+                <div className="flex-grow space-y-3">
+                  <h3 className="font-black text-3xl text-white tracking-wide uppercase">
                     {brand.id === 'imocarwash' ? t('regCardFullCarWash', lang) : brand.id === 'ymcactx' ? t('regCardFullSports', lang) : t('regCardFull', lang)}
                   </h3>
-                  <p className="text-base text-slate-500 font-semibold mt-3 leading-relaxed">
+                  <p className="text-base text-white/80 font-semibold leading-relaxed">
                     {brand.id === 'imocarwash' ? t('regCardFullDescCarWash', lang) : brand.id === 'ymcactx' ? t('regCardFullDescSports', lang) : t('regCardFullDesc', lang)}
                   </p>
                 </div>
-                <div className="mt-6 font-bold text-sm uppercase text-slate-450 group-hover:text-brand-red tracking-wider flex items-center gap-1.5 shrink-0">
+                <div className="mt-6 font-black text-sm uppercase text-brand-red tracking-wider flex items-center gap-1.5 shrink-0">
                   <span>{brand.id === 'imocarwash' ? 'Cadastrar Perfil' : 'Preencher Completo'}</span>
                   <span className="material-symbols-outlined !text-base">arrow_forward</span>
                 </div>
+              </div>
+
+              {/* Watermark background icon rotating on hover */}
+              <div className="absolute -right-8 -bottom-8 opacity-[0.07] group-hover:opacity-[0.18] text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 z-0 pointer-events-none">
+                <span className="material-symbols-outlined !text-[200px]">assignment_ind</span>
               </div>
             </button>
 
@@ -384,29 +410,36 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
                 setRegistrationMode('quick');
                 setActiveField('email');
               }}
-              className="relative overflow-hidden bg-white/90 backdrop-blur-md hover:bg-white rounded-3xl p-10 text-left border-2 border-slate-200 hover:border-brand-red cursor-pointer transition-all flex flex-col justify-between items-start group shadow-md hover:scale-[1.05] active:scale-[0.96] min-h-[320px]"
+              onMouseEnter={() => setHoveredCategoryBg('https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1600&fit=crop&q=80')}
+              onMouseLeave={() => setHoveredCategoryBg(null)}
+              className="relative overflow-hidden bg-slate-900/90 hover:bg-slate-900/40 backdrop-blur-2xl border-2 border-white/10 hover:border-brand-red cursor-pointer transition-all flex flex-col justify-between items-start group shadow-2xl hover:scale-[1.05] active:scale-[0.96] duration-300 min-h-[380px] p-12 rounded-[2.5rem]"
             >
               {/* Background image related to client virtual identity inside button */}
               <div 
-                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.10] pointer-events-none"
-                style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
+                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none"
+                style={{ backgroundImage: `url(https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1600&fit=crop&q=80)`, filter: 'blur(1px)' }}
               />
               <div className="relative z-10 flex flex-col justify-between h-full w-full items-start">
-                <div className="w-16 h-16 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center font-bold mb-4 shrink-0">
+                <div className="w-16 h-16 rounded-full bg-brand-red/20 text-brand-red flex items-center justify-center font-bold mb-6 shrink-0">
                   <span className="material-symbols-outlined !text-4xl">alternate_email</span>
                 </div>
-                <div className="flex-grow">
-                  <h3 className="font-extrabold text-3xl text-brand-dark group-hover:text-brand-red transition-colors">
+                <div className="flex-grow space-y-3">
+                  <h3 className="font-black text-3xl text-white tracking-wide uppercase">
                     {brand.id === 'imocarwash' ? t('regCardQuickCarWash', lang) : brand.id === 'ymcactx' ? t('regCardQuickSports', lang) : t('regCardQuick', lang)}
                   </h3>
-                  <p className="text-base text-slate-500 font-semibold mt-3 leading-relaxed">
+                  <p className="text-base text-white/80 font-semibold leading-relaxed">
                     {brand.id === 'imocarwash' ? t('regCardQuickDescCarWash', lang) : brand.id === 'ymcactx' ? t('regCardQuickDescSports', lang) : t('regCardQuickDesc', lang)}
                   </p>
                 </div>
-                <div className="mt-6 font-bold text-sm uppercase text-slate-450 group-hover:text-brand-red tracking-wider flex items-center gap-1.5 shrink-0">
+                <div className="mt-6 font-black text-sm uppercase text-brand-red tracking-wider flex items-center gap-1.5 shrink-0">
                   <span>{brand.id === 'imocarwash' ? 'Registrar E-mail' : 'Registrar E-mail'}</span>
                   <span className="material-symbols-outlined !text-base">arrow_forward</span>
                 </div>
+              </div>
+
+              {/* Watermark background icon rotating on hover */}
+              <div className="absolute -right-8 -bottom-8 opacity-[0.07] group-hover:opacity-[0.18] text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 z-0 pointer-events-none">
+                <span className="material-symbols-outlined !text-[200px]">alternate_email</span>
               </div>
             </button>
           </div>
@@ -416,9 +449,10 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
         <button
           type="button"
           onClick={onBack}
-          className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
+          className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-white/10"
           style={{
-            background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+            background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+            boxShadow: `0 10px 25px ${brand.primaryColor}55`
           }}
         >
           <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>
@@ -433,12 +467,19 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
 
   if (registrationMode === 'quick') {
     return (
-      <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
+      <div 
+        className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans"
+        style={{
+          '--color-brand-red': brand.primaryColor,
+          '--color-brand-red-hover': brand.primaryColorHover,
+          '--color-brand-red-rgb': hexToRgb(brand.primaryColor)
+        } as React.CSSProperties}
+      >
         
         {/* Dynamic client-specific identity background */}
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
-          style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+          style={{ backgroundImage: `url(https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1600&fit=crop&q=80)`, filter: 'blur(3px)' }}
         />
         <div 
           className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
@@ -530,9 +571,10 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
               setRegistrationMode(null);
               setActiveField(null);
             }}
-            className="flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
+            className="flex items-center gap-3 text-white font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-white/10"
             style={{
-              background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+              background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+              boxShadow: `0 10px 25px ${brand.primaryColor}55`
             }}
           >
             <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>
@@ -545,12 +587,19 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
 
   // Standard multi-step mode
   return (
-    <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans">
+    <div 
+      className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans"
+      style={{
+        '--color-brand-red': brand.primaryColor,
+        '--color-brand-red-hover': brand.primaryColorHover,
+        '--color-brand-red-rgb': hexToRgb(brand.primaryColor)
+      } as React.CSSProperties}
+    >
       
       {/* Dynamic client-specific identity background */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
-        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+        style={{ backgroundImage: `url(https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1600&fit=crop&q=80)`, filter: 'blur(3px)' }}
       />
       <div 
         className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
@@ -740,9 +789,10 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
         <button
           type="button"
           onClick={handlePrevStep}
-          className="flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
+          className="flex items-center gap-3 text-white font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-white/10"
           style={{
-            background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+            background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+            boxShadow: `0 10px 25px ${brand.primaryColor}55`
           }}
         >
           <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>

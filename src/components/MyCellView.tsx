@@ -3,15 +3,17 @@ import { CellGroup } from '../types';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
 import LiveClock from './LiveClock';
-import { BrandConfig } from '../utils/brand';
+import { BrandConfig, hexToRgb } from '../utils/brand';
+import { Lang } from '../utils/i18n';
 
 interface MyCellViewProps {
   onBack: () => void;
   onGoHome: () => void;
   brand: BrandConfig;
+  lang: Lang;
 }
 
-export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps) {
+export default function MyCellView({ onBack, onGoHome, brand, lang }: MyCellViewProps) {
   const [selectedNeighborhood, setSelectedNeighborhood] = useState<string>('Todos');
   const [activeCellModal, setActiveCellModal] = useState<CellGroup | null>(null);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -102,12 +104,19 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
   };
 
   return (
-    <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans submodule-view">
+    <div 
+      className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans submodule-view"
+      style={{
+        '--color-brand-red': brand.primaryColor,
+        '--color-brand-red-hover': brand.primaryColorHover,
+        '--color-brand-red-rgb': hexToRgb(brand.primaryColor)
+      } as React.CSSProperties}
+    >
       
       {/* Dynamic client-specific identity background */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
-        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+        style={{ backgroundImage: `url(https://images.unsplash.com/photo-1543269865-cbf427effbad?w=1600&fit=crop&q=80)`, filter: 'blur(3px)' }}
       />
       <div 
         className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
@@ -343,9 +352,10 @@ export default function MyCellView({ onBack, onGoHome, brand }: MyCellViewProps)
       <button
         type="button"
         onClick={handleGoBack}
-        className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
+        className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-white/10"
         style={{
-          background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+          background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+          boxShadow: `0 10px 25px ${brand.primaryColor}55`
         }}
       >
         <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>

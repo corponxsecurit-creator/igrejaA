@@ -3,15 +3,17 @@ import { BrandConfig, getStoredBrands, saveStoredBrands } from '../utils/brand';
 import { Pastor, CellGroup, Slide } from '../types';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import { speakText } from '../utils/tts';
+import { Lang } from '../utils/i18n';
 
 interface AdminViewProps {
   onBack: () => void;
   brand: BrandConfig;
+  lang: Lang;
 }
 
 type ActiveTab = 'general' | 'visual' | 'vocabulary' | 'pastors' | 'cells' | 'slides' | 'registrations';
 
-export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps) {
+export default function AdminView({ onBack, brand: activeBrand, lang }: AdminViewProps) {
   const [allBrands, setAllBrands] = useState<Record<string, BrandConfig>>(() => getStoredBrands());
   const [selectedBrandId, setSelectedBrandId] = useState<string>(activeBrand.id);
   const [activeTab, setActiveTab] = useState<ActiveTab>('general');
@@ -251,7 +253,10 @@ export default function AdminView({ onBack, brand: activeBrand }: AdminViewProps
               playTapSound();
               onBack();
             }}
-            className="flex items-center gap-1 bg-[#191c1e] hover:bg-[#e30613] hover:text-white text-white font-bold px-4 py-2 rounded-xl transition-all cursor-pointer active:scale-95 text-sm"
+            style={{
+              '--hover-bg': activeBrand.primaryColor
+            } as React.CSSProperties}
+            className="flex items-center gap-1 bg-[#191c1e] hover:bg-[var(--hover-bg)] hover:text-white text-white font-bold px-4 py-2 rounded-xl transition-all cursor-pointer active:scale-95 text-sm"
           >
             <span className="material-symbols-outlined !text-lg">close</span>
             <span>Sair</span>

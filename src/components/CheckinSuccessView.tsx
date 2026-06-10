@@ -140,7 +140,11 @@ export default function CheckinSuccessView({ onGoHome, brand, lang }: CheckinSuc
         <button
           type="button"
           onClick={handleFinish}
-          className="h-16 px-12 bg-brand-red hover:bg-brand-red-hover text-white font-extrabold text-lg rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-3 cursor-pointer relative z-10"
+          className="h-16 px-12 text-white font-extrabold text-lg rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-3 cursor-pointer relative z-10 border border-white/10"
+          style={{
+            background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+            boxShadow: `0 10px 25px ${brand.primaryColor}55`
+          }}
         >
           <span>{t('checkinSuccessFinishBtn', lang)}</span>
           <span className="material-symbols-outlined !text-2xl font-bold">arrow_forward</span>

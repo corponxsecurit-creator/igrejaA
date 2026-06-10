@@ -162,7 +162,7 @@ export const brands: Record<string, BrandConfig> = {
     id: 'icconselheira',
     name: 'Igreja Cristã Conselheira',
     campusName: 'ICC',
-    logoUrl: 'https://static.wixstatic.com/media/6ffcad_55af5a6f2fdf47cea5b964593486122e~mv2.png/v1/fill/w_298,h_277,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/ICC_logo_vertical_cor.png',
+    logoUrl: '/images/icc/logo.png',
     bgUrl: 'https://static.wixstatic.com/media/6ffcad_074e01478e384e37a4e59dd024c7c5ca~mv2.png/v1/crop/x_0,y_129,w_2048,h_894/fill/w_1966,h_858,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMAGEM%20DE%20ABERTURA%20PARA%20SITE.png',
     dashboardBgUrl: 'https://static.wixstatic.com/media/6ffcad_3f8d653f42e04ddf9ec57a6f5d3e188c~mv2.jpg/v1/fill/w_2500,h_1250,al_c/6ffcad_3f8d653f42e04ddf9ec57a6f5d3e188c~mv2.jpg',
     primaryColor: '#2C5A4C',
@@ -354,8 +354,8 @@ export const brands: Record<string, BrandConfig> = {
     id: 'universal',
     name: 'Universal',
     campusName: 'Templo de Salomão',
-    logoUrl: 'https://www.universal.org/wp-content/themes/portaluniversal-child/resources/assets/images/logo-universal.png',
-    bgUrl: 'https://www.universal.org/wp-content/uploads/2025/01/24180424/corrente-dos-70-2025.jpg',
+    logoUrl: '/images/universal/logo.png',
+    bgUrl: '/images/universal/bg.jpg',
     primaryColor: '#102a43',
     primaryColorHover: '#0b1d33',
     accentColor: '#cf2e2e',
@@ -366,19 +366,19 @@ export const brands: Record<string, BrandConfig> = {
     accentSplashColor: '#cf2e2e',
     slides: [
       {
-        bgUrl: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1600&fit=crop&q=80',
-        verse: 'Tudo posso naquele que me fortalece.',
-        verseRef: 'Filipenses 4:13'
+        bgUrl: '/images/universal/img_1.jpg',
+        verse: 'O Temor do Senhor envolve, sobretudo, a fé que agrada a Deus...',
+        verseRef: 'Bispo Macedo'
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1544256718-3baf237f3974?w=1600&fit=crop&q=80',
-        verse: 'O meu Deus suprirá todas as necessidades de vocês.',
-        verseRef: 'Filipenses 4:19'
+        bgUrl: '/images/universal/img_2.jpg',
+        verse: 'SEJA FEITA A MINHA VONTADE',
+        verseRef: 'Bispo Renato Cardoso'
       },
       {
-        bgUrl: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1600&fit=crop&q=80',
-        verse: 'Entrega o teu caminho ao Senhor; confia nele, e ele o fará.',
-        verseRef: 'Salmos 37:5'
+        bgUrl: '/images/universal/img_3.jpg',
+        verse: 'Remissão de pecados',
+        verseRef: 'Ester Bezerra'
       }
     ],
     type: 'church',
@@ -452,7 +452,7 @@ export const brands: Record<string, BrandConfig> = {
     id: 'beityaacov',
     name: 'Beit Yaacov',
     campusName: 'Congregação',
-    logoUrl: 'https://www.morasha.com.br/wp-content/themes/morasha/assets/images/logo-morasha.png',
+    logoUrl: '/images/beityaacov/logo.png',
     bgUrl: 'https://www.morasha.com.br/wp-content/uploads/2023/06/beityaacov.jpg',
     primaryColor: '#0d47a1',
     primaryColorHover: '#0a3580',
@@ -550,7 +550,7 @@ export const brands: Record<string, BrandConfig> = {
     id: 'ibmalphaville',
     name: 'IBM Alphaville',
     campusName: 'Sede Tamboré',
-    logoUrl: 'https://static.wixstatic.com/media/33ca7d_3ea707e37e3749d89300bb7311ddc189~mv2.png',
+    logoUrl: '/images/ibm/logo.png',
     bgUrl: 'https://static.wixstatic.com/media/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg/v1/fill/w_1600,h_1000,al_c/25a297_cdd52ddb9e2c4f8d975daee634ddf4e7~mv2.jpg',
     primaryColor: '#ea492e',
     primaryColorHover: '#c43c24',
@@ -933,4 +933,13 @@ export function getCurrentBrand(): BrandConfig {
   
   const dynamicBrands = getStoredBrands();
   return dynamicBrands[client] || dynamicBrands.atitude || brands.atitude;
+}
+
+export function hexToRgb(hex: string): string {
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  const fullHex = hex.replace(shorthandRegex, (_, r, g, b) => r + r + g + g + b + b);
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(fullHex);
+  return result
+    ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
+    : '227, 6, 19';
 }

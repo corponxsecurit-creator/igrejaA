@@ -3,7 +3,7 @@ import { ViewState, PrayerRequest } from '../types';
 import { playSuccessSound, playTapSound } from '../utils/audio';
 import VirtualKeyboard from './VirtualKeyboard';
 import LiveClock from './LiveClock';
-import { BrandConfig } from '../utils/brand';
+import { BrandConfig, hexToRgb } from '../utils/brand';
 import { t, Lang } from '../utils/i18n';
 
 interface PrayerRequestViewProps {
@@ -20,11 +20,12 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
     message: ''
   });
 
-  const [activeField, setActiveField] = useState<'name' | 'message'>('message');
+  const [activeField, setActiveField] = useState<'name' | 'message' | null>(null);
   const [isSent, setIsSent] = useState(false);
 
   const handleKeyboardPress = (char: string) => {
     const currentField = activeField;
+    if (!currentField) return;
     const val = request[currentField] || '';
     
     if (char === 'BACKSPACE') {
@@ -84,10 +85,12 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
   const handleToggleAnonymous = (anon: boolean) => {
     playTapSound();
     setRequest(prev => ({ ...prev, isAnonymous: anon }));
-    if (anon) {
-      setActiveField('message');
-    } else {
-      setActiveField('name');
+    if (activeField !== null) {
+      if (anon) {
+        setActiveField('message');
+      } else {
+        setActiveField('name');
+      }
     }
   };
 
@@ -103,7 +106,14 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
 
   if (isSent) {
     return (
-      <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col items-center justify-center p-6 animate-fade-in font-sans">
+      <div 
+        className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col items-center justify-center p-6 animate-fade-in font-sans"
+        style={{
+          '--color-brand-red': brand.primaryColor,
+          '--color-brand-red-hover': brand.primaryColorHover,
+          '--color-brand-red-rgb': hexToRgb(brand.primaryColor)
+        } as React.CSSProperties}
+      >
         
         {/* Dynamic client-specific identity background */}
         <div 
@@ -155,7 +165,7 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
             <button
               type="button"
               onClick={onGoHome}
-              className="h-16 px-12 bg-brand-dark hover:bg-brand-red text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer text-base uppercase tracking-wider"
+              className="h-16 px-12 bg-[#e30613] hover:bg-[#c61118] text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer text-base uppercase tracking-wider"
             >
               <span>{t('home', lang)}</span>
               <span className="material-symbols-outlined !text-xl">arrow_forward</span>
@@ -167,12 +177,19 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
   }
 
   return (
-    <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans submodule-view">
+    <div 
+      className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans submodule-view"
+      style={{
+        '--color-brand-red': brand.primaryColor,
+        '--color-brand-red-hover': brand.primaryColorHover,
+        '--color-brand-red-rgb': hexToRgb(brand.primaryColor)
+      } as React.CSSProperties}
+    >
       
       {/* Dynamic client-specific identity background */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
-        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+        style={{ backgroundImage: `url(https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=1600&fit=crop&q=80)`, filter: 'blur(3px)' }}
       />
       <div 
         className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
@@ -336,9 +353,10 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
         <button
           type="button"
           onClick={handleGoBack}
-          className="flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
+          className="flex items-center gap-3 text-white font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-white/10"
           style={{
-            background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+            background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+            boxShadow: `0 10px 25px ${brand.primaryColor}55`
           }}
         >
           <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>

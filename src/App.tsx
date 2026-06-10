@@ -235,7 +235,7 @@ export default function App() {
   };
 
   return (
-    <InactivityTimer currentView={view} onReset={handleGoHome}>
+    <InactivityTimer currentView={view} onReset={handleGoHome} brand={brand}>
       <div 
         className={`min-h-screen select-none transition-all duration-300 ${
           highContrast ? 'high-contrast-active bg-black text-yellow-400 font-bold' : 'bg-brand-light text-[#191c1e]'
@@ -252,6 +252,8 @@ export default function App() {
             brand={brand}
             lang={lang}
             onLanguageChange={handleLanguageChange}
+            onDirectDonation={() => handleSelectView('donations')}
+            onDirectCheckin={() => handleSelectView('checkin')}
           />
         )}
 

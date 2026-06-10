@@ -15,6 +15,99 @@ interface DonationViewProps {
   lang: Lang;
 }
 
+const getCategoryDetails = (icon: string) => {
+  switch (icon) {
+    case 'payments':
+      return {
+        hoverBorder: 'hover:border-amber-400/60',
+        hoverBg: 'hover:bg-amber-950/40',
+        iconColor: 'text-amber-300',
+        bgGradient: 'from-amber-500/20',
+        bgUrl: 'https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?w=1200&fit=crop&q=80'
+      };
+    case 'volunteer_activism':
+      return {
+        hoverBorder: 'hover:border-rose-400/60',
+        hoverBg: 'hover:bg-rose-950/40',
+        iconColor: 'text-rose-300',
+        bgGradient: 'from-rose-500/20',
+        bgUrl: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1200&fit=crop&q=80'
+      };
+    case 'public':
+      return {
+        hoverBorder: 'hover:border-cyan-400/60',
+        hoverBg: 'hover:bg-cyan-950/40',
+        iconColor: 'text-cyan-300',
+        bgGradient: 'from-cyan-500/20',
+        bgUrl: 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=1200&fit=crop&q=80'
+      };
+    case 'spa':
+      return {
+        hoverBorder: 'hover:border-emerald-400/60',
+        hoverBg: 'hover:bg-emerald-950/40',
+        iconColor: 'text-emerald-300',
+        bgGradient: 'from-emerald-500/20',
+        bgUrl: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1200&fit=crop&q=80'
+      };
+    case 'local_car_wash':
+      return {
+        hoverBorder: 'hover:border-blue-400/60',
+        hoverBg: 'hover:bg-blue-950/40',
+        iconColor: 'text-blue-300',
+        bgGradient: 'from-blue-500/20',
+        bgUrl: 'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=1200&fit=crop&q=80'
+      };
+    case 'wash':
+      return {
+        hoverBorder: 'hover:border-indigo-400/60',
+        hoverBg: 'hover:bg-indigo-950/40',
+        iconColor: 'text-indigo-300',
+        bgGradient: 'from-indigo-500/20',
+        bgUrl: 'https://images.unsplash.com/photo-1520340356584-f9917d1ecc6f?w=1200&fit=crop&q=80'
+      };
+    case 'auto_clean_detail':
+      return {
+        hoverBorder: 'hover:border-teal-400/60',
+        hoverBg: 'hover:bg-teal-950/40',
+        iconColor: 'text-teal-300',
+        bgGradient: 'from-teal-500/20',
+        bgUrl: 'https://images.unsplash.com/photo-1601362840469-81e4df86527e?w=1200&fit=crop&q=80'
+      };
+    case 'credit_card':
+      return {
+        hoverBorder: 'hover:border-purple-400/60',
+        hoverBg: 'hover:bg-purple-950/40',
+        iconColor: 'text-purple-300',
+        bgGradient: 'from-purple-500/20',
+        bgUrl: 'https://images.unsplash.com/photo-1563013544-824ae1d704d3?w=1200&fit=crop&q=80'
+      };
+    case 'emoji_events':
+      return {
+        hoverBorder: 'hover:border-yellow-400/60',
+        hoverBg: 'hover:bg-yellow-950/40',
+        iconColor: 'text-yellow-300',
+        bgGradient: 'from-yellow-500/20',
+        bgUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200&fit=crop&q=80'
+      };
+    case 'construction':
+      return {
+        hoverBorder: 'hover:border-orange-400/60',
+        hoverBg: 'hover:bg-orange-950/40',
+        iconColor: 'text-orange-300',
+        bgGradient: 'from-orange-500/20',
+        bgUrl: 'https://images.unsplash.com/photo-1544698310-74ea9d1c8258?w=1200&fit=crop&q=80'
+      };
+    default:
+      return {
+        hoverBorder: 'hover:border-slate-400/60',
+        hoverBg: 'hover:bg-slate-800/40',
+        iconColor: 'text-slate-350',
+        bgGradient: 'from-slate-500/20',
+        bgUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&fit=crop&q=80'
+      };
+  }
+};
+
 export default function DonationView({ onBack, onGoHome, brand, lang }: DonationViewProps) {
   const [state, setState] = useState<DonationState>({
     category: '',
@@ -25,6 +118,7 @@ export default function DonationView({ onBack, onGoHome, brand, lang }: Donation
 
   const [pixTimer, setPixTimer] = useState(300);
   const [copied, setCopied] = useState(false);
+  const [hoveredCategoryBg, setHoveredCategoryBg] = useState<string | null>(null);
 
   useEffect(() => {
     if (state.step !== 'pix') return;
@@ -88,9 +182,9 @@ export default function DonationView({ onBack, onGoHome, brand, lang }: Donation
     { title: 'Auxílio de Israel', icon: 'public', desc: 'Apoio direto a projetos humanitários e de assistência em Israel.' },
     { title: 'Ação Social (Chesed)', icon: 'spa', desc: 'Distribuição de cestas kosher e auxílio aos necessitados locais.' }
   ] : [
-    { title: 'Dízimo Geral', icon: 'payments', desc: 'Devolução regular de comunhão financeira de dízimo.' },
-    { title: 'Oferta de Celebração', icon: 'volunteer_activism', desc: 'Oferta voluntária para sustentação da casa e dos cultos.' },
-    { title: 'Missões Globais', icon: 'public', desc: 'Sustento direto aos nossos missionários no sertão e no exterior.' },
+    { title: 'Dízimo', icon: 'payments', desc: 'Devolução regular de comunhão financeira de dízimo.' },
+    { title: 'Oferta', icon: 'volunteer_activism', desc: 'Oferta voluntária para sustentação da casa e dos cultos.' },
+    { title: 'Missões', icon: 'public', desc: 'Sustento direto aos nossos missionários no sertão e no exterior.' },
     { title: 'Projetos Sociais', icon: 'spa', desc: 'Sustentação de cestas básicas e assistência comunitária.' }
   ];
 
@@ -170,8 +264,8 @@ export default function DonationView({ onBack, onGoHome, brand, lang }: Donation
       
       {/* Dynamic client-specific identity background */}
       <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-500"
-        style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(3px)' }}
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.35] pointer-events-none transition-all duration-700"
+        style={{ backgroundImage: `url(${hoveredCategoryBg || brand.bgUrl})`, filter: 'blur(3px)' }}
       />
       <div 
         className="absolute inset-0 z-0 backdrop-blur-lg pointer-events-none" 
@@ -204,83 +298,57 @@ export default function DonationView({ onBack, onGoHome, brand, lang }: Donation
         
         {/* STEP 1: CATEGORY SELECTION */}
         {state.step === 'category' && (
-          <div className="space-y-6 animate-fade-in text-center">
-            <header className="max-w-2xl mx-auto">
-              <h2 className="text-2xl md:text-3xl font-black text-brand-dark tracking-tight mb-1">
+          <div className="space-y-8 animate-fade-in text-center">
+            <header className="max-w-4xl mx-auto mb-16">
+              <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-brand-dark tracking-tight mb-6 leading-tight">
                 Qual será o destino da sua contribuição?
               </h2>
-              <p className="text-sm text-slate-500 font-semibold uppercase tracking-wider">
+              <p className="text-base md:text-lg lg:text-xl font-extrabold text-slate-550 uppercase tracking-wider">
                 Selecione uma categoria abaixo para fazer seu {brand.termDonation.toLowerCase()}
               </p>
             </header>
 
-            {/* COMPONENTE DE SUGESTÃO E META MOTIVACIONAL COM TOTAL DE ONTEM */}
-            <div className="relative overflow-hidden max-w-4xl mx-auto bg-gradient-to-r from-red-50/50 to-rose-50/50 border border-brand-red/30 rounded-3xl p-5 md:p-6 text-left shadow-sm flex flex-col md:flex-row gap-5 justify-between items-center animate-fade-in">
-              <div 
-                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.06] pointer-events-none"
-                style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
-              />
-              <div className="relative z-10 flex gap-4 items-start w-full md:w-3/4">
-                <div className="p-3 bg-brand-red text-white rounded-2xl flex items-center justify-center shrink-0 shadow-sm">
-                  <span className="material-symbols-outlined !text-3xl font-black">emoji_events</span>
-                </div>
-                <div className="space-y-1.5">
-                  <span className="text-[10px] uppercase tracking-widest font-black text-brand-red bg-brand-red/10 px-2.5 py-0.5 rounded-full inline-block">
-                    {brand.id === 'imocarwash' ? 'Lavagem & Serviços' : brand.type === 'synagogue' ? 'Tsedaká Comunitária' : brand.id === 'ymcactx' ? 'Mensalidades & Suporte' : `Generosidade ${brand.campusName}`}
-                  </span>
-                  <h3 className="text-lg font-black text-brand-dark tracking-tight">
-                    {brand.id === 'imocarwash' ? 'Meta Diária de Lavagens 🎯' : brand.id === 'ymcactx' ? 'Meta Diária de Contribuição 🎯' : 'Meta de Gratidão Diária 🎯'}
-                  </h3>
-                  <p className="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
-                    {brand.id === 'imocarwash'
-                      ? `No dia de ontem, nosso centro de lavagem somou um total acumulado de R$ 5.480,00 em programas e recargas! Nossa meta hoje é igualar ou superar esse valor para garantir a melhor eficiência e produtos biodegradáveis.`
-                      : brand.type === 'synagogue'
-                      ? `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 em tsedakás! Nossa meta hoje é alcançar esse valor para apoiar a manutenção da sinagoga e auxílio social.`
-                      : brand.id === 'ymcactx'
-                      ? `No dia de ontem, nossos atletas e parceiros somaram um total de R$ 5.480,00 em mensalidades e apoio! Nossa meta hoje é garantir esse suporte para financiar bolsas de treino e melhorias de materiais.`
-                      : `No dia de ontem, nossa amada comunidade somou um total acumulado incrível de R$ 5.480,00 em dízimos e ofertas voluntárias! Nossa meta hoje é igualar ou ultrapassar essa bênção para apoiar as ações sociais.`}
-                  </p>
-                </div>
-              </div>
-              
-              {/* Progresso visual da Meta */}
-              <div className="relative z-10 w-full md:w-1/4 bg-white/80 backdrop-blur-sm border border-red-100 p-4 rounded-2xl flex flex-col justify-between shrink-0 shadow-inner">
-                <div className="flex justify-between text-xs font-black text-slate-600 mb-2 uppercase tracking-wider text-[10px]">
-                  <span>Progresso da Meta</span>
-                  <span className="text-emerald-600 font-extrabold">82%</span>
-                </div>
-                {/* Progress bar */}
-                <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-brand-red to-rose-500 rounded-full transition-all duration-1000" style={{ width: '82%' }} />
-                </div>
-                <div className="flex justify-between items-center mt-2.5 text-[10px] font-bold text-slate-500 font-sans">
-                  <span>Hoje: R$ 4.500</span>
-                  <span>Meta: R$ 5.480</span>
-                </div>
-              </div>
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-7xl mx-auto">
+              {categories.map((cat) => {
+                const styles = getCategoryDetails(cat.icon);
+                return (
+                  <button
+                    key={cat.title}
+                    type="button"
+                    onClick={() => handleSelectCategory(cat.title)}
+                    onMouseEnter={() => setHoveredCategoryBg(styles.bgUrl)}
+                    onMouseLeave={() => setHoveredCategoryBg(null)}
+                    className={`w-full bg-slate-900/90 hover:bg-slate-900/40 backdrop-blur-2xl border-2 border-white/10 ${styles.hoverBorder} ${styles.hoverBg} text-white rounded-[2.5rem] p-12 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[380px] relative overflow-hidden group`}
+                  >
+                    <div 
+                      className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none"
+                      style={{ backgroundImage: `url(${styles.bgUrl})`, filter: 'blur(1px)' }}
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-tr ${styles.bgGradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`} />
+                    
+                    <span className={`material-symbols-outlined !text-[80px] ${styles.iconColor} group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10 mb-6`}>
+                      {cat.icon}
+                    </span>
+                    
+                    <div className="text-center z-10 space-y-3">
+                      <span className="text-sm tracking-wider uppercase font-black text-white/50 block">
+                        {brand.termDonation}
+                      </span>
+                      <span className="text-3xl md:text-4xl font-black uppercase tracking-wider block text-white group-hover:text-white transition-colors duration-300 break-words drop-shadow-md">
+                        {cat.title}
+                      </span>
+                      <span className="text-base font-semibold text-white/80 block max-w-md mx-auto leading-relaxed">
+                        {cat.desc}
+                      </span>
+                    </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto pt-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat.title}
-                  type="button"
-                  onClick={() => handleSelectCategory(cat.title)}
-                  className="relative overflow-hidden bg-white/95 hover:bg-white rounded-2xl p-8 text-left border-2 border-slate-200 cursor-pointer hover:border-brand-red transition-all flex gap-5 items-center group shadow-sm hover:scale-[1.05] active:scale-[0.96] duration-300 min-h-[130px]"
-                >
-                  <div 
-                    className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] pointer-events-none"
-                    style={{ backgroundImage: `url(${brand.bgUrl})`, filter: 'blur(1px)' }}
-                  />
-                  <div className="relative z-10 w-14 h-14 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center font-bold shrink-0">
-                    <span className="material-symbols-outlined !text-3xl">{cat.icon}</span>
-                  </div>
-                  <div className="relative z-10">
-                    <h3 className="font-extrabold text-xl text-brand-dark group-hover:text-brand-red transition-colors">{cat.title}</h3>
-                    <p className="text-sm text-slate-500 font-semibold mt-1 leading-relaxed">{cat.desc}</p>
-                  </div>
-                </button>
-              ))}
+                    {/* Watermark background icon rotating on hover */}
+                    <div className="absolute -right-8 -bottom-8 opacity-[0.07] group-hover:opacity-[0.18] text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 z-0 pointer-events-none">
+                      <span className="material-symbols-outlined !text-[220px]">{cat.icon}</span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -648,7 +716,7 @@ export default function DonationView({ onBack, onGoHome, brand, lang }: Donation
                 </div>
               ) : (
                 <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full text-center">
-                  <span className="absolute -top-3 left-6 px-3 py-0.5 bg-brand-red text-white font-black text-[10px] uppercase rounded-full tracking-widest block">
+                  <span className="absolute -top-3 left-6 px-3 py-0.5 text-white font-black text-[10px] uppercase rounded-full tracking-widest block" style={{ backgroundColor: brand.primaryColor }}>
                     Palavra do Altar
                   </span>
                   "Cada um dê conforme determinou em seu coração, não com pesar ou por obrigação, pois Deus ama a quem dá com alegria."
@@ -659,7 +727,11 @@ export default function DonationView({ onBack, onGoHome, brand, lang }: Donation
               <button
                 type="button"
                 onClick={onGoHome}
-                className="h-16 px-12 bg-brand-dark hover:bg-brand-red text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer text-base uppercase tracking-wider shrink-0"
+                className="h-16 px-12 text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer text-base uppercase tracking-wider shrink-0 border border-white/10"
+                style={{
+                  background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+                  boxShadow: `0 4px 12px ${brand.primaryColor}40`
+                }}
               >
                 Voltar ao Início
               </button>
@@ -673,9 +745,10 @@ export default function DonationView({ onBack, onGoHome, brand, lang }: Donation
       <button
         type="button"
         onClick={handleGoBack}
-        className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white bg-slate-750 hover:bg-slate-850 font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-slate-700/20"
+        className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-white/10"
         style={{
-          background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'
+          background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
+          boxShadow: `0 10px 25px ${brand.primaryColor}55`
         }}
       >
         <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>
