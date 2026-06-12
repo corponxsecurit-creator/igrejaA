@@ -435,18 +435,12 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               type="button"
               onClick={() => {
                 playTapSound();
-                setShowPromo(!showPromo);
+                handleSelect('donations');
               }}
-              className={`flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider border border-white/20 hover:scale-[1.05] ${
-                showPromo ? 'bg-emerald-750 border-emerald-400' : ''
-              } ${getFooterFontSizeClass(promoText)}`}
+              className={`flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider border border-white/20 hover:scale-[1.05] ${getFooterFontSizeClass(promoText)}`}
               style={{
-                background: showPromo 
-                  ? 'linear-gradient(135deg, #047857 0%, #065f46 100%)'
-                  : 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
-                boxShadow: showPromo
-                  ? '0 10px 25px rgba(4, 120, 87, 0.5)'
-                  : '0 10px 25px rgba(16, 185, 129, 0.4)'
+                background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                boxShadow: '0 10px 25px rgba(16, 185, 129, 0.4)'
               }}
             >
               <span className="material-symbols-outlined !text-3xl font-black">emoji_events</span>
