@@ -5,23 +5,37 @@
     <script>
       try {
         var stored = localStorage.getItem('santuario_brands');
-        if (stored && stored.includes('igrejaatitude.com.br') && !stored.includes('i0.wp.com')) {
+        if (stored) {
           var parsed = JSON.parse(stored);
+          var changed = false;
+          if (parsed.ymcactx) {
+            delete parsed.ymcactx;
+            changed = true;
+          }
+          if (parsed.imocarwash) {
+            delete parsed.imocarwash;
+            changed = true;
+          }
           if (parsed.atitude) {
             if (parsed.atitude.logoUrl === 'https://igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png' || (parsed.atitude.logoUrl && !parsed.atitude.logoUrl.includes('i0.wp.com'))) {
               parsed.atitude.logoUrl = 'https://i0.wp.com/igrejaatitude.com.br/wp-content/themes/ibatitude/images/logo.png';
+              changed = true;
             }
             if (parsed.atitude.bgUrl === 'https://igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png' || (parsed.atitude.bgUrl && !parsed.atitude.bgUrl.includes('i0.wp.com'))) {
               parsed.atitude.bgUrl = 'https://i0.wp.com/igrejaatitude.com.br/wp-content/uploads/2025/03/hall-iba.png';
+              changed = true;
             }
             if (parsed.atitude.slides) {
               parsed.atitude.slides = parsed.atitude.slides.map(function(s) {
                 if (s.bgUrl && s.bgUrl.includes('igrejaatitude.com.br') && !s.bgUrl.includes('i0.wp.com')) {
                   s.bgUrl = s.bgUrl.replace('https://igrejaatitude.com.br', 'https://i0.wp.com/igrejaatitude.com.br');
+                  changed = true;
                 }
                 return s;
               });
             }
+          }
+          if (changed) {
             localStorage.setItem('santuario_brands', JSON.stringify(parsed));
           }
         }

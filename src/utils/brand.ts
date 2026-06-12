@@ -669,7 +669,13 @@ export function getStoredBrands(): Record<string, BrandConfig> {
     try {
       const parsed = JSON.parse(stored);
       const merged: Record<string, BrandConfig> = JSON.parse(JSON.stringify(brands));
+      let changed = false;
       for (const key of Object.keys(parsed)) {
+        if (key === 'ymcactx' || key === 'imocarwash') {
+          delete parsed[key];
+          changed = true;
+          continue;
+        }
         if (brands[key]) {
           // Default brand: Keep all visual and system configurations from source code
           // and only merge customizable operational/text fields if present
@@ -686,6 +692,9 @@ export function getStoredBrands(): Record<string, BrandConfig> {
           // Custom dynamically created brand: Keep all parsed fields
           merged[key] = parsed[key];
         }
+      }
+      if (changed) {
+        localStorage.setItem('santuario_brands', JSON.stringify(parsed));
       }
       return merged;
     } catch (e) {
