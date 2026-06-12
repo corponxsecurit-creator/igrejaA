@@ -18,7 +18,7 @@ const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
 }));
 
 interface DashboardViewProps {
-  onSelectView: (view: ViewState) => void;
+  onSelectView: (view: ViewState, options?: { step?: 'category' | 'value'; category?: string }) => void;
   onGoHome: () => void;
   onOpenAccessibility: () => void;
   onOpenAdmin?: () => void;
@@ -31,9 +31,9 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
   const [showPromo, setShowPromo] = useState(false);
   const [showYmcaQrModal, setShowYmcaQrModal] = useState(false);
 
-  const handleSelect = (view: ViewState) => {
+  const handleSelect = (view: ViewState, options?: { step?: 'category' | 'value'; category?: string }) => {
     playTapSound();
-    onSelectView(view);
+    onSelectView(view, options);
   };
 
   const handleHomeClick = () => {
@@ -435,7 +435,10 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               type="button"
               onClick={() => {
                 playTapSound();
-                handleSelect('donations');
+                handleSelect('donations', {
+                  step: 'value',
+                  category: brand.type === 'synagogue' ? 'Tsedaká Geral' : 'Oferta'
+                });
               }}
               className={`flex items-center justify-center gap-3 text-white rounded-full px-10 h-20 transition-all duration-300 cursor-pointer shadow-lg active:scale-95 font-black uppercase tracking-wider border border-white/20 hover:scale-[1.05] ${getFooterFontSizeClass(promoText)}`}
               style={{

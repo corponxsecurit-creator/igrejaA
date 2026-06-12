@@ -45,6 +45,8 @@ export default function App() {
   const [passcodeError, setPasscodeError] = useState('');
   const [attemptsLeft, setAttemptsLeft] = useState(5);
   const [blockUntil, setBlockUntil] = useState<number | null>(null);
+  const [donationInitialStep, setDonationInitialStep] = useState<'category' | 'value'>('category');
+  const [donationInitialCategory, setDonationInitialCategory] = useState<string>('');
 
   const rawBrand = getCurrentBrand();
   const brand = translateBrandTerms(rawBrand, lang);
@@ -173,7 +175,7 @@ export default function App() {
     setView('checkin_success');
   };
 
-  const handleSelectView = (v: ViewState) => {
+  const handleSelectView = (v: ViewState, options?: { step?: 'category' | 'value'; category?: string }) => {
     setView(v);
     if (v === 'new_member') {
       const term = brand.termMember.toLowerCase();
@@ -184,7 +186,7 @@ export default function App() {
     } else if (v === 'prayer') {
       if (brand.id === 'ymcactx' || brand.id === 'imocarwash') {
         if (lang === 'en') speakText('Opening customer support screen.');
-        else if (lang === 'es') speakText('Abriendo pantalla de soporte al cliente.');
+        else if (lang === 'es') speakText('Abriendo pantalla de suporte al cliente.');
         else if (lang === 'de') speakText('Kundenservice geöffnet.');
         else speakText('Abri a tela de suporte ao cliente.');
       } else {
@@ -200,6 +202,8 @@ export default function App() {
       else if (lang === 'de') speakText(`Check-in für ${brand.termCults.toLowerCase()} geöffnet.`);
       else speakText(`Acessando check-in de ${brand.termCults.toLowerCase()} e encontros.`);
     } else if (v === 'donations') {
+      setDonationInitialStep(options?.step || 'category');
+      setDonationInitialCategory(options?.category || '');
       if (brand.id === 'imocarwash') {
         if (lang === 'en') speakText('Opening wash programs and payments.');
         else if (lang === 'es') speakText('Abriendo programas de lavado y pagos.');
@@ -207,7 +211,7 @@ export default function App() {
         else speakText('Acessando programas de lavagem e recargas.');
       } else if (brand.id === 'ymcactx') {
         if (lang === 'en') speakText('Opening fees and payments.');
-        else if (lang === 'es') speakText('Abriendo mensualidades y pagos.');
+        else if (lang === 'es') speakText('Abriendo mensalidades y pagos.');
         else if (lang === 'de') speakText('Mitgliedsbeiträge und Zahlungen geöffnet.');
         else speakText('Acessando pagamentos de mensalidades.');
       } else {
@@ -318,10 +322,13 @@ export default function App() {
 
         {view === 'donations' && (
           <DonationView 
+            key={`donations-${donationInitialStep}-${donationInitialCategory}`}
             onBack={handleBackToDashboard} 
             onGoHome={handleGoHome} 
             brand={brand}
             lang={lang}
+            initialStep={donationInitialStep}
+            initialCategory={donationInitialCategory}
           />
         )}
 

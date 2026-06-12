@@ -13,6 +13,9 @@ interface DonationViewProps {
   onGoHome: () => void;
   brand: BrandConfig;
   lang: Lang;
+  initialStep?: 'category' | 'value' | 'method';
+  initialCategory?: string;
+  key?: string;
 }
 
 const getCategoryDetails = (icon: string) => {
@@ -108,12 +111,12 @@ const getCategoryDetails = (icon: string) => {
   }
 };
 
-export default function DonationView({ onBack, onGoHome, brand, lang }: DonationViewProps) {
+export default function DonationView({ onBack, onGoHome, brand, lang, initialStep, initialCategory }: DonationViewProps) {
   const [state, setState] = useState<DonationState>({
-    category: '',
+    category: initialCategory || '',
     value: 0,
     customValue: '',
-    step: 'category'
+    step: initialStep || 'category'
   });
 
   const [pixTimer, setPixTimer] = useState(300);
