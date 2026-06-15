@@ -279,14 +279,18 @@ export default function DonationView({ onBack, onGoHome, brand, lang, initialSte
 
       <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
         <div>
-          <span className="text-xs uppercase tracking-widest text-brand-red font-black block">{brand.termDonations}</span>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
-            {brand.id === 'imocarwash' 
-              ? `${brand.termDonations} ${brand.name}` 
-              : brand.id === 'ymcactx'
-              ? `${brand.termDonations} ${brand.name}`
-              : `Contribuições ${brand.name}`}
-          </h1>
+          {state.step === 'category' && (
+            <>
+              <span className="text-xs uppercase tracking-widest text-brand-red font-black block">{brand.termDonations}</span>
+              <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
+                {brand.id === 'imocarwash' 
+                  ? `${brand.termDonations} ${brand.name}` 
+                  : brand.id === 'ymcactx'
+                  ? `${brand.termDonations} ${brand.name}`
+                  : `Contribuições ${brand.name}`}
+              </h1>
+            </>
+          )}
         </div>
 
         <div className="hidden md:block">
