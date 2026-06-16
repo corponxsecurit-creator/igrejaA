@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ViewState, PrayerRequest } from '../types';
 import { playSuccessSound, playTapSound } from '../utils/audio';
 import VirtualKeyboard from './VirtualKeyboard';
-import LiveClock from './LiveClock';
+import { HeaderClock } from './LiveClock';
 import { BrandConfig, hexToRgb } from '../utils/brand';
 import { t, Lang } from '../utils/i18n';
 
@@ -199,22 +199,16 @@ export default function PrayerRequestView({ onBack, onGoHome, brand, lang }: Pra
       />
 
       {/* Top Header */}
-      <header className="fixed top-0 left-0 w-full z-45 bg-white/80 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
-        <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
-          <div>
-            <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">
-              {brand.id === 'imocarwash' ? t('prayerEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('supportHeaderSports', lang) : brand.type === 'synagogue' ? 'Preces & Orações' : 'Intercessão'}
-            </span>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
-              {brand.id === 'imocarwash' ? t('prayerTitleCarWash', lang) : brand.id === 'ymcactx' ? t('prayerTitleSports', lang) : brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
-            </h1>
-          </div>
+      <header className="fixed top-0 left-0 w-full z-45 bg-white/90 backdrop-blur-md px-4 sm:px-6 md:px-10 py-3 md:py-4 border-b border-[#eceef1] flex items-center justify-between gap-4 shadow-sm relative z-10">
+        <div className="min-w-0 flex items-center gap-3">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-dark">
+            {brand.id === 'imocarwash' ? t('prayerTitleCarWash', lang) : brand.id === 'ymcactx' ? t('prayerTitleSports', lang) : brand.type === 'synagogue' ? 'Pedido de Rezas' : 'Pedido de Oração'}
+          </h1>
+          <span className="material-symbols-outlined text-brand-red !text-3xl sm:!text-4xl shrink-0 hidden sm:block">volunteer_activism</span>
+        </div>
 
-          <div className="hidden md:block">
-            <LiveClock />
-          </div>
-
-          <span className="material-symbols-outlined text-brand-red !text-4xl">volunteer_activism</span>
+        <div className="shrink-0">
+          <HeaderClock />
         </div>
       </header>
 

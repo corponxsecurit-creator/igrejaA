@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CellGroup } from '../types';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
-import LiveClock from './LiveClock';
+import { HeaderClock } from './LiveClock';
 import { BrandConfig, hexToRgb } from '../utils/brand';
 import { Lang } from '../utils/i18n';
 
@@ -125,17 +125,14 @@ export default function MyCellView({ onBack, onGoHome, brand, lang }: MyCellView
         }}
       />
 
-      <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
-        <div>
-          <span className="text-xs uppercase tracking-widest text-brand-red font-black block">{brand.termConnects}</span>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">Encontre seu {brand.termConnect}</h1>
+      <header className="fixed top-0 left-0 w-full z-45 bg-white/90 backdrop-blur-md px-4 sm:px-6 md:px-10 py-3 md:py-4 border-b border-[#eceef1] flex items-center justify-between gap-4 shadow-sm relative z-10">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-dark">Encontre seu {brand.termConnect}</h1>
         </div>
 
-        <div className="hidden md:block">
-          <LiveClock />
+        <div className="shrink-0">
+          <HeaderClock />
         </div>
-
-        <div className="w-28" /> {/* Placeholder to balance header spacing */}
       </header>
 
       {/* Main Content frame */}
@@ -173,9 +170,6 @@ export default function MyCellView({ onBack, onGoHome, brand, lang }: MyCellView
         >
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent z-0" />
           <div className="relative z-10 text-left">
-            <span className="bg-brand-red text-white text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md block w-fit mb-1 border border-brand-red-hover">
-              {brand.id === 'imocarwash' ? 'Promoções & Pistas' : brand.type === 'synagogue' ? 'Estudos & Mitzvot' : 'Vida em Comunidade'}
-            </span>
             <h2 className="text-xl md:text-2xl font-black text-white leading-tight uppercase">
               {brand.termConnects} {brand.name}
             </h2>
@@ -205,10 +199,7 @@ export default function MyCellView({ onBack, onGoHome, brand, lang }: MyCellView
                 />
                 <div className="relative z-10 flex flex-col justify-between h-full flex-grow">
                   <div>
-                    <div className="flex justify-between items-start mb-3">
-                      <span className="bg-red-50 text-brand-red text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md block border border-red-100">
-                        {cell.neighborhood}
-                      </span>
+                    <div className="flex justify-end items-start mb-3">
                       <span className="material-symbols-fill text-brand-red !text-2xl">hub</span>
                     </div>
 
@@ -267,9 +258,6 @@ export default function MyCellView({ onBack, onGoHome, brand, lang }: MyCellView
             {/* Header */}
             <div className="relative z-10 p-6 bg-brand-dark text-white border-b flex justify-between items-center shrink-0">
               <div>
-                <span className="text-[10px] uppercase font-black tracking-widest bg-brand-red px-2.5 py-1 rounded-md mb-1 block w-fit">
-                  {brand.id === 'imocarwash' ? 'Detalhes do Programa' : brand.type === 'synagogue' ? 'Participar do Grupo' : 'Visitar Grupo'}
-                </span>
                 <h3 className="text-xl font-bold uppercase tracking-tight">{activeCellModal.name}</h3>
               </div>
               <button

@@ -87,9 +87,6 @@ export default function CheckinSuccessView({ onGoHome, brand, lang }: CheckinSuc
             <div className="grid grid-cols-2 gap-4">
               {/* Android Download */}
               <div className="flex flex-col items-center p-3 bg-white/5 border border-white/10 rounded-xl space-y-2.5">
-                <span className="text-[9px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                  {t('downloadAndroid', lang)}
-                </span>
                 <div className="bg-white p-1.5 rounded-lg">
                   <img 
                     src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.netpulse.mobile.ymcaofgreaterwilliamsoncounty%26hl%3Den_US%26gl%3DUS%26pli%3D1"
@@ -111,9 +108,6 @@ export default function CheckinSuccessView({ onGoHome, brand, lang }: CheckinSuc
 
               {/* iOS Download */}
               <div className="flex flex-col items-center p-3 bg-white/5 border border-white/15 rounded-xl space-y-2.5">
-                <span className="text-[9px] font-black uppercase tracking-wider text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded-full border border-sky-500/20">
-                  {t('downloadIos', lang)}
-                </span>
                 <div className="bg-white p-1.5 rounded-lg">
                   <img 
                     src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https%3A%2F%2Fapps.apple.com%2Fus%2Fapp%2Fymca-ctx%2Fid1485537145"

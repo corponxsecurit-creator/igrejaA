@@ -11,8 +11,114 @@
   --color-brand-light: #f4f6f8;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   font-family: var(--font-sans);
+}
+
+/* Dashboard totem — grid 2×3 preenchendo a tela */
+:root {
+  --dashboard-header-h: clamp(5.75rem, 14vh, 7.75rem);
+}
+
+.dashboard-fullscreen {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+.dashboard-header {
+  min-height: var(--dashboard-header-h);
+}
+
+.dashboard-main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(var(--dashboard-header-h) + clamp(0.75rem, 2vh, 1.25rem));
+  padding-bottom: clamp(6.5rem, 16vh, 8.5rem);
+  padding-left: clamp(0.75rem, 2vw, 1.5rem);
+  padding-right: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(clamp(8rem, 21vh, 12rem), 1fr));
+  gap: clamp(0.75rem, 2.2vmin, 1.35rem);
+  row-gap: clamp(0.875rem, 2.5vmin, 1.5rem);
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+.dashboard-card {
+  min-height: clamp(8rem, 21vh, 12rem);
+  height: 100%;
+}
+
+@media (max-width: 479px) {
+  .dashboard-fullscreen {
+    overflow-y: auto;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, minmax(8rem, 1fr));
+    min-height: calc(100dvh - 10rem);
+  }
+}
+
+/* Novo Membro — seletor de modo em visão totem (cards lado a lado) */
+:root {
+  --newmember-header-h: clamp(3.25rem, 7.5vh, 4.75rem);
+}
+
+.newmember-selector-fullscreen {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+.newmember-selector-header {
+  min-height: var(--newmember-header-h);
+}
+
+.newmember-selector-main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(var(--newmember-header-h) + 0.2rem);
+  padding-bottom: clamp(3rem, 7vh, 3.75rem);
+  padding-left: clamp(0.5rem, 1.2vw, 1.25rem);
+  padding-right: clamp(0.5rem, 1.2vw, 1.25rem);
+}
+
+.newmember-selector-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  gap: clamp(0.5rem, 1.2vw, 1rem);
+  width: 100%;
+  height: 100%;
+}
+
+.newmember-selector-card {
+  min-height: 0;
+  height: 100%;
+  padding: clamp(1.5rem, 3.5vh, 2.75rem);
+  border-radius: clamp(1rem, 2vw, 2rem);
 }
 
 .logo-white {

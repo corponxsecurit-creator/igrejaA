@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DonationState } from '../types';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
-import LiveClock from './LiveClock';
+import { HeaderClock } from './LiveClock';
 import { speakText } from '../utils/tts';
 import { BrandConfig } from '../utils/brand';
 
@@ -263,7 +263,9 @@ export default function DonationView({ onBack, onGoHome, brand, lang, initialSte
   };
 
   return (
-    <div className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans submodule-view">
+    <div className={`relative bg-brand-light text-[#191c1e] flex flex-col overflow-x-hidden font-sans submodule-view ${
+      state.step === 'category' ? 'h-screen overflow-hidden' : 'min-h-screen justify-between'
+    }`}>
       
       {/* Dynamic client-specific identity background */}
       <div 
@@ -277,86 +279,69 @@ export default function DonationView({ onBack, onGoHome, brand, lang, initialSte
         }}
       />
 
-      <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
-        <div>
-          {state.step === 'category' && (
-            <>
-              <span className="text-xs uppercase tracking-widest text-brand-red font-black block">{brand.termDonations}</span>
-              <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
-                {brand.id === 'imocarwash' 
-                  ? `${brand.termDonations} ${brand.name}` 
-                  : brand.id === 'ymcactx'
-                  ? `${brand.termDonations} ${brand.name}`
-                  : `Contribuições ${brand.name}`}
-              </h1>
-            </>
-          )}
+      <header className="fixed top-0 left-0 w-full z-45 bg-white/90 backdrop-blur-md px-4 sm:px-6 md:px-10 py-3 md:py-4 border-b border-[#eceef1] flex items-center justify-between gap-4 shadow-sm relative z-10">
+        <div className="min-w-0 flex flex-col gap-0.5">
+          <p className="text-brand-red text-sm sm:text-base md:text-lg font-extrabold uppercase tracking-widest leading-none">
+            {brand.termDonations}
+          </p>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-dark leading-tight truncate">
+            {brand.id === 'imocarwash' || brand.id === 'ymcactx'
+              ? `${brand.termDonations} ${brand.name}`
+              : `Contribuições ${brand.name}`}
+          </h1>
         </div>
 
-        <div className="hidden md:block">
-          <LiveClock />
+        <div className="shrink-0">
+          <HeaderClock />
         </div>
-
-        <div className="w-28" /> {/* Placeholder to balance header spacing */}
       </header>
 
       {/* Main interactive area */}
-      <main className="flex-grow pt-28 pb-32 px-6 md:px-20 max-w-[1550px] mx-auto w-full flex flex-col justify-center relative z-10">
+      <main className={`flex-grow relative z-10 w-full flex flex-col ${
+        state.step === 'category'
+          ? 'pt-[5.5rem] md:pt-[6rem] pb-24 px-1 min-h-0'
+          : 'pt-28 pb-32 px-6 md:px-20 max-w-[1550px] mx-auto justify-center'
+      }`}>
         
         {/* STEP 1: CATEGORY SELECTION */}
         {state.step === 'category' && (
-          <div className="space-y-8 animate-fade-in text-center">
-            <header className="max-w-4xl mx-auto mb-16">
-              <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-brand-dark tracking-tight mb-6 leading-tight">
-                Qual será o destino da sua contribuição?
-              </h2>
-              <p className="text-base md:text-lg lg:text-xl font-extrabold text-slate-550 uppercase tracking-wider">
-                Selecione uma categoria abaixo para fazer seu {brand.termDonation.toLowerCase()}
-              </p>
-            </header>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-7xl mx-auto">
-              {categories.map((cat) => {
-                const styles = getCategoryDetails(cat.icon);
-                return (
-                  <button
-                    key={cat.title}
-                    type="button"
-                    onClick={() => handleSelectCategory(cat.title)}
-                    onMouseEnter={() => setHoveredCategoryBg(styles.bgUrl)}
-                    onMouseLeave={() => setHoveredCategoryBg(null)}
-                    className={`w-full bg-slate-900/90 hover:bg-slate-900/40 backdrop-blur-2xl border-2 border-white/10 ${styles.hoverBorder} ${styles.hoverBg} text-white rounded-[2.5rem] p-12 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[380px] relative overflow-hidden group`}
-                  >
-                    <div 
-                      className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none"
-                      style={{ backgroundImage: `url(${styles.bgUrl})`, filter: 'blur(1px)' }}
-                    />
-                    <div className={`absolute inset-0 bg-gradient-to-tr ${styles.bgGradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`} />
-                    
-                    <span className={`material-symbols-outlined !text-[80px] ${styles.iconColor} group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10 mb-6`}>
-                      {cat.icon}
+          <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-1 w-full h-full min-h-0 animate-fade-in">
+            {categories.map((cat) => {
+              const styles = getCategoryDetails(cat.icon);
+              return (
+                <button
+                  key={cat.title}
+                  type="button"
+                  onClick={() => handleSelectCategory(cat.title)}
+                  onMouseEnter={() => setHoveredCategoryBg(styles.bgUrl)}
+                  onMouseLeave={() => setHoveredCategoryBg(null)}
+                  className={`h-full w-full bg-slate-900/90 hover:bg-slate-900/40 backdrop-blur-2xl border border-white/10 ${styles.hoverBorder} ${styles.hoverBg} text-white rounded-lg p-4 md:p-6 flex flex-col justify-center items-center text-center cursor-pointer active:scale-[0.98] transition-all duration-300 shadow-lg relative overflow-hidden group`}
+                >
+                  <div 
+                    className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none"
+                    style={{ backgroundImage: `url(${styles.bgUrl})`, filter: 'blur(1px)' }}
+                  />
+                  <div className={`absolute inset-0 bg-gradient-to-tr ${styles.bgGradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`} />
+                  
+                  <span className={`material-symbols-outlined !text-[72px] md:!text-[96px] lg:!text-[120px] ${styles.iconColor} group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10 mb-3 md:mb-4`}>
+                    {cat.icon}
+                  </span>
+                  
+                  <div className="text-center z-10 space-y-2 md:space-y-3 px-2">
+                    <span className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-wider block text-white transition-colors duration-300 break-words drop-shadow-md leading-tight">
+                      {cat.title}
                     </span>
-                    
-                    <div className="text-center z-10 space-y-3">
-                      <span className="text-sm tracking-wider uppercase font-black text-white/50 block">
-                        {brand.termDonation}
-                      </span>
-                      <span className="text-3xl md:text-4xl font-black uppercase tracking-wider block text-white group-hover:text-white transition-colors duration-300 break-words drop-shadow-md">
-                        {cat.title}
-                      </span>
-                      <span className="text-base font-semibold text-white/80 block max-w-md mx-auto leading-relaxed">
-                        {cat.desc}
-                      </span>
-                    </div>
+                    <span className="text-lg md:text-2xl lg:text-3xl font-semibold text-white/85 block max-w-[90%] mx-auto leading-snug">
+                      {cat.desc}
+                    </span>
+                  </div>
 
-                    {/* Watermark background icon rotating on hover */}
-                    <div className="absolute -right-8 -bottom-8 opacity-[0.07] group-hover:opacity-[0.18] text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 z-0 pointer-events-none">
-                      <span className="material-symbols-outlined !text-[220px]">{cat.icon}</span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+                  <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.18] text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 z-0 pointer-events-none">
+                    <span className="material-symbols-outlined !text-[180px] md:!text-[240px]">{cat.icon}</span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         )}
 
@@ -698,34 +683,22 @@ export default function DonationView({ onBack, onGoHome, brand, lang, initialSte
 
               {/* Snippet graphic style card */}
               {brand.id === 'imocarwash' ? (
-                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full text-center">
-                  <span className="absolute -top-3 left-6 px-3 py-0.5 text-white font-black text-[10px] uppercase rounded-full tracking-widest block" style={{ backgroundColor: brand.primaryColor }}>
-                    IMO Car Wash
-                  </span>
+                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 shadow-sm w-full text-center">
                   "A lavagem de carros mais popular do mundo. Proteja o seu veículo dos sinais de envelhecimento."
                   <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">Garantia de Qualidade</p>
                 </div>
               ) : brand.id === 'ymcactx' ? (
-                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full text-center">
-                  <span className="absolute -top-3 left-6 px-3 py-0.5 text-white font-black text-[10px] uppercase rounded-full tracking-widest block" style={{ backgroundColor: brand.primaryColor }}>
-                    Valores YMCA
-                  </span>
+                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 shadow-sm w-full text-center">
                   "Desenvolvendo caráter, liderança e espírito de equipe através do esporte."
                   <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">YMCA Central Texas</p>
                 </div>
               ) : brand.type === 'synagogue' ? (
-                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full text-center">
-                  <span className="absolute -top-3 left-6 px-3 py-0.5 bg-brand-red text-white font-black text-[10px] uppercase rounded-full tracking-widest block">
-                    Palavra da Torá
-                  </span>
+                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 shadow-sm w-full text-center">
                   "Abra a sua mão para o seu irmão, para o seu pobre e para o seu necessitado na sua terra."
                   <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">Deuteronômio 15:11</p>
                 </div>
               ) : (
-                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 relative shadow-sm w-full text-center">
-                  <span className="absolute -top-3 left-6 px-3 py-0.5 text-white font-black text-[10px] uppercase rounded-full tracking-widest block" style={{ backgroundColor: brand.primaryColor }}>
-                    Palavra do Altar
-                  </span>
+                <div className="bg-white/80 rounded-2xl p-6 border border-slate-200 italic text-slate-500 shadow-sm w-full text-center">
                   "Cada um dê conforme determinou em seu coração, não com pesar ou por obrigação, pois Deus ama a quem dá com alegria."
                   <p className="font-extrabold text-brand-dark text-xs uppercase tracking-wider mt-3">2 Coríntios 9:7</p>
                 </div>
@@ -763,7 +736,7 @@ export default function DonationView({ onBack, onGoHome, brand, lang, initialSte
       </button>
 
       {/* Spacing empty footer padding footer */}
-      <footer className="h-28 w-full" />
+      {state.step !== 'category' && <footer className="h-28 w-full" />}
 
     </div>
   );

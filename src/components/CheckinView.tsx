@@ -4,7 +4,7 @@ import { churchMembers } from '../data';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import NumericKeypad from './NumericKeypad';
 import VirtualKeyboard from './VirtualKeyboard';
-import LiveClock from './LiveClock';
+import { HeaderClock } from './LiveClock';
 import { BrandConfig } from '../utils/brand';
 import { Lang } from '../utils/i18n';
 
@@ -134,12 +134,9 @@ export default function CheckinView({ onBack, onSuccess, brand, lang }: CheckinV
       />
 
       {/* Top Header */}
-      <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-4 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
-        <div>
-          <span className="text-xs uppercase tracking-widest text-brand-red font-black block">
-            {brand.id === 'imocarwash' ? 'Autoatendimento' : brand.type === 'synagogue' ? 'Totem de Entrada' : 'Totem de Acesso'}
-          </span>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
+      <header className="fixed top-0 left-0 w-full z-45 bg-white/90 backdrop-blur-md px-4 sm:px-6 md:px-10 py-3 md:py-4 border-b border-[#eceef1] flex items-center justify-between gap-4 shadow-sm relative z-10">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-dark">
             {brand.id === 'imocarwash'
               ? 'Check-in de Lavagem'
               : brand.id === 'ymcactx'
@@ -150,11 +147,9 @@ export default function CheckinView({ onBack, onSuccess, brand, lang }: CheckinV
           </h1>
         </div>
 
-        <div className="hidden md:block">
-          <LiveClock />
+        <div className="shrink-0">
+          <HeaderClock />
         </div>
-
-        <div className="w-28" /> {/* Placeholder to balance header spacing */}
       </header>
 
       {/* Main Layout */}
@@ -187,9 +182,6 @@ export default function CheckinView({ onBack, onSuccess, brand, lang }: CheckinV
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
                   <div className="absolute bottom-4 left-6">
-                    <span className="bg-brand-red text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md block w-fit mb-1 border border-brand-red-hover">
-                      {brand.id === 'imocarwash' ? 'Pistas de Lavagem' : brand.type === 'synagogue' ? 'Comunidade & Shabat' : 'Células & Celebração'}
-                    </span>
                     <h2 className="text-xl md:text-2xl font-black text-white leading-tight">
                       {brand.id === 'imocarwash' ? 'Programas de Lavagem IMO' : brand.type === 'synagogue' ? 'Serviços do Shabat' : `Celebração Especial ${brand.name}`}
                     </h2>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ViewState } from '../types';
 import { playTapSound } from '../utils/audio';
-import LiveClock from './LiveClock';
+import { HeaderClock } from './LiveClock';
 import { speakText } from '../utils/tts';
 import { BrandConfig } from '../utils/brand';
 import { t, Lang } from '../utils/i18n';
@@ -66,8 +66,17 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
     return 'text-base sm:text-lg md:text-xl lg:text-2xl';
   };
 
+  const menuCardClass =
+    'dashboard-card w-full bg-white/10 backdrop-blur-2xl border border-white/20 text-white rounded-2xl md:rounded-[1.75rem] px-4 py-5 sm:px-5 sm:py-6 md:px-6 md:py-7 flex flex-col justify-center items-center text-center gap-2 sm:gap-3 cursor-pointer active:scale-[0.98] transition-all duration-300 shadow-2xl relative overflow-hidden group';
+
+  const menuCardTitleClass =
+    'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-black uppercase tracking-wider block drop-shadow-sm break-words line-clamp-3';
+
+  const menuCardIconClass =
+    'material-symbols-outlined text-[clamp(2rem,5vmin,3.5rem)] group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10';
+
   return (
-    <div className="relative min-h-screen bg-[#020617] text-white flex flex-col justify-between overflow-x-hidden animate-fade-in font-sans">
+    <div className="relative dashboard-fullscreen bg-[#020617] text-white flex flex-col overflow-hidden animate-fade-in font-sans">
       
       {/* ════════════════════════════════════════════════
           BACKGROUND LAYER 1 — Radial deep gradient
@@ -112,26 +121,22 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
         ))}
       </div>
 
-      {/* Top App Bar inside main panel */}
-      <nav className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-8 md:px-20 py-4 bg-white/5 backdrop-blur-xl shadow-sm border-b border-white/10">
-        <div className="flex items-center gap-3">
+      {/* Top App Bar */}
+      <nav className="dashboard-header fixed top-0 left-0 w-full z-40 flex items-center justify-between gap-4 px-3 sm:px-6 md:px-8 py-2 md:py-3 bg-white/5 backdrop-blur-xl shadow-sm border-b border-white/10 shrink-0 text-white">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <img 
             src={brand.logoUrl} 
-            className={`h-12 object-contain ${['atitude', 'ibmalphaville', 'lagoinha', 'universal', 'beityaacov', 'icconselheira'].includes(brand.id) ? 'logo-white' : ''}`} 
+            className={`h-9 sm:h-10 md:h-12 object-contain shrink-0 ${['atitude', 'ibmalphaville', 'lagoinha', 'universal', 'beityaacov', 'icconselheira'].includes(brand.id) ? 'logo-white' : ''}`} 
             alt={brand.name} 
             referrerPolicy="no-referrer"
           />
-          <span className="text-xs uppercase tracking-[0.25em] font-black mt-1" style={{ color: accent }}>
+          <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-black truncate hidden sm:block" style={{ color: accent }}>
             {brand.campusName}
           </span>
         </div>
-
-        {/* Relógio Digital de Totem em Tempo Real */}
-        <div className="hidden md:block">
-          <LiveClock />
-        </div>
         
-        <div className="flex gap-4 items-center text-white">
+        <div className="flex gap-2 sm:gap-4 items-center shrink-0">
+          <HeaderClock tone="on-dark" prominent={false} />
           <button
             type="button"
             onClick={() => {
@@ -149,54 +154,33 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
       </nav>
 
 
-      {/* Main Grid Area */}
-      <main className="flex-grow pt-32 pb-40 px-6 md:px-12 w-full max-w-[1550px] mx-auto flex flex-col justify-center relative z-10">
-        
-        {/* Header Title */}
-        <header className="mb-6 text-center">
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-2 drop-shadow-lg">
-            {lang === 'en'
-              ? `Welcome to ${brand.name}`
-              : lang === 'es'
-              ? `Bienvenido a ${brand.name}`
-              : (brand.id === 'ymcactx' || brand.id === 'imocarwash')
-              ? `Bem-vindo ao ${brand.name}`
-              : `Bem-vindo à ${brand.name}`}
-          </h2>
-          <p className="text-lg md:text-xl text-white/80 font-medium tracking-wide">
-            {lang === 'en'
-              ? ((brand.id === 'ymcactx' || brand.id === 'imocarwash') ? 'How can we help you today?' : 'How can we walk with you today?')
-              : lang === 'es'
-              ? ((brand.id === 'ymcactx' || brand.id === 'imocarwash') ? '¿Cómo podemos ayudarle hoy?' : '¿Cómo podemos caminar con usted hoy?')
-              : (brand.id === 'ymcactx' || brand.id === 'imocarwash')
-              ? 'Como podemos ajudar você hoje?'
-              : brand.type === 'synagogue'
-              ? 'Como podemos ajudar você hoje?'
-              : 'Como podemos caminhar com você hoje?'}
-          </p>
-        </header>
-
-        {/* Bento Grid Layout - Organized horizontally two by two */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl mx-auto">
+      {/* Main Grid Area — 2×3 preenchendo a viewport */}
+      <main className="dashboard-main w-full relative z-10" aria-label={
+        lang === 'en'
+          ? `Welcome to ${brand.name}`
+          : lang === 'es'
+          ? `Bienvenido a ${brand.name}`
+          : (brand.id === 'ymcactx' || brand.id === 'imocarwash')
+          ? `Bem-vindo ao ${brand.name}`
+          : `Bem-vindo à ${brand.name}`
+      }>
+        <div className="dashboard-grid">
           
           {/* SOU NOVO AQUI */}
           <button
             type="button"
             onClick={() => handleSelect('new_member')}
-            className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-indigo-400/60 hover:bg-indigo-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            className={`${menuCardClass} hover:border-indigo-400/60 hover:bg-indigo-900/40`}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="material-symbols-outlined !text-[60px] text-indigo-300 group-hover:text-indigo-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
+            <span className={`${menuCardIconClass} text-indigo-300 group-hover:text-indigo-200`}>
               person_add
             </span>
-            <div className="text-center mt-4 z-10">
-              <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.id === 'imocarwash' ? t('newMemberEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('newMemberEyebrowSports', lang) : t('newMemberEyebrow', lang)}
-              </span>
-              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">{brand.termMember}</span>
+            <div className="text-center z-10">
+              <span className={menuCardTitleClass}>{brand.termMember}</span>
             </div>
-            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 z-0">
-              <span className="material-symbols-outlined !text-[160px]">id_card</span>
+            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 z-0 pointer-events-none">
+              <span className="material-symbols-outlined text-[clamp(4rem,12vmin,10rem)]">id_card</span>
             </div>
           </button>
 
@@ -204,18 +188,17 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('donations')}
-            className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-amber-400/60 hover:bg-amber-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            className={`${menuCardClass} hover:border-amber-400/60 hover:bg-amber-900/40`}
           >
             <div className="absolute inset-0 bg-gradient-to-bl from-amber-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="material-symbols-outlined !text-[60px] text-amber-300 group-hover:text-amber-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
+            <span className={`${menuCardIconClass} text-amber-300 group-hover:text-amber-200`}>
               payments
             </span>
-            <div className="text-center mt-4 z-10">
-              <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">{brand.termDonations}</span>
-              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">{brand.termDonation}</span>
+            <div className="text-center z-10">
+              <span className={menuCardTitleClass}>{brand.termDonation}</span>
             </div>
-            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-12 group-hover:scale-125 z-0">
-              <span className="material-symbols-outlined !text-[160px]">qr_code</span>
+            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-12 group-hover:scale-125 z-0 pointer-events-none">
+              <span className="material-symbols-outlined text-[clamp(4rem,12vmin,10rem)]">qr_code</span>
             </div>
           </button>
 
@@ -223,22 +206,19 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('ministries')}
-            className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-cyan-400/60 hover:bg-cyan-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            className={`${menuCardClass} hover:border-cyan-400/60 hover:bg-cyan-900/40`}
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="material-symbols-outlined !text-[60px] text-cyan-300 group-hover:text-cyan-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
+            <span className={`${menuCardIconClass} text-cyan-300 group-hover:text-cyan-200`}>
               groups
             </span>
-            <div className="text-center mt-4 z-10">
-              <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.id === 'imocarwash' ? t('volunteerEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('volunteerEyebrowSports', lang) : brand.type === 'synagogue' ? t('volunteerEyebrowSynagogue', lang) : t('volunteerEyebrow', lang)}
-              </span>
-              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">
+            <div className="text-center z-10">
+              <span className={menuCardTitleClass}>
                 {brand.id === 'imocarwash' ? t('volunteerTitleCarWash', lang) : t('volunteerTitle', lang)}
               </span>
             </div>
-            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:rotate-6 group-hover:scale-125 z-0">
-              <span className="material-symbols-outlined !text-[160px]">handshake</span>
+            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:rotate-6 group-hover:scale-125 z-0 pointer-events-none">
+              <span className="material-symbols-outlined text-[clamp(4rem,12vmin,10rem)]">handshake</span>
             </div>
           </button>
 
@@ -250,42 +230,36 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
                 playTapSound();
                 setShowYmcaQrModal(true);
               }}
-              className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-emerald-400/60 hover:bg-emerald-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+              className={`${menuCardClass} hover:border-emerald-400/60 hover:bg-emerald-900/40`}
             >
               <div className="absolute inset-0 bg-gradient-to-tl from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="material-symbols-outlined !text-[60px] text-emerald-300 group-hover:text-emerald-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
+              <span className={`${menuCardIconClass} text-emerald-300 group-hover:text-emerald-200`}>
                 qr_code_2
               </span>
-              <div className="text-center mt-4 z-10">
-                <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                  {t('ymcaClassesCardEyebrow', lang)}
-                </span>
-                <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">
+              <div className="text-center z-10">
+                <span className={menuCardTitleClass}>
                   {t('ymcaClassesCardTitle', lang)}
                 </span>
               </div>
-              <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-6 group-hover:scale-125 z-0">
-                <span className="material-symbols-outlined !text-[160px]">app_registration</span>
+              <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-6 group-hover:scale-125 z-0 pointer-events-none">
+                <span className="material-symbols-outlined text-[clamp(4rem,12vmin,10rem)]">app_registration</span>
               </div>
             </button>
           ) : (
             <button
               type="button"
               onClick={() => handleSelect('checkin')}
-              className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-emerald-400/60 hover:bg-emerald-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+              className={`${menuCardClass} hover:border-emerald-400/60 hover:bg-emerald-900/40`}
             >
               <div className="absolute inset-0 bg-gradient-to-tl from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="material-symbols-outlined !text-[60px] text-emerald-300 group-hover:text-emerald-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
+              <span className={`${menuCardIconClass} text-emerald-300 group-hover:text-emerald-200`}>
                 calendar_month
               </span>
-              <div className="text-center mt-4 z-10">
-                <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                  {brand.id === 'imocarwash' ? t('calendarEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('calendarEyebrowSports', lang) : brand.type === 'synagogue' ? t('calendarEyebrowSynagogue', lang) : t('calendarEyebrow', lang)}
-                </span>
-                <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">{brand.termCults}</span>
+              <div className="text-center z-10">
+                <span className={menuCardTitleClass}>{brand.termCults}</span>
               </div>
-              <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-6 group-hover:scale-125 z-0">
-                <span className="material-symbols-outlined !text-[160px]">event</span>
+              <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-6 group-hover:scale-125 z-0 pointer-events-none">
+                <span className="material-symbols-outlined text-[clamp(4rem,12vmin,10rem)]">event</span>
               </div>
             </button>
           )}
@@ -294,22 +268,19 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('my_cell')}
-            className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-slate-400/60 hover:bg-slate-800/60 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            className={`${menuCardClass} hover:border-slate-400/60 hover:bg-slate-800/60`}
           >
             <div className="absolute inset-0 bg-gradient-to-bl from-slate-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="material-symbols-outlined !text-[60px] text-slate-300 group-hover:text-white group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
+            <span className={`${menuCardIconClass} text-slate-300 group-hover:text-white`}>
               diversity_3
             </span>
-            <div className="text-center mt-4 z-10">
-              <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.id === 'imocarwash' ? t('groupsEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('groupsEyebrowSports', lang) : brand.type === 'synagogue' ? t('groupsEyebrowSynagogue', lang) : t('groupsEyebrow', lang)}
-              </span>
-              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm line-clamp-2 break-words">
+            <div className="text-center z-10">
+              <span className={menuCardTitleClass}>
                 {brand.termConnects}
               </span>
             </div>
-            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:scale-125 z-0">
-              <span className="material-symbols-outlined !text-[160px]">hub</span>
+            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:scale-125 z-0 pointer-events-none">
+              <span className="material-symbols-outlined text-[clamp(4rem,12vmin,10rem)]">hub</span>
             </div>
           </button>
 
@@ -317,22 +288,19 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
           <button
             type="button"
             onClick={() => handleSelect('prayer')}
-            className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 hover:border-rose-400/60 hover:bg-rose-900/40 text-white rounded-[2rem] p-8 flex flex-col justify-center items-center text-center cursor-pointer hover:scale-[1.05] active:scale-[0.96] transition-all duration-300 shadow-2xl min-h-[280px] relative overflow-hidden group"
+            className={`${menuCardClass} hover:border-rose-400/60 hover:bg-rose-900/40`}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="material-symbols-outlined !text-[60px] text-rose-300 group-hover:text-rose-200 group-hover:scale-110 transition-transform duration-500 drop-shadow-md z-10">
+            <span className={`${menuCardIconClass} text-rose-300 group-hover:text-rose-200`}>
               {(brand.id === 'ymcactx' || brand.id === 'imocarwash') ? 'chat' : 'volunteer_activism'}
             </span>
-            <div className="text-center mt-4 z-10">
-              <span className="text-sm tracking-wider uppercase font-extrabold text-white/60 block mb-1">
-                {brand.id === 'imocarwash' ? t('prayerEyebrowCarWash', lang) : brand.id === 'ymcactx' ? t('prayerEyebrowSports', lang) : t('prayerEyebrow', lang)}
-              </span>
-              <span className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider block drop-shadow-sm break-words">
+            <div className="text-center z-10">
+              <span className={menuCardTitleClass}>
                 {brand.id === 'imocarwash' ? t('prayerTitleCarWash', lang) : brand.id === 'ymcactx' ? t('prayerTitleSports', lang) : brand.type === 'synagogue' ? t('prayerTitleSynagogue', lang) : t('prayerTitle', lang)}
               </span>
             </div>
-            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-12 group-hover:scale-125 z-0">
-              <span className="material-symbols-outlined !text-[160px]">chat</span>
+            <div className="absolute -right-4 -bottom-4 opacity-[0.07] group-hover:opacity-[0.15] text-white transition-all duration-500 group-hover:-rotate-12 group-hover:scale-125 z-0 pointer-events-none">
+              <span className="material-symbols-outlined text-[clamp(4rem,12vmin,10rem)]">chat</span>
             </div>
           </button>
 
@@ -367,9 +335,6 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               <span className="material-symbols-outlined !text-xl font-black">emoji_events</span>
             </div>
             <div>
-              <span className="text-[9px] uppercase tracking-widest font-black text-brand-red block">
-                {brand.id === 'imocarwash' ? 'Meta IMO' : brand.type === 'synagogue' ? 'Meta Tsedaká' : brand.id === 'ymcactx' ? 'Meta YMCA' : 'Meta Generosidade'}
-              </span>
               <h3 className="text-xs font-black text-white tracking-tight">
                 {brand.id === 'imocarwash' ? 'Meta de Lavagens 🎯' : brand.id === 'ymcactx' ? 'Meta de Contribuição 🎯' : 'Meta de Gratidão 🎯'}
               </h3>
@@ -412,7 +377,7 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
       )}
 
       {/* Floating Glass Dock Footer */}
-      <footer className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 p-3 bg-white/10 backdrop-blur-2xl shadow-2xl rounded-[2.5rem] border border-white/20 max-w-[95vw] md:max-w-max overflow-x-auto scrollbar-none">
+      <footer className="fixed bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 md:gap-3 p-2 md:p-3 bg-white/10 backdrop-blur-2xl shadow-2xl rounded-[2.5rem] border border-white/20 max-w-[95vw] md:max-w-max overflow-x-auto scrollbar-none">
         
         {/* Início */}
         <button
@@ -545,9 +510,6 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
               
               {/* 1. Locator Web */}
               <div className="flex flex-col items-center p-5 bg-white/5 border border-white/10 rounded-2xl space-y-4">
-                <span className="text-xs font-black uppercase tracking-wider text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
-                  {t('ymcaLocatorLabel', lang)}
-                </span>
                 <div className="bg-white p-2.5 rounded-xl shadow-inner">
                   <img 
                     src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fwww.ymca.org%2Ffind-your-y"
@@ -569,9 +531,6 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
 
               {/* 2. Google Play Android */}
               <div className="flex flex-col items-center p-5 bg-white/5 border border-white/10 rounded-2xl space-y-4">
-                <span className="text-xs font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-                  Google Play (Android)
-                </span>
                 <div className="bg-white p-2.5 rounded-xl shadow-inner">
                   <img 
                     src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.netpulse.mobile.ymcaofgreaterwilliamsoncounty%26hl%3Den_US%26gl%3DUS%26pli%3D1"
@@ -593,9 +552,6 @@ export default function DashboardView({ onSelectView, onGoHome, onOpenAccessibil
 
               {/* 3. App Store iOS */}
               <div className="flex flex-col items-center p-5 bg-white/5 border border-white/10 rounded-2xl space-y-4">
-                <span className="text-xs font-black uppercase tracking-wider text-sky-400 bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20">
-                  App Store (iOS)
-                </span>
                 <div className="bg-white p-2.5 rounded-xl shadow-inner">
                   <img 
                     src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fapps.apple.com%2Fus%2Fapp%2Fymca-ctx%2Fid1485537145"

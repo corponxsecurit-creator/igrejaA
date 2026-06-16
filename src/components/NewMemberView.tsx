@@ -3,7 +3,7 @@ import { ViewState, NewMemberState } from '../types';
 import { playSuccessSound, playTapSound } from '../utils/audio';
 import VirtualKeyboard from './VirtualKeyboard';
 import NumericKeypad from './NumericKeypad';
-import LiveClock from './LiveClock';
+import { HeaderClock } from './LiveClock';
 import { BrandConfig, hexToRgb } from '../utils/brand';
 import { Lang, t } from '../utils/i18n';
 
@@ -243,9 +243,6 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                   {/* Android Download */}
                   <div className="flex flex-col items-center p-4 bg-slate-50/50 border border-slate-150 rounded-2xl space-y-3">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
-                      {t('downloadAndroid', lang)}
-                    </span>
                     <div className="bg-white p-2 rounded-xl shadow-sm border border-slate-200">
                       <img 
                         src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.netpulse.mobile.ymcaofgreaterwilliamsoncounty%26hl%3Den_US%26gl%3DUS%26pli%3D1"
@@ -267,9 +264,6 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
 
                   {/* iOS Download */}
                   <div className="flex flex-col items-center p-4 bg-slate-50/50 border border-slate-150 rounded-2xl space-y-3">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-sky-600 bg-sky-50 px-3 py-1 rounded-full border border-sky-100">
-                      {t('downloadIos', lang)}
-                    </span>
                     <div className="bg-white p-2 rounded-xl shadow-sm border border-slate-200">
                       <img 
                         src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fapps.apple.com%2Fus%2Fapp%2Fymca-ctx%2Fid1485537145"
@@ -313,7 +307,7 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
   if (registrationMode === null) {
     return (
       <div 
-        className="relative min-h-screen bg-brand-light text-[#191c1e] flex flex-col justify-between overflow-x-hidden font-sans"
+        className="relative newmember-selector-fullscreen bg-brand-light text-[#191c1e] flex flex-col overflow-hidden font-sans submodule-view"
         style={{
           '--color-brand-red': brand.primaryColor,
           '--color-brand-red-hover': brand.primaryColorHover,
@@ -334,33 +328,19 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
         />
 
         {/* Top Header */}
-        <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-6 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
-          <div>
-            <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">Boas-vindas</span>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">{brand.termMember}</h1>
+        <header className="newmember-selector-header fixed top-0 left-0 w-full z-45 bg-white/90 backdrop-blur-md px-4 sm:px-6 md:px-10 py-3 md:py-4 border-b border-[#eceef1] flex items-center justify-between gap-4 shadow-sm relative z-10 shrink-0">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-dark">{brand.termMember}</h1>
           </div>
 
-          <div className="hidden md:block">
-            <LiveClock size="large" />
+          <div className="shrink-0">
+            <HeaderClock />
           </div>
         </header>
 
-        {/* Main selector body */}
-        <main className="flex-grow flex flex-col items-center justify-center px-6 md:px-20 pt-28 pb-32 max-w-6xl mx-auto w-full relative z-10 space-y-8">
-          <div className="text-center max-w-xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-black text-brand-dark tracking-tight mb-2">
-              {t('regHowToProceed', lang)}
-            </h2>
-            <p className="text-sm md:text-base text-slate-600 font-semibold leading-relaxed">
-              {brand.id === 'imocarwash'
-                ? t('regIntroTextCarWash', lang)
-                : brand.id === 'ymcactx'
-                ? t('regIntroTextSports', lang)
-                : t('regIntroText', lang)}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
+        {/* Main selector body — totem, cards lado a lado */}
+        <main className="newmember-selector-main relative z-10 w-full">
+          <div className="newmember-selector-grid">
             {/* Standard Mode */}
             <button
               type="button"
@@ -371,34 +351,32 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
               }}
               onMouseEnter={() => setHoveredCategoryBg('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&fit=crop&q=80')}
               onMouseLeave={() => setHoveredCategoryBg(null)}
-              className="relative overflow-hidden bg-slate-900/90 hover:bg-slate-900/40 backdrop-blur-2xl border-2 border-white/10 hover:border-brand-red cursor-pointer transition-all flex flex-col justify-between items-start group shadow-2xl hover:scale-[1.05] active:scale-[0.96] duration-300 min-h-[380px] p-12 rounded-[2.5rem]"
+              className="newmember-selector-card relative overflow-hidden bg-slate-900/90 hover:bg-slate-900/40 backdrop-blur-2xl border-2 border-white/10 hover:border-brand-red cursor-pointer transition-all flex flex-col justify-between items-center text-center group shadow-2xl hover:scale-[1.02] active:scale-[0.98] duration-300 w-full"
             >
-              {/* Background image related to client virtual identity inside button */}
               <div 
                 className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none"
                 style={{ backgroundImage: `url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&fit=crop&q=80)`, filter: 'blur(1px)' }}
               />
-              <div className="relative z-10 flex flex-col justify-between h-full w-full items-start">
-                <div className="w-16 h-16 rounded-full bg-brand-red/20 text-brand-red flex items-center justify-center font-bold mb-6 shrink-0">
-                  <span className="material-symbols-outlined !text-4xl">assignment_ind</span>
+              <div className="relative z-10 flex flex-col justify-between h-full w-full items-center text-center">
+                <div className="w-[clamp(5rem,13vmin,8rem)] h-[clamp(5rem,13vmin,8rem)] rounded-full bg-brand-red/20 text-brand-red flex items-center justify-center font-bold shrink-0">
+                  <span className="material-symbols-outlined text-[clamp(2.75rem,7.5vmin,5rem)]">assignment_ind</span>
                 </div>
-                <div className="flex-grow space-y-3">
-                  <h3 className="font-black text-3xl text-white tracking-wide uppercase">
+                <div className="flex-grow flex flex-col justify-center space-y-4 py-1 px-3">
+                  <h3 className="font-black text-[clamp(1.65rem,4.8vmin,3.25rem)] text-white tracking-wide uppercase leading-tight">
                     {brand.id === 'imocarwash' ? t('regCardFullCarWash', lang) : brand.id === 'ymcactx' ? t('regCardFullSports', lang) : t('regCardFull', lang)}
                   </h3>
-                  <p className="text-base text-white/80 font-semibold leading-relaxed">
+                  <p className="text-[clamp(1.1rem,2.8vmin,1.75rem)] text-white/90 font-semibold leading-snug max-w-lg mx-auto">
                     {brand.id === 'imocarwash' ? t('regCardFullDescCarWash', lang) : brand.id === 'ymcactx' ? t('regCardFullDescSports', lang) : t('regCardFullDesc', lang)}
                   </p>
                 </div>
-                <div className="mt-6 font-black text-sm uppercase text-brand-red tracking-wider flex items-center gap-1.5 shrink-0">
+                <div className="font-black text-[clamp(1.05rem,2.8vmin,1.6rem)] uppercase text-brand-red tracking-wider flex items-center justify-center gap-2 shrink-0">
                   <span>{brand.id === 'imocarwash' ? 'Cadastrar Perfil' : 'Preencher Completo'}</span>
-                  <span className="material-symbols-outlined !text-base">arrow_forward</span>
+                  <span className="material-symbols-outlined text-[clamp(1.25rem,3.2vmin,1.85rem)]">arrow_forward</span>
                 </div>
               </div>
 
-              {/* Watermark background icon rotating on hover */}
               <div className="absolute -right-8 -bottom-8 opacity-[0.07] group-hover:opacity-[0.18] text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 z-0 pointer-events-none">
-                <span className="material-symbols-outlined !text-[200px]">assignment_ind</span>
+                <span className="material-symbols-outlined text-[clamp(10rem,28vmin,16rem)]">assignment_ind</span>
               </div>
             </button>
 
@@ -412,34 +390,32 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
               }}
               onMouseEnter={() => setHoveredCategoryBg('https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1600&fit=crop&q=80')}
               onMouseLeave={() => setHoveredCategoryBg(null)}
-              className="relative overflow-hidden bg-slate-900/90 hover:bg-slate-900/40 backdrop-blur-2xl border-2 border-white/10 hover:border-brand-red cursor-pointer transition-all flex flex-col justify-between items-start group shadow-2xl hover:scale-[1.05] active:scale-[0.96] duration-300 min-h-[380px] p-12 rounded-[2.5rem]"
+              className="newmember-selector-card relative overflow-hidden bg-slate-900/90 hover:bg-slate-900/40 backdrop-blur-2xl border-2 border-white/10 hover:border-brand-red cursor-pointer transition-all flex flex-col justify-between items-center text-center group shadow-2xl hover:scale-[1.02] active:scale-[0.98] duration-300 w-full"
             >
-              {/* Background image related to client virtual identity inside button */}
               <div 
                 className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none"
                 style={{ backgroundImage: `url(https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1600&fit=crop&q=80)`, filter: 'blur(1px)' }}
               />
-              <div className="relative z-10 flex flex-col justify-between h-full w-full items-start">
-                <div className="w-16 h-16 rounded-full bg-brand-red/20 text-brand-red flex items-center justify-center font-bold mb-6 shrink-0">
-                  <span className="material-symbols-outlined !text-4xl">alternate_email</span>
+              <div className="relative z-10 flex flex-col justify-between h-full w-full items-center text-center">
+                <div className="w-[clamp(5rem,13vmin,8rem)] h-[clamp(5rem,13vmin,8rem)] rounded-full bg-brand-red/20 text-brand-red flex items-center justify-center font-bold shrink-0">
+                  <span className="material-symbols-outlined text-[clamp(2.75rem,7.5vmin,5rem)]">alternate_email</span>
                 </div>
-                <div className="flex-grow space-y-3">
-                  <h3 className="font-black text-3xl text-white tracking-wide uppercase">
+                <div className="flex-grow flex flex-col justify-center space-y-4 py-1 px-3">
+                  <h3 className="font-black text-[clamp(1.65rem,4.8vmin,3.25rem)] text-white tracking-wide uppercase leading-tight">
                     {brand.id === 'imocarwash' ? t('regCardQuickCarWash', lang) : brand.id === 'ymcactx' ? t('regCardQuickSports', lang) : t('regCardQuick', lang)}
                   </h3>
-                  <p className="text-base text-white/80 font-semibold leading-relaxed">
+                  <p className="text-[clamp(1.1rem,2.8vmin,1.75rem)] text-white/90 font-semibold leading-snug max-w-lg mx-auto">
                     {brand.id === 'imocarwash' ? t('regCardQuickDescCarWash', lang) : brand.id === 'ymcactx' ? t('regCardQuickDescSports', lang) : t('regCardQuickDesc', lang)}
                   </p>
                 </div>
-                <div className="mt-6 font-black text-sm uppercase text-brand-red tracking-wider flex items-center gap-1.5 shrink-0">
+                <div className="font-black text-[clamp(1.05rem,2.8vmin,1.6rem)] uppercase text-brand-red tracking-wider flex items-center justify-center gap-2 shrink-0">
                   <span>{brand.id === 'imocarwash' ? 'Registrar E-mail' : 'Registrar E-mail'}</span>
-                  <span className="material-symbols-outlined !text-base">arrow_forward</span>
+                  <span className="material-symbols-outlined text-[clamp(1.25rem,3.2vmin,1.85rem)]">arrow_forward</span>
                 </div>
               </div>
 
-              {/* Watermark background icon rotating on hover */}
               <div className="absolute -right-8 -bottom-8 opacity-[0.07] group-hover:opacity-[0.18] text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-125 z-0 pointer-events-none">
-                <span className="material-symbols-outlined !text-[200px]">alternate_email</span>
+                <span className="material-symbols-outlined text-[clamp(10rem,28vmin,16rem)]">alternate_email</span>
               </div>
             </button>
           </div>
@@ -449,18 +425,15 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
         <button
           type="button"
           onClick={onBack}
-          className="fixed bottom-8 right-6 md:right-20 z-50 flex items-center gap-3 text-white font-black px-12 h-20 rounded-2xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-xl md:text-2xl shadow-xl border border-white/10"
+          className="fixed bottom-3 right-3 sm:right-5 md:right-8 z-50 flex items-center gap-2 text-white font-black px-8 sm:px-10 h-[clamp(3rem,7vh,4rem)] rounded-xl transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 text-base sm:text-lg md:text-xl shadow-xl border border-white/10"
           style={{
             background: `linear-gradient(135deg, ${brand.primaryColor} 0%, ${brand.primaryColorHover} 100%)`,
             boxShadow: `0 10px 25px ${brand.primaryColor}55`
           }}
         >
-          <span className="material-symbols-outlined !text-3xl font-black">arrow_back</span>
+          <span className="material-symbols-outlined text-[clamp(1.5rem,4vmin,2rem)] font-black">arrow_back</span>
           <span>Voltar</span>
         </button>
-
-        {/* Footer empty layout for spacing */}
-        <footer className="h-28 w-full" />
       </div>
     );
   }
@@ -489,18 +462,15 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
         />
 
         {/* Top Header */}
-        <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md px-6 md:px-20 py-6 border-b border-[#eceef1] flex justify-between items-center shadow-sm relative z-10">
-          <div>
-            <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">
-              {brand.id === 'imocarwash' ? 'Registro Rápido' : 'Envio Rápido'}
-            </span>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">
+        <header className="fixed top-0 left-0 w-full z-45 bg-white/90 backdrop-blur-md px-4 sm:px-6 md:px-10 py-3 md:py-4 border-b border-[#eceef1] flex items-center justify-between gap-4 shadow-sm relative z-10">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-dark">
               {brand.id === 'imocarwash' ? t('regCardQuickCarWash', lang) : brand.id === 'ymcactx' ? t('regCardQuickSports', lang) : t('regCardQuick', lang)}
             </h1>
           </div>
 
-          <div className="hidden md:block">
-            <LiveClock size="large" />
+          <div className="shrink-0">
+            <HeaderClock />
           </div>
         </header>
 
@@ -609,20 +579,18 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
       />
 
       {/* Kiosk Step Progress Header */}
-      <header className="fixed top-0 left-0 w-full z-45 bg-white/85 backdrop-blur-md p-6 md:px-20 pt-8 flex flex-col gap-4 border-b border-[#eceef1] shadow-sm relative z-10">
-        <div className="flex justify-between items-end">
-          <div>
-            <span className="text-xs uppercase tracking-widest text-brand-red font-black block mb-1">Boas-vindas</span>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-brand-dark">{brand.termMember}</h1>
+      <header className="fixed top-0 left-0 w-full z-45 bg-white/90 backdrop-blur-md px-4 sm:px-6 md:px-10 pt-4 pb-3 border-b border-[#eceef1] shadow-sm relative z-10">
+        <div className="flex items-center justify-between gap-4 mb-3">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-dark">{brand.termMember}</h1>
           </div>
 
-          <div className="hidden md:block">
-            <LiveClock size="large" />
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+            <span className="text-xs sm:text-sm font-bold text-slate-500 font-sans whitespace-nowrap" id="step-counter">
+              Passo {form.step} de 3
+            </span>
+            <HeaderClock />
           </div>
-
-          <span className="text-sm font-bold text-slate-500 font-sans" id="step-counter">
-            Passo {form.step} de 3
-          </span>
         </div>
         <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
           <div
