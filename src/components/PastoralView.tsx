@@ -5,6 +5,7 @@ import NumericKeypad from './NumericKeypad';
 import { HeaderClock } from './LiveClock';
 import { BrandConfig, hexToRgb } from '../utils/brand';
 import { Lang, t } from '../utils/i18n';
+import { saveRegistration } from '../lib/registrations';
 
 interface PastoralViewProps {
   onBack: () => void;
@@ -84,14 +85,7 @@ export default function PastoralView({ onBack, onGoHome, onSelectView, brand, la
       date: new Date().toISOString()
     };
 
-    try {
-      const existing = localStorage.getItem('santuario_registrations');
-      const regs = existing ? JSON.parse(existing) : [];
-      regs.push(newReg);
-      localStorage.setItem('santuario_registrations', JSON.stringify(regs));
-    } catch (e) {
-      console.error('Failed to save registration:', e);
-    }
+    void saveRegistration(newReg);
 
     setIsScheduled(true);
     playSuccessSound();

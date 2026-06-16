@@ -7,6 +7,7 @@ import { speakText } from '../utils/tts';
 import { BrandConfig } from '../utils/brand';
 
 import { Lang } from '../utils/i18n';
+import { saveRegistration } from '../lib/registrations';
 
 interface DonationViewProps {
   onBack: () => void;
@@ -241,14 +242,7 @@ export default function DonationView({ onBack, onGoHome, brand, lang, initialSte
       date: new Date().toISOString()
     };
 
-    try {
-      const existing = localStorage.getItem('santuario_registrations');
-      const regs = existing ? JSON.parse(existing) : [];
-      regs.push(newReg);
-      localStorage.setItem('santuario_registrations', JSON.stringify(regs));
-    } catch (e) {
-      console.error('Failed to save registration:', e);
-    }
+    void saveRegistration(newReg);
 
     playSuccessSound();
     setState((prev) => ({ ...prev, step: 'success' }));

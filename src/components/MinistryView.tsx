@@ -5,6 +5,7 @@ import NumericKeypad from './NumericKeypad';
 import { HeaderClock } from './LiveClock';
 import { BrandConfig } from '../utils/brand';
 import { Lang } from '../utils/i18n';
+import { saveRegistration } from '../lib/registrations';
 
 interface MinistryViewProps {
   onBack: () => void;
@@ -380,14 +381,7 @@ export default function MinistryView({ onBack, onGoHome, brand, lang }: Ministry
       date: new Date().toISOString()
     };
 
-    try {
-      const existing = localStorage.getItem('santuario_registrations');
-      const regs = existing ? JSON.parse(existing) : [];
-      regs.push(newReg);
-      localStorage.setItem('santuario_registrations', JSON.stringify(regs));
-    } catch (e) {
-      console.error('Failed to save registration:', e);
-    }
+    void saveRegistration(newReg);
 
     setIsSuccess(true);
     playSuccessSound();

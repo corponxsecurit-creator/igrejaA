@@ -6,6 +6,7 @@ import NumericKeypad from './NumericKeypad';
 import { HeaderClock } from './LiveClock';
 import { BrandConfig, hexToRgb } from '../utils/brand';
 import { Lang, t } from '../utils/i18n';
+import { saveRegistration } from '../lib/registrations';
 
 interface NewMemberViewProps {
   onBack: () => void;
@@ -74,14 +75,7 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
       date: new Date().toISOString()
     };
 
-    try {
-      const existing = localStorage.getItem('santuario_registrations');
-      const regs = existing ? JSON.parse(existing) : [];
-      regs.push(newReg);
-      localStorage.setItem('santuario_registrations', JSON.stringify(regs));
-    } catch (e) {
-      console.error('Failed to save registration:', e);
-    }
+    void saveRegistration(newReg);
 
     setIsSuccess(true);
     playSuccessSound();
@@ -128,14 +122,7 @@ export default function NewMemberView({ onBack, onGoHome, brand, lang }: NewMemb
         date: new Date().toISOString()
       };
 
-      try {
-        const existing = localStorage.getItem('santuario_registrations');
-        const regs = existing ? JSON.parse(existing) : [];
-        regs.push(newReg);
-        localStorage.setItem('santuario_registrations', JSON.stringify(regs));
-      } catch (e) {
-        console.error('Failed to save registration:', e);
-      }
+      void saveRegistration(newReg);
 
       setIsSuccess(true);
       playSuccessSound();

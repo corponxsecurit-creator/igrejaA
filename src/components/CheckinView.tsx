@@ -7,6 +7,7 @@ import VirtualKeyboard from './VirtualKeyboard';
 import { HeaderClock } from './LiveClock';
 import { BrandConfig } from '../utils/brand';
 import { Lang } from '../utils/i18n';
+import { saveRegistration } from '../lib/registrations';
 
 interface CheckinViewProps {
   onBack: () => void;
@@ -96,14 +97,7 @@ export default function CheckinView({ onBack, onSuccess, brand, lang }: CheckinV
       date: new Date().toISOString()
     };
 
-    try {
-      const existing = localStorage.getItem('santuario_registrations');
-      const regs = existing ? JSON.parse(existing) : [];
-      regs.push(newReg);
-      localStorage.setItem('santuario_registrations', JSON.stringify(regs));
-    } catch (e) {
-      console.error('Failed to save registration:', e);
-    }
+    void saveRegistration(newReg);
 
     playSuccessSound();
     setIsProcessing(true);

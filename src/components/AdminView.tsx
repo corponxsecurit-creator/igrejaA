@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrandConfig, getStoredBrands, saveStoredBrands } from '../utils/brand';
 import { Pastor, CellGroup, Slide } from '../types';
 import { playTapSound, playSuccessSound } from '../utils/audio';
 import { speakText } from '../utils/tts';
 import { Lang } from '../utils/i18n';
+import { clearRegistrations, deleteRegistration, fetchRegistrations, TotemRegistration } from '../lib/registrations';
 
 interface AdminViewProps {
   onBack: () => void;
@@ -17,14 +18,11 @@ export default function AdminView({ onBack, brand: activeBrand, lang }: AdminVie
   const [allBrands, setAllBrands] = useState<Record<string, BrandConfig>>(() => getStoredBrands());
   const [selectedBrandId, setSelectedBrandId] = useState<string>(activeBrand.id);
   const [activeTab, setActiveTab] = useState<ActiveTab>('general');
-  const [registrations, setRegistrations] = useState<any[]>(() => {
-    try {
-      const stored = localStorage.getItem('santuario_registrations');
-      return stored ? JSON.parse(stored) : [];
-    } catch (e) {
-      return [];
-    }
-  });
+  const [registrations, setRegistrations] = useState<TotemRegistration[]>([]);
+
+  useEffect(() => {
+    void fetchRegistrations().then(setRegistrations);
+  }, []);
 
   // Selected brand state
   const currentEditingBrand = allBrands[selectedBrandId] || allBrands.atitude;
@@ -1020,9 +1018,10 @@ export default function AdminView({ onBack, brand: activeBrand, lang }: AdminVie
                       onClick={() => {
                         if (confirm('Deseja realmente limpar todos os registros do sistema?')) {
                           playTapSound();
-                          localStorage.removeItem('santuario_registrations');
-                          setRegistrations([]);
-                          speakText('Registros apagados.');
+                          void clearRegistrations().then(() => {
+                            setRegistrations([]);
+                            speakText('Registros apagados.');
+                          });
                         }
                       }}
                       className="flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold px-4 py-2 rounded-xl transition-all cursor-pointer text-xs border border-red-200 active:scale-95"
@@ -1074,9 +1073,7 @@ export default function AdminView({ onBack, brand: activeBrand, lang }: AdminVie
                                     type="button"
                                     onClick={() => {
                                       playTapSound();
-                                      const updated = registrations.filter(r => r.id !== reg.id);
-                                      setRegistrations(updated);
-                                      localStorage.setItem('santuario_registrations', JSON.stringify(updated));
+                                      void deleteRegistration(reg.id).then(setRegistrations);
                                     }}
                                     className="w-8 h-8 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors cursor-pointer mx-auto"
                                     title="Remover Registro"
