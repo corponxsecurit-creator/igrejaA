@@ -18,3 +18,4 @@ for i, url in enumerate(urls):
             print(f'Downloaded img_{i+1}.jpg')
     except Exception as e:
         print('Error downloading', url, e)
+#testes
